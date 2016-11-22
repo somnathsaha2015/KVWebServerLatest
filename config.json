@@ -1,0 +1,17 @@
+{
+  "jwtKey": "12345",
+  "port": 6120,
+  "env": "development",
+  "connString": "Server=tcp:kistlerdb.database.windows.net,1433;Initial Catalog=KistlerDB;Persist Security Info=False;User ID=somnath;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+  "dbName": "KistlerDB",
+  "host": "http://localhost:6120",
+  "sendMail": {
+    "host": "smtp.gmail.com",
+    "port": 465,
+    "secure": true,
+    "user": "*****",
+    "password": "*****"
+  },
+  "forgotPasswordMailBody": "Please note that this is a system generated email. Please do not reply to this email. In order to generate a new password click the following link or paste it in your browser.",
+  "sendPasswordMailBody": "Your newly generated password is <b>@pwd</b>. You are strongy recommended to change this password by logging in to site at @url."
+}
