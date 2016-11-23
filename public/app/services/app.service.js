@@ -141,6 +141,9 @@ var AppService = (function () {
         return (ret);
     };
     ;
+    AppService.prototype.reset = function (key) {
+        delete this.channel[key];
+    };
     AppService.prototype.encodeBase64 = function (inputString) {
         var Base64 = { _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", encode: function (e) { var t = ""; var n, r, i, s, o, u, a; var f = 0; e = Base64._utf8_encode(e); while (f < e.length) {
                 n = e.charCodeAt(f++);

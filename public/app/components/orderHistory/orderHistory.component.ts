@@ -20,8 +20,8 @@ export class OrderHistory {
         console.log(id);
     };
     ngOnInit(){
-        let token = this.appService.getToken();
-        this.appService.httpGet('get:order:headers',{token:token})
+        //let token = this.appService.getToken();
+        this.appService.httpGet('get:order:headers')
     };
     ngOnDestroy() {
         this.subscription.unsubscribe();

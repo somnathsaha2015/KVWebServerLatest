@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/subscription';
 import { AppService } from '../../services/app.service';
 
@@ -19,32 +20,49 @@ export class Order {
     bottomNotes: this.appService.getMessage('mess:order:bottom:notes')
   };
   currentOfferSubscription: Subscription;
-  saveOrderSubscription:Subscription;
+  saveOrderSubscription: Subscription;
   orders: any[];
-  constructor(private appService: AppService) {
-    //this.staticTexts.introText = appService.getMessage('mess:order:intro:text');
+  constructor(private appService: AppService, private router: Router) {
     this.currentOfferSubscription = appService.filterOn('get:current:offer')
       .subscribe(d => {
-        this.orders = JSON.parse(d.data).Table;
-        console.log(d);
+        if (d.data.error) {
+          console.log(d.data.error);
+        } else {
+          this.orders = JSON.parse(d.data).Table.map(function (value, i) {
+            value.orderQty = 0;
+            value.wishList = 0;
+            return (value);
+          });
+        }
       });
 
-    this.saveOrderSubscription = appService.filterOn('post:save:order') 
-    .subscribe(d=>{
-      console.log(d);
-    });
+    this.saveOrderSubscription = appService.filterOn('post:save:order')
+      .subscribe(d => {
+        if (d.data.error) {
+          console.log(d.data.error);
+        } else {
+          console.log(d);
+        }
+      });
   };
+  // save() {
+  //   let finalOrder = this.orders.map(function (value, i) {
+  //     return ({ offerId: value.id, orderQty: value.orderQty, wishList: value.wishList })
+  //   });
+  //   let token = this.appService.getToken();
+  //   this.appService.httpPost('post:save:order', { token: token, order: finalOrder });
+  // };
   request() {
-    //console.log(this.orders);
-    let finalOrder = this.orders.map(function (value,i) {
-        return({OfferId:value.Id,OrderQty:value.OrderQty, WishList:value.WishList})      
-    });
-    let token = this.appService.getToken();
-    this.appService.httpPost('post:save:order', {token:token, order: finalOrder });
-   };
+    this.appService.reply('orders', this.orders);
+    this.router.navigate(['approve/order']);
+  }
   ngOnInit() {
-    let token = this.appService.getToken();
-    this.appService.httpGet('get:current:offer', { token: token });
+    let ords = this.appService.request('orders');
+    if (ords) {
+      this.orders = ords;
+    } else {
+      this.appService.httpGet('get:current:offer');
+    }
   };
   ngOnDestroy() {
     this.currentOfferSubscription.unsubscribe();

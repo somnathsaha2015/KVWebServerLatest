@@ -29,7 +29,7 @@ var PaymentMethod = (function () {
                 console.log(d);
             }
             else {
-                _this.cards[0].id = d.data.result.id;
+                _this.cards[0].id = d.data.result.result;
                 d.body.card.isNew = false;
             }
         });
@@ -40,6 +40,15 @@ var PaymentMethod = (function () {
             }
             else {
                 _this.cards.splice(d.index, 1);
+            }
+        });
+        this.setDefaultCardSubscription = appService.filterOn("set:default:card")
+            .subscribe(function (d) {
+            if (d.data.error) {
+                console.log("Error occured");
+            }
+            else {
+                console.log(d);
             }
         });
     }
@@ -63,6 +72,9 @@ var PaymentMethod = (function () {
         this.appService.httpPost('insert:credit:card', { card: card });
     };
     ;
+    PaymentMethod.prototype.setDefault = function (card) {
+        this.appService.httpPost('set:default:card', { id: card.id });
+    };
     PaymentMethod.prototype.ngOnInit = function () {
         var token = this.appService.getToken();
         this.appService.httpGet('get:credit:card', { token: token });
@@ -70,6 +82,7 @@ var PaymentMethod = (function () {
     PaymentMethod.prototype.ngOnDestroy = function () {
         this.getSubscription.unsubscribe();
         this.postSubscription.unsubscribe();
+        this.setDefaultCardSubscription.unsubscribe();
     };
     ;
     PaymentMethod = __decorate([
