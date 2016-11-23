@@ -72,8 +72,11 @@ export class AppService {
                     data: { error: err }
                 }));
     };
-    httpGet(id: string, body?: {}) {
-        let url = urlHash[id];        
+    httpGet(id: string, body?: any) {
+        var url = urlHash[id];
+        if(body && body.id){
+            url = url.replace(':id',body.id);
+        }        
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('x-access-token', this.getToken());

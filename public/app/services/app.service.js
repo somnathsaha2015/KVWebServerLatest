@@ -80,6 +80,9 @@ var AppService = (function () {
     AppService.prototype.httpGet = function (id, body) {
         var _this = this;
         var url = config_1.urlHash[id];
+        if (body && body.id) {
+            url = url.replace(':id', body.id);
+        }
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('x-access-token', this.getToken());
