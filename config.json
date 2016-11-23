@@ -8,8 +8,8 @@
         "host":"smtp.gmail.com",       
         "port":587,
         "secure":false,
-        "fromUser":"****",
-        "fromUserPassword":"*****",
+        "fromUser":"netwoventest1@gmail.com",
+        "fromUserPassword":"netwoven@123#",
         "fromUserName":"System"
     },
     "forgotPassword":{

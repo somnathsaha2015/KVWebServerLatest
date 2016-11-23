@@ -1,16 +1,15 @@
 {
     "jwtKey": "12345",
-    "port": 6120,
     "env": "development",
-    "connString": "server=(local);Database=@dbName;Integrated Security=SSPI",
+    "connString": "Server=tcp:kistlerdb.database.windows.net,1433;Initial Catalog=KistlerDB;Persist Security Info=False;User ID=somnath;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
     "dbName": "KistlerDB",
     "host":"http://localhost:6120",
     "sendMail":{
         "host":"smtp.gmail.com",       
         "port":587,
         "secure":false,
-        "fromUser":"****",
-        "fromUserPassword":"*****",
+        "fromUser":"somnathsaha2005@gmail.com",
+        "fromUserPassword":"somnath@saha007",
         "fromUserName":"System"
     },
     "forgotPassword":{
