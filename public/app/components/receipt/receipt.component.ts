@@ -1,18 +1,14 @@
 import { Component } from '@angular/core';
-import { Subscription } from 'rxjs/subscription';
 import { AppService } from '../../services/app.service';
 
 @Component({
     templateUrl: 'app/components/receipt/receipt.component.html'
 })
 export class Receipt {
-   
-    subscription: Subscription;
+    staticTexts: any = {};
     constructor(private appService: AppService) {
-        
-    };
-    
-    ngOnDestroy() {
-        //this.subscription.unsubscribe();
+        this.staticTexts.header = appService.getMessage('mess:receipt:heading');
+        let email = this.appService.getCredential().email;
+        this.staticTexts.info = appService.getMessage('mess:receipt:info').replace('@email', email);
     };
 }

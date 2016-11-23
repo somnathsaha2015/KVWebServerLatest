@@ -27,10 +27,10 @@ var receipt_component_1 = require('./components/receipt/receipt.component');
 var orderHistory_component_1 = require('./components/orderHistory/orderHistory.component');
 var shippingAddress_component_1 = require('./components/shippingAddress/shippingAddress.component');
 var paymentMethod_component_1 = require('./components/paymentMethod/paymentMethod.component');
-//import { ModalModule } from 'ng2-bootstrap/ng2-bootstrap';
+//import { ModalModule } from 'ng2-bootstrap';
 var ng2_modal_1 = require('ng2-modal');
+var ng2_bootstrap_1 = require('ng2-bootstrap');
 //import { jquery } from 'jquery';
-//import {Route1, Route2, Home} from './app.routes.components';
 //import {ComponentStub1} from './componentStub1';
 var AppModule = (function () {
     function AppModule() {
@@ -38,7 +38,8 @@ var AppModule = (function () {
     AppModule = __decorate([
         core_1.NgModule({
             imports: [platform_browser_1.BrowserModule, http_1.HttpModule, app_routes_1.Routing, forms_1.FormsModule,
-                ng2_modal_1.ModalModule
+                ng2_modal_1.ModalModule,
+                ng2_bootstrap_1.AlertModule
             ],
             declarations: [app_component_1.AppComponent, login_component_1.Login, order_component_1.Order, managePassword_component_1.ForgotPassword,
                 managePassword_component_1.SendPassword, managePassword_component_1.ChangePassword, createAccount_component_1.CreateAccount,

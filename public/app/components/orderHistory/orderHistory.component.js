@@ -26,8 +26,8 @@ var OrderHistory = (function () {
     };
     ;
     OrderHistory.prototype.ngOnInit = function () {
-        var token = this.appService.getToken();
-        this.appService.httpGet('get:order:headers', { token: token });
+        //let token = this.appService.getToken();
+        this.appService.httpGet('get:order:headers');
     };
     ;
     OrderHistory.prototype.ngOnDestroy = function () {

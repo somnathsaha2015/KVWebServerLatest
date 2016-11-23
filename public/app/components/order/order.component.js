@@ -9,41 +9,62 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
 var app_service_1 = require('../../services/app.service');
 var Order = (function () {
-    function Order(appService) {
+    function Order(appService, router) {
         var _this = this;
         this.appService = appService;
+        this.router = router;
         this.staticTexts = {
             introText: this.appService.getMessage('mess:order:intro:text'),
             holidayGift: this.appService.getMessage('mess:order:holiday:gift'),
             minimumRequest: this.appService.getMessage('mess:order:minimum:request'),
             bottomNotes: this.appService.getMessage('mess:order:bottom:notes')
         };
-        //this.staticTexts.introText = appService.getMessage('mess:order:intro:text');
         this.currentOfferSubscription = appService.filterOn('get:current:offer')
             .subscribe(function (d) {
-            _this.orders = JSON.parse(d.data).Table;
-            console.log(d);
+            if (d.data.error) {
+                console.log(d.data.error);
+            }
+            else {
+                _this.orders = JSON.parse(d.data).Table.map(function (value, i) {
+                    value.orderQty = 0;
+                    value.wishList = 0;
+                    return (value);
+                });
+            }
         });
         this.saveOrderSubscription = appService.filterOn('post:save:order')
             .subscribe(function (d) {
-            console.log(d);
+            if (d.data.error) {
+                console.log(d.data.error);
+            }
+            else {
+                console.log(d);
+            }
         });
     }
     ;
+    // save() {
+    //   let finalOrder = this.orders.map(function (value, i) {
+    //     return ({ offerId: value.id, orderQty: value.orderQty, wishList: value.wishList })
+    //   });
+    //   let token = this.appService.getToken();
+    //   this.appService.httpPost('post:save:order', { token: token, order: finalOrder });
+    // };
     Order.prototype.request = function () {
-        //console.log(this.orders);
-        var finalOrder = this.orders.map(function (value, i) {
-            return ({ OfferId: value.Id, OrderQty: value.OrderQty, WishList: value.WishList });
-        });
-        var token = this.appService.getToken();
-        this.appService.httpPost('post:save:order', { token: token, order: finalOrder });
+        this.appService.reply('orders', this.orders);
+        this.router.navigate(['approve/order']);
     };
-    ;
     Order.prototype.ngOnInit = function () {
-        var token = this.appService.getToken();
-        this.appService.httpGet('get:current:offer', { token: token });
+        var ords = this.appService.request('orders');
+        if (ords) {
+            this.orders = ords;
+        }
+        else {
+            this.appService.httpGet('get:current:offer');
+        }
     };
     ;
     Order.prototype.ngOnDestroy = function () {
@@ -54,7 +75,7 @@ var Order = (function () {
         core_1.Component({
             templateUrl: 'app/components/order/order.component.html'
         }), 
-        __metadata('design:paramtypes', [app_service_1.AppService])
+        __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router])
     ], Order);
     return Order;
 }());

@@ -9,6 +9,7 @@ export class PaymentMethod {
     getSubscription: Subscription;
     postSubscription: Subscription;
     deleteSubscription: Subscription;
+    setDefaultCardSubscription: Subscription;
     //isNewCard:boolean=false;
     cards:[any];
     constructor(private appService: AppService) {
@@ -26,7 +27,7 @@ export class PaymentMethod {
                     console.log(d);
                 }
                 else {
-                    this.cards[0].id = d.data.result.id;
+                    this.cards[0].id = d.data.result.result;
                     d.body.card.isNew = false;
                 }
             });
@@ -36,6 +37,14 @@ export class PaymentMethod {
                     console.log("Error occured");
                 } else {
                     this.cards.splice(d.index, 1);
+                }
+            });
+        this.setDefaultCardSubscription = appService.filterOn("set:default:card")
+            .subscribe(d => {
+                if (d.data.error) {
+                    console.log("Error occured");
+                } else {
+                    console.log(d);
                 }
             });
     };
@@ -55,6 +64,9 @@ export class PaymentMethod {
     save(card){
         this.appService.httpPost('insert:credit:card',{card:card});
     };
+    setDefault(card) {
+        this.appService.httpPost('set:default:card',{id:card.id});
+    }
     ngOnInit(){
         let token = this.appService.getToken();
         this.appService.httpGet('get:credit:card', { token: token });
@@ -62,5 +74,6 @@ export class PaymentMethod {
     ngOnDestroy() {
         this.getSubscription.unsubscribe();
         this.postSubscription.unsubscribe();
+        this.setDefaultCardSubscription.unsubscribe();
     };
 }

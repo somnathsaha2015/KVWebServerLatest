@@ -13,11 +13,11 @@ var app_service_1 = require('../../services/app.service');
 var Receipt = (function () {
     function Receipt(appService) {
         this.appService = appService;
+        this.staticTexts = {};
+        this.staticTexts.header = appService.getMessage('mess:receipt:heading');
+        var email = this.appService.getCredential().email;
+        this.staticTexts.info = appService.getMessage('mess:receipt:info').replace('@email', email);
     }
-    ;
-    Receipt.prototype.ngOnDestroy = function () {
-        //this.subscription.unsubscribe();
-    };
     ;
     Receipt = __decorate([
         core_1.Component({

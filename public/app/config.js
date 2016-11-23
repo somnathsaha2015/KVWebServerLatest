@@ -7,7 +7,7 @@ exports.urlHash = {
     'post:change:password': '/api/change/password',
     'post:create:account': '/api/create/account',
     'get:current:offer': '/api/current/offer',
-    'post:save:order': '/api/order',
+    //'post:save:order': '/api/order',
     'get:user:profile': '/api/profile',
     'post:save:profile': '/api/profile',
     'get:order:headers': '/api/order/headers',
@@ -16,15 +16,22 @@ exports.urlHash = {
     'get:credit:card': '/api/credit/card',
     'delete:credit:card': '/api/credit/card',
     'insert:credit:card': '/api/credit/card',
+    'set:default:card': '/api/credit/card/default',
     'get:default:shipping:address': '/api/shipping/address/default',
-    'get:all:shipping:addresses': '/api/shipping/address'
+    'get:all:shipping:addresses': '/api/shipping/address',
+    'get:default:credit:card': '/api/credit/card/default',
+    'get:all:credit:cards': '/api/credit/card',
+    'get:approve:artifacts': '/api/approve/artifact',
+    'post:save:approve:request': '/api/approve/request'
 };
 exports.messages = {
     'mess:order:intro:text': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a tortor imperdiet, porttitor purus ut, pretium diam. Nulla convallis vel ipsum quis mattis. Nam in erat massa. Praesent bibendum dapibus lectus, nec imperdiet eros pharetra et. Vestibulum euismod velit sit amet nulla ornare iaculis viverra eget augue. Etiam dolor lacus, rhoncus in rhoncus eget, faucibus at nisi. Nulla nec mollis orci. Pellentesque pharetra facilisis dolor vel tincidunt. Suspendisse ullamcorper fermentum nunc, a dapibus tellus imperdiet vitae.',
     'mess:order:holiday:gift': 'Holiday Gift - Yes I\'m interested, please contact me',
     'mess:order:minimum:request': 'Minimum request 6 bottles',
     'mess:order:bottom:notes': 'Wines in 6 bottle packages are subject to change',
-    'mess:approve:heading': 'Please review your shipping address & payment method information for your order.'
+    'mess:approve:heading': 'Please review your shipping address & payment method information for your order.',
+    'mess:receipt:heading': 'Thank you for your Kistler Fall 2016 Request.',
+    'mess:receipt:info': 'An acknowledgement email has been sent to @email. If you do not receive the email within 10 minutes, please check your Spam / Junk mail folder. Otherwise, contact us for assistance. '
 };
 exports.viewBoxConfig = {
     '/login': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false },
