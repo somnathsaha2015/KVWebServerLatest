@@ -14,15 +14,32 @@ var OrderHistory = (function () {
     function OrderHistory(appService) {
         var _this = this;
         this.appService = appService;
-        this.subscription = appService.filterOn('get:order:headers')
+        this.orderDetails = {};
+        this.orderDetailsSub = appService.filterOn('get:order:details')
             .subscribe(function (d) {
-            _this.orderHeaders = JSON.parse(d.data).Table;
-            console.log(d);
+            if (d.data.error) {
+                console.log(d.data.error);
+            }
+            else {
+                _this.orderDetails.details = JSON.parse(d.data).Table[0];
+                _this.orderDetails.imp = JSON.parse(d.data).Table1[0];
+            }
+        });
+        this.orderHeaderSub = appService.filterOn('get:order:headers')
+            .subscribe(function (d) {
+            if (d.data.error) {
+                console.log(d.data.error);
+            }
+            else {
+                _this.orderHeaders = JSON.parse(d.data).Table;
+            }
         });
     }
     ;
-    OrderHistory.prototype.showDetails = function (id) {
-        console.log(id);
+    OrderHistory.prototype.showDetails = function (order) {
+        this.selectedOrder = order;
+        this.appService.httpGet('get:order:details', { id: order.id });
+        //console.log(id);
     };
     ;
     OrderHistory.prototype.ngOnInit = function () {
@@ -31,7 +48,8 @@ var OrderHistory = (function () {
     };
     ;
     OrderHistory.prototype.ngOnDestroy = function () {
-        this.subscription.unsubscribe();
+        this.orderHeaderSub.unsubscribe();
+        this.orderDetailsSub.unsubscribe();
     };
     ;
     OrderHistory = __decorate([

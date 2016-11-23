@@ -38,8 +38,8 @@ var allowCrossDomain = function (req, res, next) {
 };
 app.use(allowCrossDomain);
 
-app.get('/*', function (req, res) {console.log('index.html');
-    res.sendFile(path.join(__dirname, 'public','index.html'));
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'public','index1.html'));
     //res.render(path.join(__dirname, 'public/index1.html'));
 });
 
@@ -47,8 +47,8 @@ app.get('/*', function (req, res) {console.log('index.html');
     //res.send(messages.genInfo);
     //res.sendFile(path.join(__dirname, 'public','index1.html'));
 //});
-var port    =   process.env.PORT || 8080;
-var server = app.listen(port, function () {
+
+var server = app.listen(config.port, function () {
     console.log(messages.messExpressServerRunning + config.port);
 });
 

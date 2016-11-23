@@ -10,6 +10,7 @@ export var urlHash = {
     'get:user:profile': '/api/profile',
     'post:save:profile': '/api/profile',
     'get:order:headers': '/api/order/headers',
+    'get:order:details':'/api/order/details/:id',
     'get:shipping:address': '/api/shipping/address',
     'post:shipping:address': '/api/shipping/address',
     'get:credit:card': '/api/credit/card',
