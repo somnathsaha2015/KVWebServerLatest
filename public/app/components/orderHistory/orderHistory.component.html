@@ -1,6 +1,6 @@
 <div class="container mainContainer">
     <h2>Order history</h2>
-    <div class="panel panel panel-default kistlarOderHistory">
+    <div *ngIf="isDataAvailable" class="panel panel panel-default kistlarOderHistory">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -12,19 +12,93 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let order of orderHeaders" (click)="showDetails(order)">
+                <tr *ngFor="let order of pageRows" (click)="showDetails(order)">
                     <td scope="row">{{order.mDate | date:'MM/dd/yyyy'}}</td>
                     <td><a href="">{{order.invoice}}</a></td>
                     <td>{{order.descr}}</td>
                     <td>{{order.amount | currency:'USD':true}}</td>
-                    <td><button>View Details</button></td>
+                    <td><input type="radio" name="showDetails" [checked]="order.checked">View Details</td>
                 </tr>
             </tbody>
         </table>
+        <pagination class="pagination-sm" [(ngModel)]="page" [totalItems]="orderHeaders.length" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize"
+            [boundaryLinks]="true" (pageChanged)="onPageChange($event)" (numPages)="numPages = $event">
+        </pagination>
+        <div class="container form-group" name="requestTotal">
+            <h4>Order Details</h4>
+            <div class="row">
+                <div class='col-sm-3'>Wine Request</div>
+                <div class='col-sm-1'>Request</div>
+                <div class='col-sm-1'>Total</div>
+                <div class="col-sm-1">Wish List</div>
+                <div class="col-sm-1">Additional</div>
+            </div>
+            <div class="row" *ngFor="let order of orderDetails.details">
+                <div class='col-sm-3'>{{order.item}}</div>
+                <div class='col-sm-1'>{{order.orderQty}}</div>
+                <div class='col-sm-1'>${{(order.orderQty * order.price) | number : '1.2-2'}}</div>
+                <div class='col-sm-1'>{{order.wishList}}</div>
+                <div class='col-sm-1'>${{(order.wishList * order.price) | number : '1.2-2'}}</div>
+            </div>
 
-        <table>
-            
-        </table>
+            <div class='row'>
+                <div class='col-sm-3'>Total wine costs</div>
+                <div class='col-sm-1'></div>
+                <div class='col-sm-1'>${{selectedOrder.totalPriceWine | number : '1.2-2'}}</div>
+                <div class='col-sm-1'></div>
+                <div class='col-sm-1'>${{selectedOrder.totalPriceAddl | number : '1.2-2'}}</div>
+            </div>
+
+            <div class="row">
+                <div class='col-sm-3'>Sales Tax</div>
+                <div class='col-sm-1'></div>
+                <div class='col-sm-1'>${{selectedOrder.salesTaxWine | number : '1.2-2'}}</div>
+                <div class='col-sm-1'></div>
+                <div class='col-sm-1'>${{selectedOrder.salesTaxAddl | number : '1.2-2'}}</div>
+            </div>
+
+            <div class="row">
+                <div class='col-sm-3'>Shipping</div>
+                <div class='col-sm-1'></div>
+                <div class='col-sm-1'>${{selectedOrder.shippingWine | number : '1.2-2'}}</div>
+                <div class='col-sm-1'></div>
+                <div class='col-sm-1'>${{selectedOrder.shippingAddl | number : '1.2-2'}}</div>
+            </div>
+
+            <!--<div class="row">
+                    <div class='col-sm-2'>Previous Balance / Credit</div>
+                    <div class='col-sm-1'></div>
+                    <div class='col-sm-1'>${{footer.prevBalances.wine | number : '1.2-2'}}</div>
+                    <div class='col-sm-1'></div>
+                    <div class='col-sm-1'>${{footer.prevBalances.addl | number : '1.2-2'}}</div>
+                </div>-->
+
+            <div class="row">
+                <div class='col-sm-3'>Grand Total</div>
+                <div class='col-sm-1'></div>
+                <div class='col-sm-1'>${{selectedOrder.grandTotalWine | number : '1.2-2'}}</div>
+                <div class='col-sm-1'></div>
+                <div class='col-sm-1'>${{selectedOrder.grandTotalAddl | number : '1.2-2'}}</div>
+            </div>
+        </div>
+        <div class="form-group" name="shippingAddress">
+            <h4>Shipping Address</h4>
+            <form class="form-horizontal">
+                <div>Address1: {{orderDetails.address.address1}}</div>
+                <div>Zip: {{orderDetails.address.zip}}</div>
+                <div>Street: {{orderDetails.address.street}}</div>
+                <div>City: {{orderDetails.address.city}}</div>
+            </form>
+        </div>
+
+        <div class="form-group" name="creditCardInfo">
+            <h4>Payment Details</h4>
+            <form class="form-horizontal">
+                <div>Card Name: {{orderDetails.card.cardName}}</div>
+                <div>Card Number: {{orderDetails.card.cardNumber}}</div>
+            </form>
+        </div>
+
     </div>
 
 </div>

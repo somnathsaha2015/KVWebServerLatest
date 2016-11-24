@@ -13,7 +13,7 @@ import { AlertModule } from 'ng2-bootstrap';
 })
 export class ApproveOrder {
     approveArtifactsSub: Subscription;
-    postApproveSubscription:Subscription;
+    postApproveSubscription: Subscription;
     selectedAddress: any = {};
     selectedCard: any = {};
     allTotals: {} = {};
@@ -23,10 +23,10 @@ export class ApproveOrder {
         },
         salesTaxPerc: 0.00,
         shippingCharges: 0.00,
-        shippingTotals: { wine: 0.00/1, addl: 0.00/1 },
-        prevBalances: { wine: 0.00/1, addl: 0.00/1 },
-        grandTotals: { wine: 0.00/1, addl: 0.00/1 },
-        salesTaxTotals: { wine: 0.00/1, addl: 0.00/1 }
+        shippingTotals: { wine: 0.00 / 1, addl: 0.00 / 1 },
+        prevBalances: { wine: 0.00 / 1, addl: 0.00 / 1 },
+        grandTotals: { wine: 0.00 / 1, addl: 0.00 / 1 },
+        salesTaxTotals: { wine: 0.00 / 1, addl: 0.00 / 1 }
     };
     allAddrSubscription: Subscription;
     allCardSubscription: Subscription;
@@ -43,13 +43,13 @@ export class ApproveOrder {
 
     constructor(private appService: AppService, private location: Location, private router: Router) {
         let ords = appService.request('orders');
-        if(!ords){
+        if (!ords) {
             router.navigate(['order']);
         }
-        this.postApproveSubscription = appService.filterOn('post:save:approve:request').subscribe(d=>{
-            if(d.data.error){
+        this.postApproveSubscription = appService.filterOn('post:save:approve:request').subscribe(d => {
+            if (d.data.error) {
                 console.log(d.data.error);
-            } else{
+            } else {
                 this.appService.reset('orders');
                 this.router.navigate(['receipt']);
             }
@@ -120,29 +120,34 @@ export class ApproveOrder {
         //this.location.back();
     };
     approve() {
-        let orderBundle:any={};
+        let orderBundle: any = {};
         orderBundle.orderMaster = {
-            MDate:new Date(),
-            TotalPriceWine: this.footer.wineTotals.wine/1,
-            TotalPriceAddl: this.footer.wineTotals.addl/1,
-            SalesTaxWine: this.footer.salesTaxTotals.wine/1,
-            SalesTaxAddl: this.footer.salesTaxTotals.addl/1,
-            ShippingWine: this.footer.shippingTotals.wine/1,
-            ShippingAddl: this.footer.shippingTotals.addl/1
+            MDate: new Date(),
+            TotalPriceWine: this.footer.wineTotals.wine / 1,
+            TotalPriceAddl: this.footer.wineTotals.addl / 1,
+            SalesTaxWine: this.footer.salesTaxTotals.wine / 1,
+            SalesTaxAddl: this.footer.salesTaxTotals.addl / 1,
+            ShippingWine: this.footer.shippingTotals.wine / 1,
+            ShippingAddl: this.footer.shippingTotals.addl / 1
         };
         let master = orderBundle.orderMaster;
         orderBundle.orderMaster.Amount = master.TotalPriceWine + master.TotalPriceAddl + master.SalesTaxWine
             + master.SalesTaxAddl + master.ShippingWine + master.ShippingAddl;
-        orderBundle.orderDetails = this.orders.map(
-            (a)=>{
-                return(
-                    {OfferId:a.id
-                        ,OrderQty:a.orderQty
-                        ,WishList:a.wishList
-                        ,Price:a.price
-                    })});
-        orderBundle.orderImpDetails = {AddressId:this.selectedAddress.id,CreditCardId:this.selectedCard.id};
-        this.appService.httpPost('post:save:approve:request',orderBundle);
+        //to remove zero quantities
+        orderBundle.orderDetails = this.orders.filter((a) => {
+            return ((a.orderQty && a.orderQty > 0) || (a.wishList && a.wishList > 0));
+        }).map(
+            (a) => {
+                return (
+                    {
+                        OfferId: a.id
+                        , OrderQty: a.orderQty
+                        , WishList: a.wishList
+                        , Price: a.price
+                    });
+            });       
+        orderBundle.orderImpDetails = { AddressId: this.selectedAddress.id, CreditCardId: this.selectedCard.id };
+        this.appService.httpPost('post:save:approve:request', orderBundle);
     };
 
     computeTotals() {
@@ -154,7 +159,7 @@ export class ApproveOrder {
         // { availableQty: 3, id: 1, item: 'test item4', orderQty: 2, packing: 'p', price: 130, wishList: 5 },
         // ];        
         //totals
-        if(!this.orders){
+        if (!this.orders) {
             console.log('Order request is not available.');
             return;
         }
@@ -171,8 +176,8 @@ export class ApproveOrder {
 
         //grand totals
         this.footer.grandTotals = {
-            wine: this.footer.wineTotals.wine + this.footer.salesTaxTotals.wine + this.footer.shippingTotals.wine
-            + this.footer.prevBalances.wine
+            wine: this.footer.wineTotals.wine/1 + this.footer.salesTaxTotals.wine/1 + this.footer.shippingTotals.wine/1
+            + this.footer.prevBalances.wine/1
             , addl: this.footer.wineTotals.addl / 1 + this.footer.salesTaxTotals.addl / 1 + this.footer.shippingTotals.addl / 1
             + this.footer.prevBalances.addl / 1
         };

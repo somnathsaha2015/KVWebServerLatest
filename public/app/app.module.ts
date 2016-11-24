@@ -20,6 +20,7 @@ import { ShippingAddress } from './components/shippingAddress/shippingAddress.co
 import { PaymentMethod } from './components/paymentMethod/paymentMethod.component';
 //import { ModalModule } from 'ng2-bootstrap';
 import {ModalModule} from'ng2-modal';
+import { PaginationModule } from 'ng2-bootstrap';
 import { AlertModule } from 'ng2-bootstrap';
 //import { jquery } from 'jquery';
 //import {ComponentStub1} from './componentStub1';
@@ -28,6 +29,7 @@ import { AlertModule } from 'ng2-bootstrap';
   imports: [BrowserModule, HttpModule, Routing,FormsModule 
   ,ModalModule
   ,AlertModule
+  ,PaginationModule
   ]
   , declarations: [AppComponent, Login, Order, ForgotPassword
     , SendPassword, ChangePassword, CreateAccount,

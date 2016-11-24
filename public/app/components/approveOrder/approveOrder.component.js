@@ -150,8 +150,12 @@ var ApproveOrder = (function () {
         var master = orderBundle.orderMaster;
         orderBundle.orderMaster.Amount = master.TotalPriceWine + master.TotalPriceAddl + master.SalesTaxWine
             + master.SalesTaxAddl + master.ShippingWine + master.ShippingAddl;
-        orderBundle.orderDetails = this.orders.map(function (a) {
-            return ({ OfferId: a.id,
+        //to remove zero quantities
+        orderBundle.orderDetails = this.orders.filter(function (a) {
+            return ((a.orderQty && a.orderQty > 0) || (a.wishList && a.wishList > 0));
+        }).map(function (a) {
+            return ({
+                OfferId: a.id,
                 OrderQty: a.orderQty,
                 WishList: a.wishList,
                 Price: a.price
@@ -185,8 +189,8 @@ var ApproveOrder = (function () {
         this.computeShipping();
         //grand totals
         this.footer.grandTotals = {
-            wine: this.footer.wineTotals.wine + this.footer.salesTaxTotals.wine + this.footer.shippingTotals.wine
-                + this.footer.prevBalances.wine,
+            wine: this.footer.wineTotals.wine / 1 + this.footer.salesTaxTotals.wine / 1 + this.footer.shippingTotals.wine / 1
+                + this.footer.prevBalances.wine / 1,
             addl: this.footer.wineTotals.addl / 1 + this.footer.salesTaxTotals.addl / 1 + this.footer.shippingTotals.addl / 1
                 + this.footer.prevBalances.addl / 1
         };
