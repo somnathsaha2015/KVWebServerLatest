@@ -53,8 +53,13 @@ export class Order {
   //   this.appService.httpPost('post:save:order', { token: token, order: finalOrder });
   // };
   request() {
-    this.appService.reply('orders', this.orders);
-    this.router.navigate(['approve/order']);
+    let ords = this.orders.filter((a) => {
+      return ((a.orderQty && a.orderQty > 0) || (a.wishList && a.wishList > 0));
+    });
+    if (ords.length > 0) {
+      this.appService.reply('orders', this.orders);
+      this.router.navigate(['approve/order']);
+    }
   }
   ngOnInit() {
     let ords = this.appService.request('orders');

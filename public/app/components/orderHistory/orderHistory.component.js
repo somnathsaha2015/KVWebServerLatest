@@ -14,15 +14,24 @@ var OrderHistory = (function () {
     function OrderHistory(appService) {
         var _this = this;
         this.appService = appService;
-        this.orderDetails = {};
+        this.isDataAvailable = false;
+        this.orderDetails = { details: [{}], address: {}, card: {} };
+        this.selectedOrder = {};
+        this.itemsPerPage = 5;
+        this.maxSize = 5;
         this.orderDetailsSub = appService.filterOn('get:order:details')
             .subscribe(function (d) {
             if (d.data.error) {
                 console.log(d.data.error);
             }
             else {
-                _this.orderDetails.details = JSON.parse(d.data).Table[0];
-                _this.orderDetails.imp = JSON.parse(d.data).Table1[0];
+                _this.orderDetails.details = JSON.parse(d.data).Table;
+                _this.orderDetails.address = JSON.parse(d.data).Table1[0];
+                _this.orderDetails.card = JSON.parse(d.data).Table2[0];
+                //to escape from null values
+                _this.orderDetails.details = _this.orderDetails.details ? _this.orderDetails.details : [{}];
+                _this.orderDetails.address = _this.orderDetails.address ? _this.orderDetails.address : {};
+                _this.orderDetails.card = _this.orderDetails.card ? _this.orderDetails.card : {};
             }
         });
         this.orderHeaderSub = appService.filterOn('get:order:headers')
@@ -32,18 +41,35 @@ var OrderHistory = (function () {
             }
             else {
                 _this.orderHeaders = JSON.parse(d.data).Table;
+                _this.pageRows = _this.orderHeaders.slice(0, _this.itemsPerPage);
+                if (_this.orderHeaders.length > 0) {
+                    var ord = _this.orderHeaders[0];
+                    ord.checked = true;
+                    _this.showDetails(ord);
+                    _this.isDataAvailable = true;
+                }
             }
         });
     }
+    OrderHistory.prototype.onPageChange = function (page) {
+        var start = (page.page - 1) * page.itemsPerPage;
+        var end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : this.orderHeaders.length;
+        this.pageRows = this.orderHeaders.slice(start, end);
+        if (this.pageRows.length > 0) {
+            this.showDetails(this.pageRows[0]);
+        }
+    };
     ;
     OrderHistory.prototype.showDetails = function (order) {
+        this.orderHeaders.map(function (a, b) { a.checked = false; }); //to uncheck all rows
+        order.grandTotalWine = order.totalPriceWine / 1 + order.salesTaxWine / 1 + order.shippingWine / 1;
+        order.grandTotalAddl = order.totalPriceAddl / 1 + order.salesTaxAddl / 1 + order.shippingAddl / 1;
+        order.checked = true; // to check current row
         this.selectedOrder = order;
         this.appService.httpGet('get:order:details', { id: order.id });
-        //console.log(id);
     };
     ;
     OrderHistory.prototype.ngOnInit = function () {
-        //let token = this.appService.getToken();
         this.appService.httpGet('get:order:headers');
     };
     ;

@@ -54,8 +54,13 @@ var Order = (function () {
     //   this.appService.httpPost('post:save:order', { token: token, order: finalOrder });
     // };
     Order.prototype.request = function () {
-        this.appService.reply('orders', this.orders);
-        this.router.navigate(['approve/order']);
+        var ords = this.orders.filter(function (a) {
+            return ((a.orderQty && a.orderQty > 0) || (a.wishList && a.wishList > 0));
+        });
+        if (ords.length > 0) {
+            this.appService.reply('orders', this.orders);
+            this.router.navigate(['approve/order']);
+        }
     };
     Order.prototype.ngOnInit = function () {
         var ords = this.appService.request('orders');

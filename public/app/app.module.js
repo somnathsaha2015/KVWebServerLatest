@@ -30,6 +30,7 @@ var paymentMethod_component_1 = require('./components/paymentMethod/paymentMetho
 //import { ModalModule } from 'ng2-bootstrap';
 var ng2_modal_1 = require('ng2-modal');
 var ng2_bootstrap_1 = require('ng2-bootstrap');
+var ng2_bootstrap_2 = require('ng2-bootstrap');
 //import { jquery } from 'jquery';
 //import {ComponentStub1} from './componentStub1';
 var AppModule = (function () {
@@ -39,7 +40,8 @@ var AppModule = (function () {
         core_1.NgModule({
             imports: [platform_browser_1.BrowserModule, http_1.HttpModule, app_routes_1.Routing, forms_1.FormsModule,
                 ng2_modal_1.ModalModule,
-                ng2_bootstrap_1.AlertModule
+                ng2_bootstrap_2.AlertModule,
+                ng2_bootstrap_1.PaginationModule
             ],
             declarations: [app_component_1.AppComponent, login_component_1.Login, order_component_1.Order, managePassword_component_1.ForgotPassword,
                 managePassword_component_1.SendPassword, managePassword_component_1.ChangePassword, createAccount_component_1.CreateAccount,
