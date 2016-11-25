@@ -4,28 +4,34 @@
         <div class="welcomeTxt">Welcome <label class="username"> ipsum</label></div>
         <summary>{{staticTexts.introText}}</summary>
     </div>
-    <div class="panel-group" id="accordion">
+    <div class="panel-group">
         <div class="panel panel-default" *ngFor="let order of orders">
             <div class="panel-heading">
-
                 <div class="row">
                     <div class="col-sm-4 productTitle">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{order.Id}}">{{order.item }}</a>
+                        <a (click)="toggleDetails(order)">{{order.item }}</a>
                     </div>
-                    <div class="col-sm-1 col-xs-4"><a data-toggle="collapse" data-parent="#accordion" href="#collapse{{order.id}}">Tasting Notes</a></div>
+                    <div class="col-sm-1 col-xs-4"><a href="#collapse{{order.id}}">Tasting Notes</a></div>
                     <div class="col-sm-1 col-xs-4"><span class="productPrice">${{order.price}}</span>/{{order.packing =='b' ? 'Btl' : 'Pkg'}}</div>
                     <div class="col-sm-2 col-xs-4">Avail: {{order.availableQty}} {{order.packing =='b' ? 'Btls' : 'Pkg'}}</div>
                     <div class="col-sm-2 col-xs-6 ">
-                        <span>Request: </span><input class="form-control orderWith" type="number" min="1" onfocus="this.select()" [(ngModel)]="order.orderQty">
+                        <span>Request: </span><input class="form-control orderWith" type="number" min="1" onfocus="this.select()"
+                            [(ngModel)]="order.orderQty">
                     </div>
                     <div class="col-sm-2 col-xs-6 ">Wish List: <input class="form-control orderWith" type="number" min="1" onfocus="this.select()" [(ngModel)]="order.wishList"></div>
                 </div>
+                <div class="row" *ngIf="order.isShowDetails">
+                    <img [src]="order.imageUrl" class="col-sm-4">
+                    <div class="col-sm-4">{{order.descr}}</div>
+                    <div class="col-sm-4">{{order.tastingNotes}}</div>
+                </div>
             </div>
-            <div id="collapse{{order.id}}" class="panel-collapse collapse">
+
+            <!--<div id="collapse{{order.id}}" class="panel-collapse collapse">
                 <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
                     magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
                     commodo consequat.</div>
-            </div>
+            </div>-->
         </div>
     </div>
     <div class="row requestPanel">
