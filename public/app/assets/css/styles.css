@@ -103,5 +103,9 @@ border-radius: 0 0 0 0;}
 .paymentMethDivider{ border-bottom:solid 1px #ddd; padding:10px 0px;}
 .cardName{ color:#a75b02; font-weight:700;}
 .AddCardPanel{ padding:10px;}
-.AddCardPanelForm { padding-bottom:20px;
-}
+.AddCardPanelForm { padding-bottom:20px;}
+.grandTotals{ background-color: #f5f5f5; font-weight:700; font-size: 1.3em;}
+.subTotalTtitle{font-weight:700; font-size: 1.1em;}
+.apporveOderBtn{ padding-right: 15px; padding-bottom: 15px;}
+.apporveOderBtn button{ margin-left: 10px;}
+.divider{ border-bottom: solid 1px #763721;}

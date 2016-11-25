@@ -31,11 +31,11 @@ export class Order {
           this.orders = JSON.parse(d.data).Table.map(function (value, i) {
             value.orderQty = 0;
             value.wishList = 0;
+            value.imageUrl = 'app/assets/img/'+value.imageUrl;
             return (value);
           });
         }
       });
-
     this.saveOrderSubscription = appService.filterOn('post:save:order')
       .subscribe(d => {
         if (d.data.error) {
@@ -45,6 +45,16 @@ export class Order {
         }
       });
   };
+  toggleDetails(order) {
+    if (order.isShowDetails) {
+      order.isShowDetails = false;
+    } else {
+      this.orders.map((a) => {
+        a.isShowDetails = false;
+      });
+      order.isShowDetails = true;
+    }
+  }
   // save() {
   //   let finalOrder = this.orders.map(function (value, i) {
   //     return ({ offerId: value.id, orderQty: value.orderQty, wishList: value.wishList })

@@ -1,5 +1,6 @@
 {
     "jwtKey": "12345",
+    "port": 6120,
     "env": "development",
     "connString": "Server=tcp:kistlerdb.database.windows.net,1433;Initial Catalog=KistlerDB;Persist Security Info=False;User ID=somnath;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
     "dbName": "KistlerDB",
@@ -8,8 +9,8 @@
         "host":"smtp.gmail.com",       
         "port":587,
         "secure":false,
-        "fromUser":"netwoventest1@gmail.com",
-        "fromUserPassword":"netwoven@123#",
+        "fromUser":"*****",
+        "fromUserPassword":"*****",
         "fromUserName":"System"
     },
     "forgotPassword":{
