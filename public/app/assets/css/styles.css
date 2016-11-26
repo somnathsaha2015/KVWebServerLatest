@@ -64,12 +64,28 @@ border-radius: 5px 5px 5px 5px;
 .introText .welcomeTxt{ font-size:1.2em; margin-bottom:1px;}
 .introText .welcomeTxt .username{ color:#a65a02;}
 
-.boxPanel .boxdivider{border-bottom:solid 1px #ddd; margin-bottom:10px; padding-bottom:10px;}
+
 .orderWith{ width:60px; display:inline-block;}
-.boxPanel .productTitle{font-size:1.2em;}
-.productPrice{ color: #94070d; }
-.requestPanel{padding:15px 0px;}
-.requestPanel .btn{ text-align: right;}
+
+.ProductPanel .productTitle{font-size:1.2em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-top: 5px; }
+.ProductPanel .productTitle a{ cursor: pointer; color: #a0090a;}
+.ProductPanel .notesOrderAvailPanel .testingNotes{ width: 40%; float: left; padding-top: 7px;}
+.ProductPanel .notesOrderAvailPanel .orderPack{ width: 30%; float: left; padding-top: 7px; }
+.productPrice{color: #a75b02; }
+
+.ProductPanel .notesOrderAvailPanel .availPack{ width: 30%; float: left; padding-top: 7px;}
+.ProductPanel .notesOrderAvailPanel .availPack .availableQtyColor{ color: #858585;}
+
+
+.ProductPanel .showproductDetails{padding: 15px; background-color: #fff; margin: 10px 1px 1px 1px; -webkit-border-radius: 3px 3px 3px 3px;
+border-radius: 3px 3px 3px 3px; -webkit-box-shadow: 0 0 2px 2px #dddddd;
+box-shadow: 0 0 2px 2px #dddddd;}
+.ProductPanel .showproductDetails .orderDescPanel{ padding-bottom: 15px; font-size:1.2em; }
+.ProductPanel .showproductDetails .tastingNotesPanel{ border-top:solid 1px #dddddd; padding-top:15px;}
+
+
+.ProductPanel .requestPanel{padding:15px 0px;}
+.ProductPanel .requestPanel .btn{ text-align: right;}
 
 .hidefieldvalidationMsg{display: none; }
 .showfieldvalidationMsg{color: #94070d; display:block; }
@@ -109,3 +125,116 @@ border-radius: 0 0 0 0;}
 .apporveOderBtn{ padding-right: 15px; padding-bottom: 15px;}
 .apporveOderBtn button{ margin-left: 10px;}
 .divider{ border-bottom: solid 1px #763721;}
+
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus{
+    background-color: #312000;
+
+}
+.navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus{
+    background-color: #312000;
+}
+.navbar-inverse .navbar-toggle {
+    border-color: #3f3011;
+}
+.KistlerSubMenu{/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#352311+0,261e15+100 */
+background: #352311; /* Old browsers */
+background: -moz-linear-gradient(top,  #352311 0%, #261e15 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  #352311 0%,#261e15 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  #352311 0%,#261e15 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#352311', endColorstr='#261e15',GradientType=0 ); /* IE6-9 */
+
+-webkit-border-radius: 5px 5px 5px 5px;
+border-radius: 5px 5px 5px 5px;
+}
+
+.KistlerSubMenu li a{ color: #ddd; 
+}
+.KistlerSubMenu li a:hover, .KistlerSubMenu li a:focus{ color: #f2a840; /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#261e15+0,473418+100 */
+background: #261e15; /* Old browsers */
+background: -moz-linear-gradient(top,  #261e15 0%, #473418 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  #261e15 0%,#473418 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  #261e15 0%,#473418 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#261e15', endColorstr='#473418',GradientType=0 ); /* IE6-9 */
+}
+
+	/*==========  Mobile First Method  ==========*/
+
+	/* Custom, iPhone Retina */
+	@media only screen and (min-width : 320px){
+		
+	}
+
+	/* Extra Small Devices, Phones */
+	@media only screen and (min-width : 480px){
+
+	}
+
+	/* Small Devices, Tablets */
+	@media only screen and (min-width : 768px){
+
+	}
+
+	/* Medium Devices, Desktops */
+	@media only screen and (min-width : 992px){
+
+	}
+
+	/* Large Devices, Wide Screens */
+	@media only screen and (min-width : 1200px){
+
+	}
+
+
+
+	/*==========  Non-Mobile First Method  ==========*/
+
+	/* Large Devices, Wide Screens */
+	@media only screen and (max-width : 1200px){
+
+	}
+
+	/* Medium Devices, Desktops */
+	@media only screen and (max-width : 992px){
+
+	}
+
+	/* Small Devices, Tablets */
+	@media only screen and (max-width : 768px){
+        .ProductPanel{text-align: center;}
+.ProductPanel .productTitle{ text-align: center; margin-bottom: 10px;}
+.orderDescPanel .col-sm-2{ padding-bottom: 10px;}
+ .notesOrderAvailPanel{margin-bottom: 10px; border-bottom: solid 1px #ddd;  padding-bottom: 10px; border-top: solid 1px #ddd;}
+
+ .KistlerSubMenu .navbar-toggle {
+     background-color: transparent;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    float: none;
+    margin-bottom: 8px;
+    margin-right: 15px;
+    margin-top: 8px;
+    padding: 9px 10px;
+    position: relative;
+}
+.KistlerSubMenu .mobileMenu{
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+}
+
+
+	}
+
+	/* Extra Small Devices, Phones */
+	@media only screen and (max-width : 480px){
+
+	}
+
+	/* Custom, iPhone Retina */
+	@media only screen and (max-width : 320px){
+		
+	}
+
+
