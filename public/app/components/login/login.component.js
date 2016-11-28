@@ -75,7 +75,7 @@ var Login = (function () {
     Login = __decorate([
         core_1.Component({
             templateUrl: 'app/components/login/login.component.html',
-            styles: ["\n        .ng-valid {\n          border: 1px solid #42A948;\n        }\n        .ng-invalid {\n            border: 1px solid #a94442;\n        }\n    "]
+            styles: ["\n        input[type=password].ng-valid, input[type=email].ng-valid{\n          border: 1px solid #42A948;\n        }\n        input[type=password].ng-invalid, input[type=email].ng-invalid{\n            border: 1px solid #a94442;\n        }\n    "]
         }), 
         __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router, forms_1.FormBuilder])
     ], Login);
