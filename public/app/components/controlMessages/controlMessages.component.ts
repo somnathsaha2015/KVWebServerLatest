@@ -8,8 +8,9 @@ import { AppService } from '../../services/app.service';
     , styles: [`
     .validation { 
         color: #e80c4d;
-        font-weight: bold;
-        font-size: 1.1em; 
+        font-weight: 700;
+        font-size: .9em; 
+        margin-top:6px;
     }`]
 
 })
