@@ -16,6 +16,12 @@ var Order = (function () {
         var _this = this;
         this.appService = appService;
         this.router = router;
+        this.alert = {
+            show: false,
+            type: 'danger',
+            message: ''
+        };
+        this.excessOrder = this.appService.getValidationErrorMessage('excessOrder');
         this.staticTexts = {
             introText: this.appService.getMessage('mess:order:intro:text'),
             holidayGift: this.appService.getMessage('mess:order:holiday:gift'),
@@ -58,6 +64,7 @@ var Order = (function () {
             order.isShowDetails = true;
         }
     };
+    ;
     // save() {
     //   let finalOrder = this.orders.map(function (value, i) {
     //     return ({ offerId: value.id, orderQty: value.orderQty, wishList: value.wishList })
@@ -69,9 +76,22 @@ var Order = (function () {
         var ords = this.orders.filter(function (a) {
             return ((a.orderQty && a.orderQty > 0) || (a.wishList && a.wishList > 0));
         });
-        if (ords.length > 0) {
-            this.appService.reply('orders', this.orders);
-            this.router.navigate(['approve/order']);
+        var index = this.orders.findIndex(function (a) { return a.orderQty > a.availableQty; });
+        if (index != -1) {
+            this.alert.show = true;
+            this.alert.message = this.appService.getValidationErrorMessage('someExcessOrder');
+        }
+        else {
+            if (ords.length > 0) {
+                this.alert.show = false;
+                this.alert.message = '';
+                this.appService.reply('orders', this.orders);
+                this.router.navigate(['approve/order']);
+            }
+            else {
+                this.alert.show = true;
+                this.alert.message = this.appService.getValidationErrorMessage('emptyOrder');
+            }
         }
     };
     Order.prototype.ngOnInit = function () {

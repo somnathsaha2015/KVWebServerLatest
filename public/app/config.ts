@@ -10,20 +10,20 @@ export var urlHash = {
     'get:user:profile': '/api/profile',
     'post:save:profile': '/api/profile',
     'get:order:headers': '/api/order/headers',
-    'get:order:details':'/api/order/details/:id',
+    'get:order:details': '/api/order/details/:id',
     'get:shipping:address': '/api/shipping/address',
     'post:shipping:address': '/api/shipping/address',
     'get:credit:card': '/api/credit/card',
     'delete:credit:card': '/api/credit/card',
     'insert:credit:card': '/api/credit/card',
-    'set:default:card':'/api/credit/card/default',
-    'get:default:shipping:address':'/api/shipping/address/default',
-    'get:all:shipping:addresses':'/api/shipping/address',
-    'get:default:credit:card':'/api/credit/card/default',
-    'get:all:credit:cards':'/api/credit/card',
+    'set:default:card': '/api/credit/card/default',
+    'get:default:shipping:address': '/api/shipping/address/default',
+    'get:all:shipping:addresses': '/api/shipping/address',
+    'get:default:credit:card': '/api/credit/card/default',
+    'get:all:credit:cards': '/api/credit/card',
 
-    'get:approve:artifacts':'/api/approve/artifact',
-    'post:save:approve:request':'/api/approve/request'
+    'get:approve:artifacts': '/api/approve/artifact',
+    'post:save:approve:request': '/api/approve/request'
 };
 export var messages = {
     'mess:order:intro:text': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a tortor imperdiet, porttitor purus ut, pretium diam. Nulla convallis vel ipsum quis mattis. Nam in erat massa. Praesent bibendum dapibus lectus, nec imperdiet eros pharetra et. Vestibulum euismod velit sit amet nulla ornare iaculis viverra eget augue. Etiam dolor lacus, rhoncus in rhoncus eget, faucibus at nisi. Nulla nec mollis orci. Pellentesque pharetra facilisis dolor vel tincidunt. Suspendisse ullamcorper fermentum nunc, a dapibus tellus imperdiet vitae.',
@@ -31,8 +31,16 @@ export var messages = {
     'mess:order:minimum:request': 'Minimum request 6 bottles',
     'mess:order:bottom:notes': 'Wines in 6 bottle packages are subject to change',
     'mess:approve:heading': 'Please review your shipping address & payment method information for your order.',
-    'mess:receipt:heading':'Thank you for your Kistler Fall 2016 Request.',
-    'mess:receipt:info':'An acknowledgement email has been sent to @email. If you do not receive the email within 10 minutes, please check your Spam / Junk mail folder. Otherwise, contact us for assistance. '
+    'mess:receipt:heading': 'Thank you for your Kistler Fall 2016 Request.',
+    'mess:receipt:info': 'An acknowledgement email has been sent to @email. If you do not receive the email within 10 minutes, please check your Spam / Junk mail folder. Otherwise, contact us for assistance. '
+};
+export var validationErrorMessages = {
+    'required': 'Value is required',
+    'invalidEmail': 'Email address is invalid',
+    'loginFailed':'Login failed',
+    'emptyOrder':'Empty order is not allowed',
+    'excessOrder':'Request exceeds available quantity',
+    'someExcessOrder':'One or many of the requests exceeds available quantity'
 };
 export var viewBoxConfig = {
     '/login': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false },

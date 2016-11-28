@@ -30,6 +30,11 @@ var AppService = (function () {
     AppService.prototype.getMessage = function (messageKey) {
         return (config_1.messages[messageKey]);
     };
+    ;
+    AppService.prototype.getValidationErrorMessage = function (key) {
+        return (config_1.validationErrorMessages[key]);
+    };
+    ;
     AppService.prototype.setCredential = function (email, token) {
         var credential = { email: email, token: token };
         localStorage.setItem('credential', JSON.stringify(credential));

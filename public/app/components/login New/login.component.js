@@ -11,20 +11,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var forms_1 = require('@angular/forms');
-var customValidators_1 = require('../../services/customValidators');
+//import { AlertModule } from 'ng2-bootstrap';
 var app_service_1 = require('../../services/app.service');
+var customValidators_1 = require('../../services/customValidators');
 var md5_1 = require('../../vendor/md5');
 var Login = (function () {
     function Login(appService, router, fb) {
         var _this = this;
         this.appService = appService;
         this.router = router;
-        this.fb = fb;
-        this.alert = {
-            show: false,
-            type: 'danger',
-            message: this.appService.getValidationErrorMessage('loginFailed')
-        };
+        // alert: any = {
+        //   show: false,
+        //   type: 'danger',
+        //   message: this.appService.getValidationErrorMessage('loginFailed')
+        // }
+        this.isFailed = false;
         this.loginForm = fb.group({
             email: ['', [forms_1.Validators.required, customValidators_1.CustomValidators.emailValidator]],
             password: ['', forms_1.Validators.required]
@@ -34,44 +35,32 @@ var Login = (function () {
             console.log(d);
             if (d.data.error) {
                 console.log(d.data.error.status);
+                //this.alert.show = true;
                 appService.resetCredential();
-                _this.alert.show = true;
             }
             else {
                 console.log('token:' + d.data.token);
-                _this.alert.show = false;
-                _this.appService.setCredential(_this.loginForm.controls["email"].value, d.data.token);
+                //this.alert.show = false;
                 _this.router.navigate(['order']);
             }
         });
     }
     ;
     Login.prototype.authenticate = function (pwd) {
-        if (this.loginForm.valid) {
-            var base64Encoded = this.appService.encodeBase64(this.loginForm.controls["email"].value + ':' + md5_1.md5(pwd));
-            console.log('md5:' + md5_1.md5(pwd));
-            console.log(base64Encoded);
-            this.appService.httpPost('post:authenticate', { auth: base64Encoded });
-        }
-        else {
-            this.alert.show = true;
-        }
+        var base64Encoded = this.appService.encodeBase64(this.loginForm.controls["email"].value + ':' + md5_1.md5(pwd));
+        console.log('md5:' + md5_1.md5(pwd));
+        this.appService.httpPost('post:authenticate', { auth: base64Encoded });
     };
     ;
     Login.prototype.logout = function () {
         this.appService.resetCredential();
         this.router.navigate(['/login']);
     };
-    Login.prototype.ngOnInit = function () {
-        var _this = this;
-        this.loginFormChangesSubscription = this.loginForm.valueChanges.subscribe(function (x) {
-            _this.alert.show = false;
-        });
-    };
+    ;
     Login.prototype.ngOnDestroy = function () {
         this.subscription.unsubscribe();
-        this.loginFormChangesSubscription.unsubscribe();
     };
+    ;
     Login = __decorate([
         core_1.Component({
             templateUrl: 'app/components/login/login.component.html',

@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs/subscription';
 import { AppService } from '../../services/app.service';
-
+import {DatepickerModule} from 'ng2-bootstrap';
 @Component({
     templateUrl: 'app/components/profile/profile.component.html'
 })
 export class Profile {
     getProfileSubscription: Subscription;
     saveProfileSubscription: Subscription;
-    profile: {} = {};    
+    profile: {} = {};
+    dt:any;  
     constructor(private appService: AppService) {
         this.getProfileSubscription = appService.filterOn('get:user:profile')
             .subscribe(d => {
