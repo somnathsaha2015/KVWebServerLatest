@@ -1,12 +1,22 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/subscription';
+//import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
+//import { CustomValidators } from '../../services/customValidators';
+import { ControlMessages } from '../controlMessages/controlMessages.component';
 import { AppService } from '../../services/app.service';
+import { AlertModule } from 'ng2-bootstrap';
 
 @Component({
   templateUrl: 'app/components/order/order.component.html'
 })
 export class Order {
+  alert: any = {
+    show: false,
+    type: 'danger',
+    message: ''
+  };
+  excessOrder: string = this.appService.getValidationErrorMessage('excessOrder');
   email: string;
   staticTexts: {
     introText: string,
@@ -31,7 +41,7 @@ export class Order {
           this.orders = JSON.parse(d.data).Table.map(function (value, i) {
             value.orderQty = 0;
             value.wishList = 0;
-            value.imageUrl = 'app/assets/img/'+value.imageUrl;
+            value.imageUrl = 'app/assets/img/' + value.imageUrl;
             return (value);
           });
         }
@@ -54,7 +64,7 @@ export class Order {
       });
       order.isShowDetails = true;
     }
-  }
+  };
   // save() {
   //   let finalOrder = this.orders.map(function (value, i) {
   //     return ({ offerId: value.id, orderQty: value.orderQty, wishList: value.wishList })
@@ -66,9 +76,20 @@ export class Order {
     let ords = this.orders.filter((a) => {
       return ((a.orderQty && a.orderQty > 0) || (a.wishList && a.wishList > 0));
     });
-    if (ords.length > 0) {
-      this.appService.reply('orders', this.orders);
-      this.router.navigate(['approve/order']);
+    let index = this.orders.findIndex(a => a.orderQty > a.availableQty);
+    if (index != -1) {
+      this.alert.show = true;
+      this.alert.message = this.appService.getValidationErrorMessage('someExcessOrder');
+    } else {
+      if (ords.length > 0) {
+        this.alert.show = false;
+        this.alert.message = '';
+        this.appService.reply('orders', this.orders);
+        this.router.navigate(['approve/order']);
+      } else {
+        this.alert.show = true;
+        this.alert.message = this.appService.getValidationErrorMessage('emptyOrder');
+      }
     }
   }
   ngOnInit() {

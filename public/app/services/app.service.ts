@@ -14,7 +14,7 @@ import {
 import 'rxjs/add/operator/map'; //this is how operator is imported
 import 'rxjs/add/operator/filter';
 //import * as _ from 'lodash';
-import { urlHash, messages } from '../config';
+import { urlHash, messages, validationErrorMessages } from '../config';
 
 @Injectable()
 export class AppService {
@@ -29,7 +29,11 @@ export class AppService {
 
     getMessage(messageKey) {
         return (messages[messageKey]);
-    }
+    };
+
+    getValidationErrorMessage(key){
+        return(validationErrorMessages[key]);
+    };
 
     setCredential(email, token) {
         let credential = { email: email, token: token };

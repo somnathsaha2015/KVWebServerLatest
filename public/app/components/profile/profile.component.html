@@ -26,18 +26,23 @@
                     <label class="control-label col-sm-4" for="birthDay">Birthday:</label>
                     <div class="col-sm-4">
                         <input type="date" [(ngModel)]="profile.birthDay" class="form-control" id="birthday" name="birthday" placeholder="Enter birth day">
+                        <!--<div style="display:inline-block; min-height:290px;">
+                            <datepicker [(ngModel)]="dt" [minDate]="minDate" [showWeeks]="true" name='kvDatePicker'></datepicker>
+                        </div>-->
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-4" for="mailingAddress1">Mailing Address1:</label>
                     <div class="col-sm-4">
-                        <input type="text" [(ngModel)]="profile.mailingAddress1" class="form-control" id="mailingAddress1" name="mailingAddress1" placeholder="Enter mailing address1">
+                        <input type="text" [(ngModel)]="profile.mailingAddress1" class="form-control" id="mailingAddress1" name="mailingAddress1"
+                            placeholder="Enter mailing address1">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-4" for="mailingAddress2">Mailing Address2:</label>
                     <div class="col-sm-4">
-                        <input type="text" [(ngModel)]="profile.mailingAddress2" class="form-control" id="mailingAddress2" name="mailingAddress2" placeholder="Enter mailing address2">
+                        <input type="text" [(ngModel)]="profile.mailingAddress2" class="form-control" id="mailingAddress2" name="mailingAddress2"
+                            placeholder="Enter mailing address2">
                     </div>
                 </div>
                 <div class="form-group">

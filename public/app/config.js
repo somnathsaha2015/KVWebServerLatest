@@ -34,6 +34,14 @@ exports.messages = {
     'mess:receipt:heading': 'Thank you for your Kistler Fall 2016 Request.',
     'mess:receipt:info': 'An acknowledgement email has been sent to @email. If you do not receive the email within 10 minutes, please check your Spam / Junk mail folder. Otherwise, contact us for assistance. '
 };
+exports.validationErrorMessages = {
+    'required': 'Value is required',
+    'invalidEmail': 'Email address is invalid',
+    'loginFailed': 'Login failed',
+    'emptyOrder': 'Empty order is not allowed',
+    'excessOrder': 'Request exceeds available quantity',
+    'someExcessOrder': 'One or many of the requests exceeds available quantity'
+};
 exports.viewBoxConfig = {
     '/login': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false },
     '/order': { home: true, needHelp: true, order: false, myAccount: true, menuBar: false },

@@ -1,22 +1,21 @@
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
-import { Login} from '../login/login.component';
-import {CreateAccount } from '../createAccount/createAccount.component';
-import {ForgotPassword, SendPassword, ChangePassword } from '../managePassword/managePassword.component';
+import { Login } from '../login/login.component';
+import { CreateAccount } from '../createAccount/createAccount.component';
+import { ForgotPassword, SendPassword, ChangePassword } from '../managePassword/managePassword.component';
 import { Order } from '../order/order.component';
 import { Profile } from '../profile/profile.component';
 import { Receipt } from '../receipt/receipt.component';
 import { OrderHistory } from '../orderHistory/orderHistory.component';
 import { ShippingAddress } from '../shippingAddress/shippingAddress.component';
 import { PaymentMethod } from '../paymentMethod/paymentMethod.component';
-import{ApproveOrder} from '../approveOrder/approveOrder.component';
-import {LoginGuard} from '../../services/app.service';
-
+import { ApproveOrder } from '../approveOrder/approveOrder.component';
+import { LoginGuard } from '../../services/app.service';
 const routes: Routes = [
     {
         path: '',
-        redirectTo:'/login',
-        pathMatch:'full'        
+        redirectTo: '/login',
+        pathMatch: 'full'
     },
     {
         path: 'login',
@@ -24,60 +23,60 @@ const routes: Routes = [
     },
     {
         path: 'order',
-        component:Order
-        ,canActivate:[LoginGuard]
+        component: Order
+        , canActivate: [LoginGuard]
     },
     {
-        path:'forgot/password',
-        component:ForgotPassword
+        path: 'forgot/password',
+        component: ForgotPassword
     },
     {
-        path:'send/password',
-        component:SendPassword
+        path: 'send/password',
+        component: SendPassword
     },
     {
-        path:'change/password',
+        path: 'change/password',
         component: ChangePassword
-        ,canActivate:[LoginGuard]
+        , canActivate: [LoginGuard]
     },
     {
-        path:'create/account',
-        component:CreateAccount
+        path: 'create/account',
+        component: CreateAccount
     },
     {
-        path:'profile',
+        path: 'profile',
         component: Profile
-        ,canActivate:[LoginGuard]
+        , canActivate: [LoginGuard]
     },
     {
-        path:'approve/order',
+        path: 'approve/order',
         component: ApproveOrder
-        ,canActivate:[LoginGuard]
+        , canActivate: [LoginGuard]
     },
     {
-        path:'receipt',
+        path: 'receipt',
         component: Receipt
-        ,canActivate:[LoginGuard]
+        , canActivate: [LoginGuard]
     },
-     {
-        path:'order/history',
+    {
+        path: 'order/history',
         component: OrderHistory
-        ,canActivate:[LoginGuard]
+        , canActivate: [LoginGuard]
     },
     {
-        path:'shipping/address',
+        path: 'shipping/address',
         component: ShippingAddress
-        ,canActivate:[LoginGuard]
-     },
-    {
-        path:'payment/method',
-        component: PaymentMethod
-        ,canActivate:[LoginGuard]
+        , canActivate: [LoginGuard]
     },
     {
-        path:'**',
-        redirectTo:'/login',
-        pathMatch:'full'
-    }    
+        path: 'payment/method',
+        component: PaymentMethod
+        , canActivate: [LoginGuard]
+    },
+    {
+        path: '**',
+        redirectTo: '/login',
+        pathMatch: 'full'
+    }
 ];
 export const Routing: ModuleWithProviders = RouterModule.forRoot(routes);

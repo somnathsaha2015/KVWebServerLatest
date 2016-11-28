@@ -17,9 +17,7 @@ var login_component_1 = require('./components/login/login.component');
 var createAccount_component_1 = require('./components/createAccount/createAccount.component');
 var managePassword_component_1 = require('./components/managePassword/managePassword.component');
 var order_component_1 = require('./components/order/order.component');
-//import {ChildComponent} from './childComponent';
 var app_service_1 = require('./services/app.service');
-//import { LoginGuard } from './services/app.loginGuard';
 var app_routes_1 = require('./components/routes/app.routes');
 var profile_component_1 = require('./components/profile/profile.component');
 var approveOrder_component_1 = require('./components/approveOrder/approveOrder.component');
@@ -27,12 +25,12 @@ var receipt_component_1 = require('./components/receipt/receipt.component');
 var orderHistory_component_1 = require('./components/orderHistory/orderHistory.component');
 var shippingAddress_component_1 = require('./components/shippingAddress/shippingAddress.component');
 var paymentMethod_component_1 = require('./components/paymentMethod/paymentMethod.component');
-//import { ModalModule } from 'ng2-bootstrap';
+var customValidators_1 = require('./services/customValidators');
+var controlMessages_component_1 = require('./components/controlMessages/controlMessages.component');
 var ng2_modal_1 = require('ng2-modal');
 var ng2_bootstrap_1 = require('ng2-bootstrap');
 var ng2_bootstrap_2 = require('ng2-bootstrap');
 //import { jquery } from 'jquery';
-//import {ComponentStub1} from './componentStub1';
 var AppModule = (function () {
     function AppModule() {
     }
@@ -41,12 +39,15 @@ var AppModule = (function () {
             imports: [platform_browser_1.BrowserModule, http_1.HttpModule, app_routes_1.Routing, forms_1.FormsModule,
                 ng2_modal_1.ModalModule,
                 ng2_bootstrap_2.AlertModule,
-                ng2_bootstrap_1.PaginationModule
+                ng2_bootstrap_1.PaginationModule,
+                forms_1.ReactiveFormsModule,
+                ng2_bootstrap_2.DatepickerModule
             ],
             declarations: [app_component_1.AppComponent, login_component_1.Login, order_component_1.Order, managePassword_component_1.ForgotPassword,
                 managePassword_component_1.SendPassword, managePassword_component_1.ChangePassword, createAccount_component_1.CreateAccount,
-                profile_component_1.Profile, approveOrder_component_1.ApproveOrder, receipt_component_1.Receipt, orderHistory_component_1.OrderHistory, shippingAddress_component_1.ShippingAddress, paymentMethod_component_1.PaymentMethod],
-            providers: [app_service_1.AppService, app_service_1.LoginGuard],
+                profile_component_1.Profile, approveOrder_component_1.ApproveOrder, receipt_component_1.Receipt, orderHistory_component_1.OrderHistory, shippingAddress_component_1.ShippingAddress,
+                paymentMethod_component_1.PaymentMethod, controlMessages_component_1.ControlMessages],
+            providers: [app_service_1.AppService, app_service_1.LoginGuard, customValidators_1.CustomValidators],
             bootstrap: [app_component_1.AppComponent]
         }), 
         __metadata('design:paramtypes', [])
