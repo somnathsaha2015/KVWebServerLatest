@@ -11,14 +11,14 @@ import { ControlMessages } from '../controlMessages/controlMessages.component';
 
 @Component({
     templateUrl: 'app/components/login/login.component.html'
-    , styles: [`
-        input[type=password].ng-valid, input[type=email].ng-valid{
-          border: 1px solid #42A948;
-        }
-        input[type=password].ng-invalid, input[type=email].ng-invalid{
-            border: 1px solid #a94442;
-        }
-    `]
+    // , styles: [`
+    //     input[type=password].ng-valid, input[type=email].ng-valid{
+    //       border: 1px solid #42A948;
+    //     }
+    //     input[type=password].ng-invalid, input[type=email].ng-invalid{
+    //         border: 1px solid #a94442;
+    //     }
+    // `]
 })
 export class Login {
     alert: any = {

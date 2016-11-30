@@ -9,25 +9,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var forms_1 = require('@angular/forms');
-var customValidators_1 = require('../../services/customValidators');
 var app_service_1 = require('../../services/app.service');
 var Profile = (function () {
-    function Profile(appService, fb) {
+    function Profile(appService) {
         var _this = this;
         this.appService = appService;
         this.profile = {};
-        this.profileForm = fb.group({
-            firstName: ['', forms_1.Validators.required],
-            lastName: ['', forms_1.Validators.required],
-            phone: ['', [forms_1.Validators.required, customValidators_1.CustomValidators.usPhoneValidator]],
-            birthDay: ['', forms_1.Validators.required],
-            mailingAddress1: ['', forms_1.Validators.required],
-            mailingAddress2: [''],
-            mailingCity: ['', forms_1.Validators.required],
-            mailingState: ['', forms_1.Validators.required],
-            mailingZip: ['', forms_1.Validators.required]
-        });
         this.getProfileSubscription = appService.filterOn('get:user:profile')
             .subscribe(function (d) {
             if (d.data.error) {
@@ -66,7 +53,7 @@ var Profile = (function () {
         core_1.Component({
             templateUrl: 'app/components/profile/profile.component.html'
         }), 
-        __metadata('design:paramtypes', [app_service_1.AppService, forms_1.FormBuilder])
+        __metadata('design:paramtypes', [app_service_1.AppService])
     ], Profile);
     return Profile;
 }());

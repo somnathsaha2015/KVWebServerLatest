@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
+import { CustomValidators } from '../../services/customValidators';
 import { Subscription } from 'rxjs/subscription';
 import { AppService } from '../../services/app.service';
+import { AlertModule } from 'ng2-bootstrap';
+import { ControlMessages } from '../controlMessages/controlMessages.component';
 import { md5 } from '../../vendor/md5';
 
 @Component({
@@ -9,8 +13,9 @@ import { md5 } from '../../vendor/md5';
 })
 export class ForgotPassword {
   subscription: Subscription;
-  email: string;
-  constructor(private appService: AppService, private router: Router) {
+  //email: string;
+  forgotForm: FormGroup;
+  constructor(private appService: AppService, private router: Router, private fb: FormBuilder) {
     this.subscription = appService.filterOn('post:forgot:password')
       .subscribe(d => {
         if (d.data.error) {
@@ -21,8 +26,13 @@ export class ForgotPassword {
         }
       });
   };
-  sendMail() {
-    let base64Encoded = this.appService.encodeBase64(this.email);
+  ngOnInit() {
+    this.forgotForm = this.fb.group({
+      email: ['', [Validators.required, CustomValidators.emailValidator]]
+    });
+  }
+  sendMail(email) {
+    let base64Encoded = this.appService.encodeBase64(email);
     this.appService.httpPost('post:forgot:password', { auth: base64Encoded });
   }
   ngOnDestroy() {
@@ -64,19 +74,57 @@ export class SendPassword {
   templateUrl: 'app/components/managePassword/changePassword.component.html'
 })
 export class ChangePassword {
+  changePwdForm: FormGroup;
   subscription: Subscription;
-  constructor(private appService: AppService, private router: Router) {
+  alert: any = {};
+  constructor(private appService: AppService, private router: Router, private fb: FormBuilder) {
     this.subscription = appService.filterOn('post:change:password')
       .subscribe(d => {
         if (d.data.error) {
           console.log(d.data.error.status);
+          //this.alert.show=true;
+          this.appService.showAlert(this.alert, true, 'changePasswordFailed')
+
         } else {
           this.appService.resetCredential();
-          console.log('Success');
-        }        
-          this.router.navigate(['/login']);
+          this.appService.showAlert(this.alert, false);
+        }
       });
   };
+
+  ngOnInit() {
+    this.changePwdForm = this.fb.group({
+      oldPassword: ['', Validators.required]
+      , newPassword1: ['', Validators.required]
+      , newPassword2: ['', Validators.required
+        //, this.testAsync.bind(this)
+        ]
+    }, { validator: this.checkFormGroup });
+  };
+  // testAsync(control) {
+  //   let pr = new Promise((resolve, reject) => {
+  //     this.appService.filterOn('get:default:credit:card').subscribe(d => {
+  //       if (d.data.error) {
+  //         console.log('Error in default credit card');
+  //       } else {
+  //         resolve({ testError: true });
+  //       }
+  //     });
+  //     this.appService.httpGet('get:default:credit:card');
+  //   });
+  //   return (pr);
+  // }
+  checkFormGroup(group) {
+    let ret = null;
+    if (group.dirty) {
+      if (group.value.oldPassword == group.value.newPassword1) {
+        ret = { 'oldAndNewPasswordsSame': true }
+      } else if (group.value.newPassword1 != group.value.newPassword2) {
+        ret = { 'confirmPasswordMismatch': true };
+      }
+    }
+    return (ret);
+  }
   changePassword(oldPwd, newPwd1, newPwd2) {
     let credential = this.appService.getCredential();
     if (credential) {

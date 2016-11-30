@@ -127,6 +127,11 @@ router.post('/api/create/account', function (req, res, next) {
     }
 });
 
+router.get('/api/init/data', function (req, res, next) {
+    let initData = { kistler: config.homePageUrl, host: config.host };
+    res.status(200).json(initData);
+});
+
 router.all('/api*', function (req, res, next) {
     // implementation for token verification
     try {
@@ -165,7 +170,7 @@ router.post('/api/change/password', function (req, res, next) {
                 action: 'change:password', auth: auth
                 , emailItem: emailItem
             };
-            handler.edgePush(res, next, 'common:result', data);
+            handler.edgePush(res, next, 'common:result:no:data', data);
         } else {
             let err = new def.NError(404, messages.errAuthStringNotFound, messages.messAuthStringinPostRequest);
             next(err);
@@ -197,7 +202,7 @@ router.get('/api/order/headers', function (req, res, next) {
 
 router.get('/api/order/details/:orderId', function (req, res, next) {
     try {
-        let data = { action: 'sql:query', sqlKey: 'GetOrderDetails', sqlParms: { userId: req.user.userId, orderId:req.params.orderId } };
+        let data = { action: 'sql:query', sqlKey: 'GetOrderDetails', sqlParms: { userId: req.user.userId, orderId: req.params.orderId } };
         handler.edgePush(res, next, 'common:result:data', data);
     } catch (error) {
         let err = new def.NError(500, messages.errInternalServerError, error.message);
@@ -372,7 +377,7 @@ router.post('/api/approve/request', function (req, res, next) {
             orderBundle: orderBundle,
             userId: req.user.userId,
             emailItem: emailItem,
-            email:req.user.email
+            email: req.user.email
         };
         handler.edgePush(res, next, 'common:result:no:data', data);
     } catch (error) {

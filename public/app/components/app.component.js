@@ -15,12 +15,22 @@ var config_1 = require('../config');
 //import * as Rx from 'rxjs/rx';
 var AppComponent = (function () {
     function AppComponent(appService, router) {
-        //Catching up Router event by name 'NavigationEnd'
         var _this = this;
         this.appService = appService;
         this.router = router;
+        this.home = '#';
+        this.kistler = '#';
         this.viewBox = config_1.viewBoxConfig['/login'];
-        // router.events.filter((e: any) => {
+        this.initDataSub = appService.filterOn('get:init:data').subscribe(function (d) {
+            if (d.data.error) {
+                console.log(d.data.error);
+            }
+            else {
+                _this.home = d.data.host;
+                _this.kistler = d.data.kistler;
+            }
+        });
+        //Catching up Router event by name 'NavigationEnd'
         router.events.filter(function (e, t) {
             return (e.constructor.name === 'NavigationEnd');
         }).subscribe(function (event) {
@@ -29,8 +39,13 @@ var AppComponent = (function () {
         });
     }
     ;
+    AppComponent.prototype.ngOnInit = function () {
+        this.appService.httpGet('get:init:data');
+    };
+    ;
     AppComponent.prototype.ngOnDestroy = function () {
         this.subscription.unsubscribe();
+        this.initDataSub.unsubscribe();
     };
     AppComponent = __decorate([
         core_1.Component({

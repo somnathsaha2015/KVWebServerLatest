@@ -23,7 +23,8 @@ export var urlHash = {
     'get:all:credit:cards': '/api/credit/card',
 
     'get:approve:artifacts': '/api/approve/artifact',
-    'post:save:approve:request': '/api/approve/request'
+    'post:save:approve:request': '/api/approve/request',
+    'get:init:data':'/api/init/data'
 };
 export var messages = {
     'mess:order:intro:text': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a tortor imperdiet, porttitor purus ut, pretium diam. Nulla convallis vel ipsum quis mattis. Nam in erat massa. Praesent bibendum dapibus lectus, nec imperdiet eros pharetra et. Vestibulum euismod velit sit amet nulla ornare iaculis viverra eget augue. Etiam dolor lacus, rhoncus in rhoncus eget, faucibus at nisi. Nulla nec mollis orci. Pellentesque pharetra facilisis dolor vel tincidunt. Suspendisse ullamcorper fermentum nunc, a dapibus tellus imperdiet vitae.',
@@ -37,10 +38,17 @@ export var messages = {
 export var validationErrorMessages = {
     'required': 'Value is required',
     'invalidEmail': 'Email address is invalid',
+    'invalidUSPhone':'Phone number is invalid',
     'loginFailed':'Login failed',
     'emptyOrder':'Empty order is not allowed',
     'excessOrder':'Request exceeds available quantity',
-    'someExcessOrder':'One or many of the requests exceeds available quantity'
+    'someExcessOrder':'One or many of the requests exceeds available quantity',
+    'changePasswordFailed':'Change of password failed',
+    'oldAndNewPasswordsSame':'Old and new passwords cannot be same',
+    'confirmPasswordMismatch':'New Password and Confirm New Password mismatch',
+    'invalidCreditCard':'Credit card is invalid',
+    'testError':'This is test error',
+    'testError1':'This is test error 1'
 };
 export var viewBoxConfig = {
     '/login': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false },

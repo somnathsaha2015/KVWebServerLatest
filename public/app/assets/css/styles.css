@@ -201,6 +201,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#261e15', end
 border-radius: 5px 5px 5px 5px;}
 .alertExcesOrder span{ margin-top: 5px;}
 
+input.ng-valid{
+          border: 1px solid #42A948;
+        }
+        input.ng-invalid{
+            border: 1px solid #a94442;
+        }
+
 	/*==========  Mobile First Method  ==========*/
 
 	/* Custom, iPhone Retina */

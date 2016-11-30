@@ -10,13 +10,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
+var forms_1 = require('@angular/forms');
+var customValidators_1 = require('../../services/customValidators');
 var app_service_1 = require('../../services/app.service');
 var md5_1 = require('../../vendor/md5');
 var ForgotPassword = (function () {
-    function ForgotPassword(appService, router) {
+    function ForgotPassword(appService, router, fb) {
         var _this = this;
         this.appService = appService;
         this.router = router;
+        this.fb = fb;
         this.subscription = appService.filterOn('post:forgot:password')
             .subscribe(function (d) {
             if (d.data.error) {
@@ -29,8 +32,13 @@ var ForgotPassword = (function () {
         });
     }
     ;
-    ForgotPassword.prototype.sendMail = function () {
-        var base64Encoded = this.appService.encodeBase64(this.email);
+    ForgotPassword.prototype.ngOnInit = function () {
+        this.forgotForm = this.fb.group({
+            email: ['', [forms_1.Validators.required, customValidators_1.CustomValidators.emailValidator]]
+        });
+    };
+    ForgotPassword.prototype.sendMail = function (email) {
+        var base64Encoded = this.appService.encodeBase64(email);
         this.appService.httpPost('post:forgot:password', { auth: base64Encoded });
     };
     ForgotPassword.prototype.ngOnDestroy = function () {
@@ -40,7 +48,7 @@ var ForgotPassword = (function () {
         core_1.Component({
             templateUrl: 'app/components/managePassword/forgotPassword.component.html'
         }), 
-        __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router])
+        __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router, forms_1.FormBuilder])
     ], ForgotPassword);
     return ForgotPassword;
 }());
@@ -82,23 +90,60 @@ var SendPassword = (function () {
 exports.SendPassword = SendPassword;
 //change password component
 var ChangePassword = (function () {
-    function ChangePassword(appService, router) {
+    function ChangePassword(appService, router, fb) {
         var _this = this;
         this.appService = appService;
         this.router = router;
+        this.fb = fb;
+        this.alert = {};
         this.subscription = appService.filterOn('post:change:password')
             .subscribe(function (d) {
             if (d.data.error) {
                 console.log(d.data.error.status);
+                //this.alert.show=true;
+                _this.appService.showAlert(_this.alert, true, 'changePasswordFailed');
             }
             else {
                 _this.appService.resetCredential();
-                console.log('Success');
+                _this.appService.showAlert(_this.alert, false);
             }
-            _this.router.navigate(['/login']);
         });
     }
     ;
+    ChangePassword.prototype.ngOnInit = function () {
+        this.changePwdForm = this.fb.group({
+            oldPassword: ['', forms_1.Validators.required],
+            newPassword1: ['', forms_1.Validators.required],
+            newPassword2: ['', forms_1.Validators.required
+            ]
+        }, { validator: this.checkFormGroup });
+    };
+    ;
+    // testAsync(control) {
+    //   let pr = new Promise((resolve, reject) => {
+    //     this.appService.filterOn('get:default:credit:card').subscribe(d => {
+    //       if (d.data.error) {
+    //         console.log('Error in default credit card');
+    //       } else {
+    //         resolve({ testError: true });
+    //       }
+    //     });
+    //     this.appService.httpGet('get:default:credit:card');
+    //   });
+    //   return (pr);
+    // }
+    ChangePassword.prototype.checkFormGroup = function (group) {
+        var ret = null;
+        if (group.dirty) {
+            if (group.value.oldPassword == group.value.newPassword1) {
+                ret = { 'oldAndNewPasswordsSame': true };
+            }
+            else if (group.value.newPassword1 != group.value.newPassword2) {
+                ret = { 'confirmPasswordMismatch': true };
+            }
+        }
+        return (ret);
+    };
     ChangePassword.prototype.changePassword = function (oldPwd, newPwd1, newPwd2) {
         var credential = this.appService.getCredential();
         if (credential) {
@@ -122,7 +167,7 @@ var ChangePassword = (function () {
         core_1.Component({
             templateUrl: 'app/components/managePassword/changePassword.component.html'
         }), 
-        __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router])
+        __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router, forms_1.FormBuilder])
     ], ChangePassword);
     return ChangePassword;
 }());
