@@ -27,6 +27,11 @@ var AppService = (function () {
         this.channel = {};
     }
     ;
+    // getTestAsync(){
+    //     setTimeout(function(){ 
+    //         return('testError'); 
+    //     }, 3000);
+    // };
     AppService.prototype.getMessage = function (messageKey) {
         return (config_1.messages[messageKey]);
     };
@@ -59,6 +64,14 @@ var AppService = (function () {
     };
     AppService.prototype.resetCredential = function () {
         localStorage.removeItem('credential');
+    };
+    ;
+    AppService.prototype.showAlert = function (alert, show, id) {
+        alert.show = show;
+        if (id) {
+            alert.message = this.getValidationErrorMessage(id);
+            alert.type = 'danger';
+        }
     };
     ;
     AppService.prototype.httpPost = function (id, body) {

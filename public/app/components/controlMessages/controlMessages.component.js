@@ -36,7 +36,7 @@ var ControlMessages = (function () {
         core_1.Component({
             selector: 'control-messages',
             template: "<div class='validation' *ngIf=\"!isValid()\">{{errorMessage}}</div>",
-            styles: ["\n    .validation { \n        color: #e80c4d;\n        font-weight: 700;\n        font-size: .9em; \n        margin-top:6px;\n    }"]
+            styles: ["\n    .validation { \n        color: #e80c4d;\n        font-weight: 700;\n        font-size: .9em; \n        margin-top:6px;\n    }   \n    "]
         }), 
         __metadata('design:paramtypes', [app_service_1.AppService])
     ], ControlMessages);

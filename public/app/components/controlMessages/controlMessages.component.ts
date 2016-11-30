@@ -11,9 +11,11 @@ import { AppService } from '../../services/app.service';
         font-weight: 700;
         font-size: .9em; 
         margin-top:6px;
-    }`]
-
+    }   
+    `]
 })
+
+
 export class ControlMessages {
     @Input() control: FormControl;
     errorMessage: string;

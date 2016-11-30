@@ -27,12 +27,18 @@ export class AppService {
         this.channel = {};
     };
 
+    // getTestAsync(){
+    //     setTimeout(function(){ 
+    //         return('testError'); 
+    //     }, 3000);
+    // };
+
     getMessage(messageKey) {
         return (messages[messageKey]);
     };
 
-    getValidationErrorMessage(key){
-        return(validationErrorMessages[key]);
+    getValidationErrorMessage(key) {
+        return (validationErrorMessages[key]);
     };
 
     setCredential(email, token) {
@@ -58,6 +64,13 @@ export class AppService {
     resetCredential() {
         localStorage.removeItem('credential');
     };
+    showAlert(alert: any, show: boolean, id?: string) {
+        alert.show = show;
+        if (id) {
+            alert.message = this.getValidationErrorMessage(id);
+            alert.type = 'danger';
+        }
+    };
 
     httpPost(id: string, body?: any) {
         let url = urlHash[id];
@@ -65,11 +78,11 @@ export class AppService {
         headers.append('Content-Type', 'application/json');
         headers.append('x-access-token', this.getToken());
         body.token = this.getToken();
-        this.http.post(url, body,{headers:headers})
+        this.http.post(url, body, { headers: headers })
             .map(response => response.json())
             .subscribe(d =>
                 this.subject.next({
-                    id: id, data: d,body:body
+                    id: id, data: d, body: body
                 }), err =>
                 this.subject.next({
                     id: id,
@@ -78,9 +91,9 @@ export class AppService {
     };
     httpGet(id: string, body?: any) {
         var url = urlHash[id];
-        if(body && body.id){
-            url = url.replace(':id',body.id);
-        }        
+        if (body && body.id) {
+            url = url.replace(':id', body.id);
+        }
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('x-access-token', this.getToken());
@@ -134,7 +147,7 @@ export class AppService {
         }
         return (ret);
     };
-    reset(key:string){
+    reset(key: string) {
         delete this.channel[key];
     }
 

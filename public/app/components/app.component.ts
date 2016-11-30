@@ -13,22 +13,33 @@ import { viewBoxConfig } from '../config';
 
 export class AppComponent {
   subscription: Subscription;
+  initDataSub: Subscription;
+  home: string = '#';
+  kistler: string = '#';
   viewBox: {} = viewBoxConfig['/login'];
 
   constructor(private appService: AppService, private router: Router) {
-
+    this.initDataSub = appService.filterOn('get:init:data').subscribe(d => {
+      if (d.data.error) {
+        console.log(d.data.error);
+      } else {
+        this.home = d.data.host;
+        this.kistler = d.data.kistler;
+      }
+    });
     //Catching up Router event by name 'NavigationEnd'
-
-    // router.events.filter((e: any) => {
     router.events.filter((e: Event, t: number) => {
       return (e.constructor.name === 'NavigationEnd');
     }).subscribe((event: any) => {
       let url = event.urlAfterRedirects.split('?')[0];
       this.viewBox = viewBoxConfig[url];
     });
-
+  };
+  ngOnInit() {
+    this.appService.httpGet('get:init:data');
   };
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.initDataSub.unsubscribe();
   }
 }
