@@ -5,9 +5,9 @@
             <div class="row">
                 <div class="col-xs-2">Set As Default</div>
                 <div class="col-xs-3">Address</div>
-                <div class="col-xs-2">Zip</div>
-                <div class="col-xs-2">Street</div>
                 <div class="col-xs-2">City</div>
+                <div class="col-xs-2">State</div>
+                <div class="col-xs-2">Zip</div>
                 <div class="col-xs-1">&nbsp;</div>
             </div>
         </div>
@@ -17,9 +17,9 @@
                 <div class="row divierBar" *ngIf="(!address.isEdit)&&(!address.isNew)">
                     <div class="col-xs-2"><input type="radio" [checked]="address.isDefault" (click)="setDefault(address)" name="isDefault"></div>
                     <div class="col-xs-3">{{address.address1}}</div>
-                    <div class="col-xs-2">{{address.zip}}</div>
-                    <div class="col-xs-2">{{address.street}}</div>
                     <div class="col-xs-2">{{address.city}}</div>
+                    <div class="col-xs-2">{{address.street}}</div>
+                    <div class="col-xs-2">{{address.zip}}</div>
                     <div class="col-sm-1">
                         <button (click)="toggleEdit(address)" class="btn btn-kistler btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
                     </div>
@@ -27,9 +27,9 @@
                 <div class="row divierBar" *ngIf="(address.isEdit) && (!address.isNew)">
                     <div class="col-xs-2"><input type="radio" [checked]="address.isDefault" (click)="setDefault(address)" name="isDefault"></div>
                     <div class="col-xs-3"><input type="text" [(ngModel)]="address.address1" name="address1"></div>
-                    <div class="col-xs-2"><input type="text" [(ngModel)]="address.zip" name="zip"></div> 
-                    <div class="col-xs-2"><input type="text" [(ngModel)]="address.street" name="street"></div>
                     <div class="col-xs-2"><input type="text" [(ngModel)]="address.city" name="city"></div>
+                    <div class="col-xs-2"><input type="text" [(ngModel)]="address.street" name="street"></div>
+                    <div class="col-xs-2"><input type="text" [(ngModel)]="address.zip" name="zip"></div> 
                     <div class="col-xs-1">
                         <button (click)="toggleEdit(address)" class="btn btn-kistler btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
                     </div>
@@ -37,9 +37,9 @@
                 <div class="row divierBar" *ngIf="(address.isNew) && (!address.isEdit)">
                     <div class="col-xs-2"></div>
                     <div class="col-xs-3"><input type="text" [(ngModel)]="address.address1" name="newAddress1"></div>
-                    <div class="col-xs-2"><input type="text" [(ngModel)]="address.zip" name="newZip"></div>
+                    <div class="col-xs-2"><input type="text" [(ngModel)]="address.city" name="newCity"></div>
                     <div class="col-xs-2"><input type="text" [(ngModel)]="address.street" name="newStreet"></div>
-                    <div class="col-xs-2"><input type="text" [(ngModel)]="address.city" name="newCity"></div> 
+                    <div class="col-xs-2"><input type="text" [(ngModel)]="address.zip" name="newZip"></div>
                     <div class="col-xs-1"><button class="btn btn-kistler btn-xs" (click)="removeNew(i)">Remove</button></div>
                 </div>
             </div>
