@@ -2,16 +2,15 @@
     "jwtKey": "12345",
     "port": 6120,
     "env": "development",
-    "connString": "Data Source=(local);Initial Catalog=@dbName;Integrated Security=True",
+    "connString": "server=(local);Database=@dbName;Integrated Security=SSPI",
     "dbName": "KistlerDB",
     "host":"http://localhost:6120",
-    "homePageUrl":"http://www.kistlervineyards.com/",
     "sendMail":{
         "host":"smtp.gmail.com",       
         "port":587,
         "secure":false,
-        "fromUser":"capitalch2@gmail.com",
-        "fromUserPassword":"su$hant123",
+        "fromUser":"*****",
+        "fromUserPassword":"*****",
         "fromUserName":"System"
     },
     "forgotPassword":{
