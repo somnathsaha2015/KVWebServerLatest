@@ -10,8 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var common_1 = require('@angular/common');
-//import { ActivatedRoute } from '@angular/router';
-//import { ModalDirective } from 'ng2-bootstrap/ng2-bootstrap';
 var app_service_1 = require('../../services/app.service');
 var router_1 = require('@angular/router');
 var config_1 = require('../../config');
@@ -92,7 +90,7 @@ var ApproveOrder = (function () {
             }
             _this.computeTotals();
         });
-        this.allAddrSubscription = appService.filterOn('get:all:shipping:addresses').subscribe(function (d) {
+        this.allAddrSubscription = appService.filterOn('get:shipping:address').subscribe(function (d) {
             if (d.data.error) {
                 console.log(d.data.error);
             }
@@ -112,7 +110,7 @@ var ApproveOrder = (function () {
     ;
     ApproveOrder.prototype.changeSelectedAddress = function () {
         this.isAlert = false;
-        this.appService.httpGet('get:all:shipping:addresses');
+        this.appService.httpGet('get:shipping:address');
         this.addrModal.open();
     };
     ;

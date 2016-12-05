@@ -27,9 +27,12 @@ var shippingAddress_component_1 = require('./components/shippingAddress/shipping
 var paymentMethod_component_1 = require('./components/paymentMethod/paymentMethod.component');
 var customValidators_1 = require('./services/customValidators');
 var controlMessages_component_1 = require('./components/controlMessages/controlMessages.component');
+var createPassword_component_1 = require('./components/managePassword/createPassword.component');
 var ng2_modal_1 = require('ng2-modal');
 var ng2_bootstrap_1 = require('ng2-bootstrap');
 var ng2_bootstrap_2 = require('ng2-bootstrap');
+// import { MyDatePickerModule } from 'mydatepicker/dist/my-date-picker.module';
+var primeng_1 = require('primeng/primeng');
 //import { jquery } from 'jquery';
 var AppModule = (function () {
     function AppModule() {
@@ -41,12 +44,13 @@ var AppModule = (function () {
                 ng2_bootstrap_2.AlertModule,
                 ng2_bootstrap_1.PaginationModule,
                 forms_1.ReactiveFormsModule,
-                ng2_bootstrap_2.DatepickerModule
+                forms_1.FormsModule,
+                primeng_1.CalendarModule
             ],
             declarations: [app_component_1.AppComponent, login_component_1.Login, order_component_1.Order, managePassword_component_1.ForgotPassword,
                 managePassword_component_1.SendPassword, managePassword_component_1.ChangePassword, createAccount_component_1.CreateAccount,
                 profile_component_1.Profile, approveOrder_component_1.ApproveOrder, receipt_component_1.Receipt, orderHistory_component_1.OrderHistory, shippingAddress_component_1.ShippingAddress,
-                paymentMethod_component_1.PaymentMethod, controlMessages_component_1.ControlMessages],
+                paymentMethod_component_1.PaymentMethod, controlMessages_component_1.ControlMessages, createPassword_component_1.CreatePassword],
             providers: [app_service_1.AppService, app_service_1.LoginGuard, customValidators_1.CustomValidators],
             bootstrap: [app_component_1.AppComponent]
         }), 

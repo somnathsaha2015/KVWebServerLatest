@@ -35,6 +35,19 @@ router.post('/api/validate/token', function (req, res, next) {
     }
 });
 
+router.get('/api/init/data', function (req, res, next) {
+    let initData = { kistler: config.homePageUrl, host: config.host };
+    res.status(200).json(initData);
+});
+router.get('/api/all/master', function (req, res, next) {
+    try {
+        let data = { action: 'sql:query', sqlKey: 'GetAllMasters', sqlParms: {} };
+        handler.edgePush(res, next, 'common:result:data', data);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
+        next(err);
+    }
+});
 //authenticate
 router.post('/api/authenticate', function (req, res, next) {
     try {
@@ -54,7 +67,6 @@ router.post('/api/authenticate', function (req, res, next) {
     }
 });
 
-//forgot password url
 router.post('/api/send/password', function (req, res, next) {
     try {
         let auth = req.body.auth;
@@ -111,6 +123,34 @@ router.post('/api/forgot/password', function (req, res, next) {
         next(err);
     }
 });
+
+router.post('/api/create/password', function (req, res, next) {
+    try {
+        let auth = req.body.auth;
+        let encodedHash = req.body.encodedHash;
+        if (auth && encodedHash) {
+            jwt.verify(auth, config.jwtKey, function (error, decoded) {
+                if (error) {
+                    res.status(406).send(false);
+                } else {
+                    let body = config.createPassword.mailBody;
+                    let emailItem = config.sendMail;
+                    emailItem.htmlBody = body;
+                    emailItem.subject = config.createPassword.subject;
+                    emailItem.to=decoded.data;        
+                    var data = { action: 'create:password', data: { emailItem: emailItem, encodedHash: encodedHash } };
+                    handler.edgePush(res, next, 'common:result:no:data', data);
+                }
+            });
+        } else {
+            res.status(404).send(false);
+        }
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
+        next(err);
+    }
+});
+
 router.post('/api/create/account', function (req, res, next) {
     try {
         let account = req.body;
@@ -127,10 +167,6 @@ router.post('/api/create/account', function (req, res, next) {
     }
 });
 
-router.get('/api/init/data', function (req, res, next) {
-    let initData = { kistler: config.homePageUrl, host: config.host };
-    res.status(200).json(initData);
-});
 
 router.all('/api*', function (req, res, next) {
     // implementation for token verification
@@ -223,7 +259,7 @@ router.post('/api/order', function (req, res, next) {
 
 router.get('/api/profile', function (req, res, next) {
     try {
-        let data = { action: 'sql:query', sqlKey: 'GetProfile', sqlParms: { email: req.user.email } };
+        let data = { action: 'sql:query', sqlKey: 'GetProfile', sqlParms: { userId: req.user.userId } };
         handler.edgePush(res, next, 'common:result:data', data);
     } catch (error) {
         let err = new def.NError(500, messages.errInternalServerError, error.message);
@@ -236,7 +272,7 @@ router.post('/api/profile', function (req, res, next) {
         let data = {
             action: 'update:insert:profile',
             profile: req.body.profile,
-            email: req.user.email,
+            userId: req.user.userId,
             isUpdate: req.body.profile.id ? true : false
         };
         handler.edgePush(res, next, 'common:result:no:data', data);
@@ -259,9 +295,50 @@ router.get('/api/shipping/address', function (req, res, next) {
 router.post('/api/shipping/address', function (req, res, next) {
     try {
         let data = {
-            action: 'update:insert:address',
-            addresses: req.body.addresses,
-            email: req.user.email
+            action: 'sql:non:query',
+            sqlKey: 'InsertShippingAddress',
+            sqlParms: {
+                code: 'Test',
+                name: req.body.address.name,
+                street1: req.body.address.street1,
+                street2: req.body.address.street2,
+                city: req.body.address.city,
+                state: req.body.address.state,
+                zip: req.body.address.zip,
+                isDefault: req.body.address.isDefault,
+                phone: req.body.address.phone,
+                isoCode: req.body.address.isoCode,
+                country: req.body.address.country,
+                userId: req.user.userId
+            }
+        };
+        handler.edgePush(res, next, 'common:result:no:data', data);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
+        next(err);
+    }
+});
+
+router.put('/api/shipping/address', function (req, res, next) {
+    try {
+        let data = {
+            action: 'sql:non:query',
+            sqlKey: 'UpdateShippingAddress',
+            sqlParms: {
+                id: req.body.address.id,
+                code: 'Test',
+                name: req.body.address.name,
+                street1: req.body.address.street1,
+                street2: req.body.address.street2,
+                city: req.body.address.city,
+                state: req.body.address.state,
+                zip: req.body.address.zip,
+                isDefault: req.body.address.isDefault,
+                phone: req.body.address.phone,
+                isoCode: req.body.address.isoCode,
+                country: req.body.address.country,
+                userId: req.user.userId
+            }
         };
         handler.edgePush(res, next, 'common:result:no:data', data);
     } catch (error) {
@@ -385,4 +462,6 @@ router.post('/api/approve/request', function (req, res, next) {
         next(err);
     }
 });
+
+
 module.exports = router;

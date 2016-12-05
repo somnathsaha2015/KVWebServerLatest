@@ -1,56 +1,141 @@
 <div class="container mainContainer">
     <h2>Shipping Addresses</h2>
     <div class="panel panel-default kistlarShippingAddress">
-        <div class="panel-heading">
+        <!--<div class="panel-heading">
             <div class="row">
-                <div class="col-xs-2">Set As Default</div>
-                <div class="col-xs-3">Address</div>
-                <div class="col-xs-2">City</div>
-                <div class="col-xs-2">State</div>
-                <div class="col-xs-2">Zip</div>
-                <div class="col-xs-1">&nbsp;</div>
+                <div class="col-xs-1">Default</div>
+                <div class="col-xs-2">Co</div>
+                <div class="col-xs-3">Name</div>
+                <div class="col-xs-1">City</div>
+                <div class="col-xs-1">State</div>
+                <div class="col-xs-1">Zip</div>
+                <div class="col-xs-1">Country</div>
             </div>
-        </div>
-
+        </div>-->
         <div class="panel-body">
             <div *ngFor="let address of addresses; let i=index">
-                <div class="row divierBar" *ngIf="(!address.isEdit)&&(!address.isNew)">
-                    <div class="col-xs-2"><input type="radio" [checked]="address.isDefault" (click)="setDefault(address)" name="isDefault"></div>
-                    <div class="col-xs-3">{{address.address1}}</div>
-                    <div class="col-xs-2">{{address.city}}</div>
-                    <div class="col-xs-2">{{address.street}}</div>
-                    <div class="col-xs-2">{{address.zip}}</div>
-                    <div class="col-sm-1">
-                        <button (click)="toggleEdit(address)" class="btn btn-kistler btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
-                    </div>
-                </div>
-                <div class="row divierBar" *ngIf="(address.isEdit) && (!address.isNew)">
-                    <div class="col-xs-2"><input type="radio" [checked]="address.isDefault" (click)="setDefault(address)" name="isDefault"></div>
-                    <div class="col-xs-3"><input type="text" [(ngModel)]="address.address1" name="address1"></div>
-                    <div class="col-xs-2"><input type="text" [(ngModel)]="address.city" name="city"></div>
-                    <div class="col-xs-2"><input type="text" [(ngModel)]="address.street" name="street"></div>
-                    <div class="col-xs-2"><input type="text" [(ngModel)]="address.zip" name="zip"></div> 
-                    <div class="col-xs-1">
-                        <button (click)="toggleEdit(address)" class="btn btn-kistler btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
-                    </div>
-                </div>
-                <div class="row divierBar" *ngIf="(address.isNew) && (!address.isEdit)">
-                    <div class="col-xs-2"></div>
-                    <div class="col-xs-3"><input type="text" [(ngModel)]="address.address1" name="newAddress1"></div>
-                    <div class="col-xs-2"><input type="text" [(ngModel)]="address.city" name="newCity"></div>
-                    <div class="col-xs-2"><input type="text" [(ngModel)]="address.street" name="newStreet"></div>
-                    <div class="col-xs-2"><input type="text" [(ngModel)]="address.zip" name="newZip"></div>
-                    <div class="col-xs-1"><button class="btn btn-kistler btn-xs" (click)="removeNew(i)">Remove</button></div>
+                <div class="row divierBar">
+                    <div class="form-group">
+                        <span><input type="radio" name = "selected"></span>
+                        <span>{{address.name}}</span>
+                        <span>, {{address.street1}}</span>
+                        <span>, {{address.street2}}</span>
+                        <span>, {{address.city}}</span>
+                        <span>, {{address.state}}</span>
+                        <span>, {{address.zip}}</span>
+                        <span>, {{address.country}}</span>
+                        <span>, {{address.phone}}</span>
+                        <span>, Default:<input type="checkbox" [checked]="address.isDefault" [disabled]="true" name="isDefault"></span>
+                        <button *ngIf="isDataReady" type="button" class="btn btn-link" (click)="edit(address)">Edit</button>
+                    </div>                    
                 </div>
             </div>
             <div class="row panelAddSubmit">
                 <div class="pull-left">
-                    <button (click)="addAddress()" class="btn btn-md btn-kistler"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Add Address</button>
-                </div>
-                <div class="pull-right">
-                    <button (click)="submit()" class="btn btn-md btn-kistler"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> Submit</button>
+                    <button *ngIf='isDataReady' (click)="addAddress()" class="btn btn-md btn-kistler"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Add Address</button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="row">
+        <modal #shippingModal>
+
+            <modal-header>
+                <h2>Shipping Address</h2>
+            </modal-header>
+
+            <modal-content>
+                <form [formGroup]="shippingForm" novalidate (ngSubmit)="submit()" class="form-horizontal">
+                    <!--<div class="form-group">
+                        <label class="control-label col-sm-2" for="kvCo">Co:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="kvCo" placeholder=" Enter company" formControlName="co">
+                            <control-messages [control]="shippingForm.controls.co"></control-messages>
+                        </div>
+                    </div>-->
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="kvName">Full name:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="kvName" placeholder="Enter full name" formControlName="name">
+                            <control-messages [control]="shippingForm.controls.name"></control-messages>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="kvStreet1">Address line 1:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="kvStreet1" placeholder="Enter address line 1" formControlName="street1">
+                            <control-messages [control]="shippingForm.controls.street1"></control-messages>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="kvStreet2">Address line 2:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="kvStreet2" placeholder="Enter address line 2" formControlName="street2">
+                            <control-messages [control]="shippingForm.controls.street2"></control-messages>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="kvCity">City:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="kvCity" placeholder="Enter city" formControlName="city">
+                            <control-messages [control]="shippingForm.controls.city"></control-messages>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="kvState">State/Province/Region:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="kvState" placeholder="Enter state/province/region" formControlName="state">
+                            <control-messages [control]="shippingForm.controls.state"></control-messages>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="kvZip">Zip:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="kvZip" placeholder="Enter zip" formControlName="zip">
+                            <control-messages [control]="shippingForm.controls.zip"></control-messages>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="kvCountry">Country:</label>                        
+                        <div class="col-sm-9">                            
+                            <select formControlName='countryName' [(ngModel)]='selectedISOCode'  class="form-control" id="kvCountry" >
+                                <option *ngFor="let country of countries" [value]="country.isoCode">{{country.countryName}}</option>
+                            </select>
+                            <control-messages [control]="shippingForm.controls.countryName"></control-messages>
+                        </div>
+                    </div>                    
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="kvPhone">Phone number:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="kvPhone" placeholder="Enter shipping phone number" formControlName="phone">
+                            <control-messages [control]="shippingForm.controls.phone"></control-messages>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-9">
+                            <div class="checkbox">
+                                <label><input type="checkbox" formControlName="isDefault"> Use as my default address</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-inline signInPanel">
+                        <alert *ngIf="alert.show" [type]="alert.type" dismissable="true">{{alert.message}}</alert>
+                        <div class="form-group">
+                            <button *ngIf="isDataReady" type="submit" class="btn btn-md btn-kistler" [disabled]="!shippingForm.valid">Submit</button>
+                            <button type="button" class="btn btn-md btn-kistler" (click)="cancel()">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </modal-content>
+            <modal-footer>
+                <!--<div class="form-inline signInPanel">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-md btn-kistler" [disabled]="!shippingForm.valid">Submit</button>
+                            <button class="btn btn-md btn-kistler" (click)="shippingForm.reset(); shippingModal.close()">Cancel</button>
+                        </div>
+                    </div>-->
+            </modal-footer>
+        </modal>
     </div>
 </div>

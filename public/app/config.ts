@@ -4,6 +4,7 @@ export var urlHash = {
     'post:forgot:password': '/api/forgot/password',
     'post:send:password': '/api/send/password',
     'post:change:password': '/api/change/password',
+    'post:create:password':'/api/create/password',
     'post:create:account': '/api/create/account',
     'get:current:offer': '/api/current/offer',
     //'post:save:order': '/api/order',
@@ -13,18 +14,20 @@ export var urlHash = {
     'get:order:details': '/api/order/details/:id',
     'get:shipping:address': '/api/shipping/address',
     'post:shipping:address': '/api/shipping/address',
+    'put:shipping:address': '/api/shipping/address',
     'get:credit:card': '/api/credit/card',
     'delete:credit:card': '/api/credit/card',
     'insert:credit:card': '/api/credit/card',
     'set:default:card': '/api/credit/card/default',
     'get:default:shipping:address': '/api/shipping/address/default',
-    'get:all:shipping:addresses': '/api/shipping/address',
+    // 'get:all:shipping:addresses': '/api/shipping/address',
     'get:default:credit:card': '/api/credit/card/default',
     'get:all:credit:cards': '/api/credit/card',
 
     'get:approve:artifacts': '/api/approve/artifact',
     'post:save:approve:request': '/api/approve/request',
-    'get:init:data':'/api/init/data'
+    'get:init:data':'/api/init/data',
+    'get:all:masters':'/api/all/master'
 };
 export var messages = {
     'mess:order:intro:text': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a tortor imperdiet, porttitor purus ut, pretium diam. Nulla convallis vel ipsum quis mattis. Nam in erat massa. Praesent bibendum dapibus lectus, nec imperdiet eros pharetra et. Vestibulum euismod velit sit amet nulla ornare iaculis viverra eget augue. Etiam dolor lacus, rhoncus in rhoncus eget, faucibus at nisi. Nulla nec mollis orci. Pellentesque pharetra facilisis dolor vel tincidunt. Suspendisse ullamcorper fermentum nunc, a dapibus tellus imperdiet vitae.',
@@ -38,7 +41,7 @@ export var messages = {
 export var validationErrorMessages = {
     'required': 'Value is required',
     'invalidEmail': 'Email address is invalid',
-    'invalidUSPhone':'Phone number is invalid',
+    'invalidPhone':'Phone number is invalid',
     'loginFailed':'Login failed',
     'emptyOrder':'Empty order is not allowed',
     'excessOrder':'Request exceeds available quantity',
@@ -47,21 +50,26 @@ export var validationErrorMessages = {
     'oldAndNewPasswordsSame':'Old and new passwords cannot be same',
     'confirmPasswordMismatch':'New Password and Confirm New Password mismatch',
     'invalidCreditCard':'Credit card is invalid',
-    'testError':'This is test error',
-    'testError1':'This is test error 1'
+    'addressSaveFailed':'Saving of shipping address at server failed',
+    'dataSaved':'Data successfully saved',
+    'invalidDate':'Date is invalid',
+    'dataNotSaved':'Data could not be saved',
+    'createPasswordFailed':'Creation of new password failed',
+    'changePasswordSuccess':'Password successfully changed'
 };
 export var viewBoxConfig = {
-    '/login': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false },
-    '/order': { home: true, needHelp: true, order: false, myAccount: true, menuBar: false },
-    '/approve': { home: true, needHelp: true, order: false, myAccount: true, menuBar: false },
-    '/receipt': { home: true, needHelp: true, order: false, myAccount: true, menuBar: false },
-    '/profile': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true },
-    '/order/history': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true },
-    '/shipping/address': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true },
-    '/payment/method': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true },
-    '/change/password': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true },
-    '/create/account': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false },
-    '/forgot/password': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false },
-    '/send/password': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false },
-    '/approve/order': { home: true, needHelp: true, order: false, myAccount: true, menuBar: false }
+    '/login': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false,logout:false },
+    '/order': { home: true, needHelp: true, order: false, myAccount: true, menuBar: false,logout:true },
+    '/approve': { home: true, needHelp: true, order: false, myAccount: true, menuBar: false,logout:true },
+    '/receipt': { home: true, needHelp: true, order: false, myAccount: true, menuBar: false,logout:true },
+    '/profile': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true,logout:true },
+    '/order/history': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true,logout:true },
+    '/shipping/address': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true,logout:true },
+    '/payment/method': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true,logout:true },
+    '/change/password': { home: true, needHelp: false, order: true, myAccount: false, menuBar: true,logout:true },
+    '/create/account': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false,logout:true },
+    '/forgot/password': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false,logout:true },
+    '/send/password': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false,logout:true },
+    '/approve/order': { home: true, needHelp: true, order: false, myAccount: true, menuBar: false,logout:true },
+    '/create/password':{ home: true, needHelp: false, order: false, myAccount: false, menuBar: false,logout:false }
 };

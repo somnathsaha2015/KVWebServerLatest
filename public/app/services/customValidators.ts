@@ -6,13 +6,32 @@ export class CustomValidators {
         }
     };
 
-    static usPhoneValidator(control: FormControl) {
-        let re = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
-        //re=/^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/                        
-        if (!control.value.match(re)) {
-            return { 'invalidUSPhone': true };
+    static phoneValidator(control: FormControl) {
+        let ret;
+        let international = /^\(?[+]?(\d{1})\)?[- ]?\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+        let domestic = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+        let local = /^\(?(\d{3})\)?[- ]?(\d{4})$/;
+        let general = /^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i;
+        if(control.value == null){
+            ret = null;
+        } else 
+        if (!(control.value.match(international))
+            && (!control.value.match(domestic)
+                && (!control.value.match(local))
+                // && (!control.value.match(general))
+            )) {
+            ret = { 'invalidPhone': true };
         }
+        return(ret);
     };
+
+    // static usDateValidator(control:FormControl){
+    //     let dateRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
+    //     let mDate = control.value.toLocaleString();
+    //     if (!mDate.match(dateRegex)){
+    //         return{'invalidDate':true};
+    //     }
+    // }
 
     static creditCardValidator(control) {
         // Visa, MasterCard, American Express, Diners Club, Discover, JCB
