@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/subscription';
+import { Subscription } from 'rxjs/Subscription';
 import { AppService } from '../../services/app.service';
 import { md5 } from '../../vendor/md5';
 @Component({

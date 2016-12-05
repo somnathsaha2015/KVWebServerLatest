@@ -1,8 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs/subscription';
+import { Subscription } from 'rxjs/Subscription';
 import { Location } from '@angular/common';
-//import { ActivatedRoute } from '@angular/router';
-//import { ModalDirective } from 'ng2-bootstrap/ng2-bootstrap';
 import { AppService } from '../../services/app.service';
 import { Router } from '@angular/router';
 import { messages } from '../../config';
@@ -78,7 +76,7 @@ export class ApproveOrder {
             }
             this.computeTotals();
         });
-        this.allAddrSubscription = appService.filterOn('get:all:shipping:addresses').subscribe(d => {
+        this.allAddrSubscription = appService.filterOn('get:shipping:address').subscribe(d => {
             if (d.data.error) {
                 console.log(d.data.error);
             } else {
@@ -97,7 +95,7 @@ export class ApproveOrder {
     @ViewChild('addrModal') addrModal: Modal;
     changeSelectedAddress() {
         this.isAlert = false;
-        this.appService.httpGet('get:all:shipping:addresses');
+        this.appService.httpGet('get:shipping:address');
         this.addrModal.open();
     };
     selectAddress(address) {

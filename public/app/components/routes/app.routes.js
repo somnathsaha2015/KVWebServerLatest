@@ -10,6 +10,7 @@ var orderHistory_component_1 = require('../orderHistory/orderHistory.component')
 var shippingAddress_component_1 = require('../shippingAddress/shippingAddress.component');
 var paymentMethod_component_1 = require('../paymentMethod/paymentMethod.component');
 var approveOrder_component_1 = require('../approveOrder/approveOrder.component');
+var createPassword_component_1 = require('../managePassword/createPassword.component');
 var app_service_1 = require('../../services/app.service');
 var routes = [
     {
@@ -33,6 +34,10 @@ var routes = [
     {
         path: 'send/password',
         component: managePassword_component_1.SendPassword
+    },
+    {
+        path: 'create/password',
+        component: createPassword_component_1.CreatePassword
     },
     {
         path: 'change/password',

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/subscription';
-//import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription';
 //import { CustomValidators } from '../../services/customValidators';
 import { ControlMessages } from '../controlMessages/controlMessages.component';
 import { AppService } from '../../services/app.service';

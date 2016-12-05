@@ -82,9 +82,10 @@ filterOn('forgot:passowrd').subscribe(d => {
         } else {
             let body = config.forgotPassword.mailBody;
             let emailToken = jwt.sign({ data: d.result.email }, config.jwtKey, { expiresIn: "1d" });
-            let sendPasswordUrl = `${config.host}/send/password?code=${emailToken}`;
-            sendPasswordUrl = `<a href='${sendPasswordUrl}'>${sendPasswordUrl}</a>`;
-            body = body + "  " + sendPasswordUrl;
+            //let sendPasswordUrl = `${config.host}/send/password?code=${emailToken}`;
+            let createPasswordUrl = `${config.host}/create/password?code=${emailToken}`;
+            createPasswordUrl = `<a href='${createPasswordUrl}'>${createPasswordUrl}</a>`;
+            body = body + "  " + createPasswordUrl;
             let emailItem = config.sendMail;
             emailItem.htmlBody = body;
             emailItem.subject = config.forgotPassword.subject;

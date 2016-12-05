@@ -105,7 +105,7 @@ var ChangePassword = (function () {
             }
             else {
                 _this.appService.resetCredential();
-                _this.appService.showAlert(_this.alert, false);
+                _this.appService.showAlert(_this.alert, true, '', 'success');
             }
         });
     }
@@ -144,6 +144,7 @@ var ChangePassword = (function () {
         }
         return (ret);
     };
+    ;
     ChangePassword.prototype.changePassword = function (oldPwd, newPwd1, newPwd2) {
         var credential = this.appService.getCredential();
         if (credential) {

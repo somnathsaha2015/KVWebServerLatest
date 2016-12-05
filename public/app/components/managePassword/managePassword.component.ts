@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
 import { CustomValidators } from '../../services/customValidators';
-import { Subscription } from 'rxjs/subscription';
+import { Subscription } from 'rxjs/Subscription';
 import { AppService } from '../../services/app.service';
 import { AlertModule } from 'ng2-bootstrap';
 import { ControlMessages } from '../controlMessages/controlMessages.component';
@@ -87,7 +87,7 @@ export class ChangePassword {
 
         } else {
           this.appService.resetCredential();
-          this.appService.showAlert(this.alert, false);
+          this.appService.showAlert(this.alert,true,'','success');
         }
       });
   };
@@ -124,7 +124,7 @@ export class ChangePassword {
       }
     }
     return (ret);
-  }
+  };
   changePassword(oldPwd, newPwd1, newPwd2) {
     let credential = this.appService.getCredential();
     if (credential) {

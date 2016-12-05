@@ -4,7 +4,6 @@ import { Router, NavigationEnd, Event } from '@angular/router';
 import { Subscription } from 'rxjs/subscription';
 import { AppService } from '../services/app.service';
 import { viewBoxConfig } from '../config';
-//import * as Rx from 'rxjs/rx';
 
 @Component({
   selector: 'my-app',
@@ -17,17 +16,18 @@ export class AppComponent {
   home: string = '#';
   kistler: string = '#';
   viewBox: {} = viewBoxConfig['/login'];
+  showMenu:boolean=true;
+  myAccountshowMenu:boolean=true;
 
   constructor(private appService: AppService, private router: Router) {
     this.initDataSub = appService.filterOn('get:init:data').subscribe(d => {
       if (d.data.error) {
         console.log(d.data.error);
       } else {
-        this.home = d.data.host;
+        //this.home = d.data.host;
         this.kistler = d.data.kistler;
       }
-    });
-    //Catching up Router event by name 'NavigationEnd'
+    });    
     router.events.filter((e: Event, t: number) => {
       return (e.constructor.name === 'NavigationEnd');
     }).subscribe((event: any) => {
@@ -35,11 +35,40 @@ export class AppComponent {
       this.viewBox = viewBoxConfig[url];
     });
   };
+  logout() {
+    this.appService.resetCredential();
+  }
   ngOnInit() {
     this.appService.httpGet('get:init:data');
   };
   ngOnDestroy() {
     this.subscription.unsubscribe();
     this.initDataSub.unsubscribe();
-  }
+  };
+  menuToggle(){
+  if(this.showMenu){
+   this.showMenu=false;
+  }else{
+    this.showMenu=true;
+   }
+  };
+  myAccountToggle(){
+  if(this.myAccountshowMenu){
+   this.myAccountshowMenu=false;
+  }else{
+    this.myAccountshowMenu=true;
+   }
+  };
+ onResize(event) {
+  if(event.target.innerWidth < 768){
+      if(this.showMenu || this.myAccountshowMenu){
+        this.showMenu=false;
+        this.myAccountshowMenu=false;
+      }
+ }else{
+      this.showMenu=true;
+      this.myAccountshowMenu=true;
+ }
+};
+
 }

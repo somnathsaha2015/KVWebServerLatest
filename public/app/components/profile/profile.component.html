@@ -27,22 +27,24 @@
                 <div class="form-group">
                     <label class="control-label col-sm-4" for="birthDay">Birthday:</label>
                     <div class="col-sm-4">
-                        <input type="date" formControlName="birthDay" class="form-control" id="birthday" name="birthday" placeholder="Enter birth day">
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-4">
+                                <p-calendar formControlName='birthDay' [(ngModel)]="primeDate" [showIcon]="true" placeholder='mm/dd/yyyy' [monthNavigator]="true"
+                                    [yearNavigator]="true" yearRange="1900:2030"></p-calendar>
+                            </div>
+                        </div>
                         <control-messages [control]="profileForm.controls.birthDay"></control-messages>
-                        <!--<div style="display:inline-block; min-height:290px;">
-                            <datepicker [(ngModel)]="dt" [minDate]="minDate" [showWeeks]="true" name='kvDatePicker'></datepicker>
-                        </div>-->
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-4" for="mailingAddress1">Mailing Address1:</label>
+                    <label class="control-label col-sm-4" for="mailingAddress1">Mailing Address 1:</label>
                     <div class="col-sm-4">
                         <input type="text" formControlName="mailingAddress1" class="form-control" id="mailingAddress1" name="mailingAddress1" placeholder="Enter mailing address1">
                         <control-messages [control]="profileForm.controls.mailingAddress1"></control-messages>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-4" for="mailingAddress2">Mailing Address2:</label>
+                    <label class="control-label col-sm-4" for="mailingAddress2">Mailing Address 2:</label>
                     <div class="col-sm-4">
                         <input type="text" formControlName="mailingAddress2" class="form-control" id="mailingAddress2" name="mailingAddress2" placeholder="Enter mailing address2">
                     </div>
@@ -70,7 +72,8 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-4 col-sm-4">
-                        <button type="submit" [disabled]="!profileForm.valid" class="btn btn-kistler"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> Submit</button>
+                        <alert *ngIf="alert.show" [type]="alert.type" [dismissible]="true">{{alert.message}}</alert>
+                        <button type="submit" [disabled]="!(profileForm.valid && profileForm.dirty)" class="btn btn-kistler"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> Submit</button>
                     </div>
                 </div>
             </form>

@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+/*
+This software developed by Sushant Agrawal, India, 92/2A Bidhan Nagar Road, Kol 700067, email: capitalch@gmail.com, sagarwal@netwoven.com
+*/
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var forms_1 = require('@angular/forms');
@@ -58,10 +61,6 @@ var Login = (function () {
         }
     };
     ;
-    Login.prototype.logout = function () {
-        this.appService.resetCredential();
-        this.router.navigate(['/login']);
-    };
     Login.prototype.ngOnInit = function () {
         var _this = this;
         this.loginFormChangesSubscription = this.loginForm.valueChanges.subscribe(function (x) {

@@ -12,7 +12,6 @@ var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var app_service_1 = require('../services/app.service');
 var config_1 = require('../config');
-//import * as Rx from 'rxjs/rx';
 var AppComponent = (function () {
     function AppComponent(appService, router) {
         var _this = this;
@@ -21,16 +20,17 @@ var AppComponent = (function () {
         this.home = '#';
         this.kistler = '#';
         this.viewBox = config_1.viewBoxConfig['/login'];
+        this.showMenu = true;
+        this.myAccountshowMenu = true;
         this.initDataSub = appService.filterOn('get:init:data').subscribe(function (d) {
             if (d.data.error) {
                 console.log(d.data.error);
             }
             else {
-                _this.home = d.data.host;
+                //this.home = d.data.host;
                 _this.kistler = d.data.kistler;
             }
         });
-        //Catching up Router event by name 'NavigationEnd'
         router.events.filter(function (e, t) {
             return (e.constructor.name === 'NavigationEnd');
         }).subscribe(function (event) {
@@ -39,6 +39,9 @@ var AppComponent = (function () {
         });
     }
     ;
+    AppComponent.prototype.logout = function () {
+        this.appService.resetCredential();
+    };
     AppComponent.prototype.ngOnInit = function () {
         this.appService.httpGet('get:init:data');
     };
@@ -47,6 +50,38 @@ var AppComponent = (function () {
         this.subscription.unsubscribe();
         this.initDataSub.unsubscribe();
     };
+    ;
+    AppComponent.prototype.menuToggle = function () {
+        if (this.showMenu) {
+            this.showMenu = false;
+        }
+        else {
+            this.showMenu = true;
+        }
+    };
+    ;
+    AppComponent.prototype.myAccountToggle = function () {
+        if (this.myAccountshowMenu) {
+            this.myAccountshowMenu = false;
+        }
+        else {
+            this.myAccountshowMenu = true;
+        }
+    };
+    ;
+    AppComponent.prototype.onResize = function (event) {
+        if (event.target.innerWidth < 768) {
+            if (this.showMenu || this.myAccountshowMenu) {
+                this.showMenu = false;
+                this.myAccountshowMenu = false;
+            }
+        }
+        else {
+            this.showMenu = true;
+            this.myAccountshowMenu = true;
+        }
+    };
+    ;
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',

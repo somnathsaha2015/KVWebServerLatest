@@ -17,10 +17,12 @@ import { ShippingAddress } from './components/shippingAddress/shippingAddress.co
 import { PaymentMethod } from './components/paymentMethod/paymentMethod.component';
 import { CustomValidators } from './services/customValidators';
 import { ControlMessages } from './components/controlMessages/controlMessages.component';
+import { CreatePassword } from './components/managePassword/createPassword.component';
 import { ModalModule } from 'ng2-modal';
 import { PaginationModule } from 'ng2-bootstrap';
-import { AlertModule, DatepickerModule} from 'ng2-bootstrap';
-
+import { AlertModule } from 'ng2-bootstrap';
+// import { MyDatePickerModule } from 'mydatepicker/dist/my-date-picker.module';
+import { CalendarModule } from 'primeng/primeng';
 //import { jquery } from 'jquery';
 
 @NgModule({
@@ -29,12 +31,15 @@ import { AlertModule, DatepickerModule} from 'ng2-bootstrap';
     , AlertModule
     , PaginationModule
     , ReactiveFormsModule
-    ,DatepickerModule
+    , FormsModule
+    // , DatepickerModule,
+    // , MyDatePickerModule
+    , CalendarModule
   ]
   , declarations: [AppComponent, Login, Order, ForgotPassword
     , SendPassword, ChangePassword, CreateAccount,
     Profile, ApproveOrder, Receipt, OrderHistory, ShippingAddress,
-    PaymentMethod, ControlMessages]
+    PaymentMethod, ControlMessages, CreatePassword]
   , providers: [AppService, LoginGuard, CustomValidators]
   , bootstrap: [AppComponent]
 })
