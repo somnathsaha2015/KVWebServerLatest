@@ -207,7 +207,7 @@ input.ng-valid{
         input.ng-invalid{
             border: 1px solid #a94442;
         }
-
+.name-shipping-address{ color: #a75b02; font-size: 1.1em; font-weight: 700; }
 	/*==========  Mobile First Method  ==========*/
 
 	/* Custom, iPhone Retina */

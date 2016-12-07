@@ -5,7 +5,7 @@
   <div class="panel-heading">Address</div>
   <div class="panel-body">
     <div class="row">
-      <div class="col-sm-10">{{selectedAddress.address1}}, {{selectedAddress.zip}}, {{selectedAddress.city}}, {{selectedAddress.street}}</div>
+      <div class="col-sm-10">{{selectedAddress.street1}}, {{selectedAddress.street2}}, {{selectedAddress.city}}, {{selectedAddress.state}}, {{selectedAddress.zip}}, {{selectedAddress.country}}</div>
      <div class="col-sm-2"><button type="button" class="btn btn-md btn-kistler" (click)="changeSelectedAddress()">Change</button></div>
     </div>
   </div>
@@ -16,7 +16,7 @@
   <div class="panel-body">
      <div class="row">
       <div class="col-sm-10">
-      {{selectedCard.cardName}}, {{selectedCard.cardNumber}}
+      {{selectedCard.Name}}, {{selectedCard.CCNumber}}
       </div>
       <div class="col-sm-2"><button type="button" class="btn btn-md btn-kistler" (click)="changeSelectedCard()">Change</button></div>
      </div>
@@ -97,8 +97,8 @@
       </modal-header>
       <modal-content>
         <div class="form-group" *ngFor="let address of allAddresses; let i=index">
-          <input type="radio" [checked]="address.isDefault" (click)=selectAddress(address) name="isDefault"> {{address.address1}},
-          {{address.street}}, {{address.city}}, {{address.zip}}
+          <input type="radio" [checked]="address.shippid == selectedAddress.shippid" (click)=selectAddress(address) name="isDefault">  
+         {{address.name}}, {{address.street1}}, {{address.street2}}, {{address.city}}, {{address.state}}, {{address.zip}}, {{address.country}}
         </div>
       </modal-content>
       <modal-footer>

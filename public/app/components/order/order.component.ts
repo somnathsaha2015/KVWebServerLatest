@@ -28,8 +28,11 @@ export class Order {
     minimumRequest: this.appService.getMessage('mess:order:minimum:request'),
     bottomNotes: this.appService.getMessage('mess:order:bottom:notes')
   };
+  isholidayGift:boolean=false;
+  isShowHolidayGiftOption:boolean = false;  
   currentOfferSubscription: Subscription;
   saveOrderSubscription: Subscription;
+  currentSettingsSubscription: Subscription;  
   orders: any[];
   constructor(private appService: AppService, private router: Router) {
     this.currentOfferSubscription = appService.filterOn('get:current:offer')
@@ -53,6 +56,21 @@ export class Order {
           console.log(d);
         }
       });
+    this.currentSettingsSubscription = appService.filterOn('get:current:settings')
+    .subscribe(d => {
+      if (d.data.error) {
+        console.log(d.data.error);
+      } else {
+          let settings = JSON.parse(d.data).Table;
+                  if (settings.length > 0) {
+                        this.staticTexts.minimumRequest = "Minimum request " + settings[0].MinOrderBottles+ " bottles";;
+                        this.staticTexts.bottomNotes = "Wines in " + settings[0].MinOrderBottles+ " bottle packages are subject to change";;
+                        this.isShowHolidayGiftOption = !settings[0].HideHolidayGiftCheckBox;// == "true" ? true : false;
+                        //console.log("this.isShowHolidayGiftOption="+this.isShowHolidayGiftOption);
+                  }
+        
+      }
+    });
   };
   toggleDetails(order) {
     if (order.isShowDetails) {
@@ -97,6 +115,7 @@ export class Order {
       this.orders = ords;
     } else {
       this.appService.httpGet('get:current:offer');
+      this.appService.httpGet('get:current:settings');
     }
   };
   ngOnDestroy() {

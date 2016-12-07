@@ -37,6 +37,9 @@ var ApproveOrder = (function () {
         this.approveHeading = config_1.messages['mess:approve:heading'];
         this.allAddresses = [{}];
         this.allCards = [{}];
+        this.holidaygift = false;
+        this.isChangeAddress = false;
+        this.shippingBottles = {};
         this.alert = { type: "success" };
         this.alerts = [
             {
@@ -75,7 +78,9 @@ var ApproveOrder = (function () {
                     _this.selectedCard = null;
                 }
                 if (artifacts.Table1.length > 0) {
-                    _this.selectedAddress = artifacts.Table1[0];
+                    if (!_this.isChangeAddress) {
+                        _this.selectedAddress = artifacts.Table1[0];
+                    }
                 }
                 else {
                     _this.selectedAddress = null;
@@ -106,10 +111,30 @@ var ApproveOrder = (function () {
                 _this.allCards = JSON.parse(d.data).Table;
             }
         });
+        this.shippingandSalesTaxSub = appService.filterOn('get:approve:artifacts:ShippingandSalesTax').subscribe(function (d) {
+            if (d.data.error) {
+                console.log(d.data.error);
+            }
+            else {
+                var shippingandSaletax = JSON.parse(d.data).Table;
+                _this.selectedAddress.salesTaxPerc = shippingandSaletax[0].SalesTaxRate;
+                _this.selectedAddress.shippingCharges = shippingandSaletax[0].ShipPrice;
+                if (shippingandSaletax.length == 2) {
+                    _this.selectedAddress.addlshippingCharges = shippingandSaletax[1].ShipPrice;
+                }
+                else {
+                    if (_this.shippingBottles.requestedShippingBottle == _this.shippingBottles.additinalShippingBottle) {
+                        _this.selectedAddress.addlshippingCharges = shippingandSaletax[0].ShipPrice;
+                    }
+                }
+            }
+            _this.computeTotals();
+        });
     }
     ;
     ApproveOrder.prototype.changeSelectedAddress = function () {
         this.isAlert = false;
+        this.isChangeAddress = true;
         this.appService.httpGet('get:shipping:address');
         this.addrModal.open();
     };
@@ -117,6 +142,7 @@ var ApproveOrder = (function () {
     ApproveOrder.prototype.selectAddress = function (address) {
         this.selectedAddress = address;
         this.addrModal.close();
+        this.getShippingandSalesTax();
     };
     ;
     ApproveOrder.prototype.changeSelectedCard = function () {
@@ -137,13 +163,47 @@ var ApproveOrder = (function () {
     ApproveOrder.prototype.approve = function () {
         var orderBundle = {};
         orderBundle.orderMaster = {
-            MDate: new Date(),
-            TotalPriceWine: this.footer.wineTotals.wine / 1,
-            TotalPriceAddl: this.footer.wineTotals.addl / 1,
-            SalesTaxWine: this.footer.salesTaxTotals.wine / 1,
-            SalesTaxAddl: this.footer.salesTaxTotals.addl / 1,
-            ShippingWine: this.footer.shippingTotals.wine / 1,
-            ShippingAddl: this.footer.shippingTotals.addl / 1
+            TaxRate: this.selectedAddress.salesTaxPerc,
+            PreviousBalance: this.footer.prevBalances.wine,
+            Status: "pending",
+            ShipName: this.selectedAddress.Name,
+            ShipCo: this.selectedAddress.Co,
+            ShipStreet1: this.selectedAddress.Street1,
+            ShipStreet2: this.selectedAddress.Street2,
+            ShipCity: this.selectedAddress.City,
+            ShipState: this.selectedAddress.State,
+            ShipZip: this.selectedAddress.Zip,
+            ShipCountry: this.selectedAddress.Country,
+            ShipISOCode: this.selectedAddress.ISOCode,
+            ShipPhone: this.selectedAddress.Phone,
+            PaymentType: "CC",
+            CCFirstName: this.selectedCard.CCFirstName,
+            CCLastName: this.selectedCard.CCLastName,
+            CCType: this.selectedCard.CCType,
+            CCNumber: this.selectedCard.CCNumber,
+            CCExpiryMonth: this.selectedCard.CCExpiryMonth,
+            CCExpiryYear: this.selectedCard.CCExpiryYear,
+            CCSecurityCode: this.selectedCard.CCSecurityCode,
+            BillingName: this.selectedCard.Name,
+            BillingCo: this.selectedCard.Co,
+            BillingStreet1: this.selectedCard.Street1,
+            BillingStreet2: this.selectedCard.Street2,
+            BillingCity: this.selectedCard.City,
+            BillingState: this.selectedCard.State,
+            BillingZip: this.selectedCard.Zip,
+            BillingCountry: this.selectedCard.Country,
+            BillingISOCode: this.selectedCard.ISOCode,
+            DayPhone: this.selectedCard.Phone,
+            MailName: this.selectedCard.Name,
+            MailCo: this.selectedCard.Co,
+            MailStreet1: this.selectedCard.Street1,
+            MailStreet2: this.selectedCard.Street2,
+            MailCity: this.selectedCard.City,
+            MailState: this.selectedCard.State,
+            MailZip: this.selectedCard.Zip,
+            MailCountry: this.selectedCard.Country,
+            MailISOCode: this.selectedCard.ISOCode,
+            HolidayGift: this.holidaygift
         };
         var master = orderBundle.orderMaster;
         orderBundle.orderMaster.Amount = master.TotalPriceWine + master.TotalPriceAddl + master.SalesTaxWine
@@ -153,13 +213,15 @@ var ApproveOrder = (function () {
             return ((a.orderQty && a.orderQty > 0) || (a.wishList && a.wishList > 0));
         }).map(function (a) {
             return ({
-                OfferId: a.id,
-                OrderQty: a.orderQty,
-                WishList: a.wishList,
-                Price: a.price
+                ProductId: a.id,
+                NumOrdered: a.orderQty,
+                AdditionalRequested: a.wishList,
+                Price: a.price,
+                Allocation: a.availableQty,
+                SortOrder: 0
             });
         });
-        orderBundle.orderImpDetails = { AddressId: this.selectedAddress.id, CreditCardId: this.selectedCard.id };
+        //orderBundle.orderImpDetails = { AddressId: this.selectedAddress.id, CreditCardId: this.selectedCard.id };
         this.appService.httpPost('post:save:approve:request', orderBundle);
     };
     ;
@@ -196,18 +258,23 @@ var ApproveOrder = (function () {
     ;
     ApproveOrder.prototype.computeSalesTax = function () {
         var effectiveSalesTaxPerc = this.selectedAddress.salesTaxPerc;
+        /*
         if (effectiveSalesTaxPerc && (effectiveSalesTaxPerc > 0)) {
             this.footer.salesTaxPerc = effectiveSalesTaxPerc;
-        }
-        else {
+        } else {
             effectiveSalesTaxPerc = this.selectedAddress.defaultSalesTaxPerc;
             if (effectiveSalesTaxPerc && (effectiveSalesTaxPerc > 0)) {
                 this.footer.salesTaxPerc = effectiveSalesTaxPerc;
-            }
-            else {
+            } else {
                 this.footer.salesTaxPerc = 0.00;
             }
         }
+        this.footer.salesTaxTotals = {
+            wine: this.footer.wineTotals.wine * this.footer.salesTaxPerc / 100,
+            addl: this.footer.wineTotals.addl * this.footer.salesTaxPerc / 100
+        }
+        */
+        this.footer.salesTaxPerc = effectiveSalesTaxPerc;
         this.footer.salesTaxTotals = {
             wine: this.footer.wineTotals.wine * this.footer.salesTaxPerc / 100,
             addl: this.footer.wineTotals.addl * this.footer.salesTaxPerc / 100
@@ -215,23 +282,23 @@ var ApproveOrder = (function () {
     };
     ;
     ApproveOrder.prototype.computeShipping = function () {
-        var effectiveShipping = this.selectedAddress.shippingCharges;
+        /*let effectiveShipping = this.selectedAddress.shippingCharges;
         if (effectiveShipping && (effectiveShipping > 0)) {
             this.footer.shippingTotals = effectiveShipping;
-        }
-        else {
+        } else {
             effectiveShipping = this.selectedAddress.defaultShippingCharges;
             if (effectiveShipping && (effectiveShipping > 0)) {
                 this.footer.shippingTotals = { wine: effectiveShipping, addl: effectiveShipping };
-            }
-            else {
+            } else {
                 this.footer.shippingTotals = { wine: 0.00, addl: 0.00 };
             }
-        }
+        }*/
+        this.footer.shippingTotals = { wine: this.selectedAddress.shippingCharges, addl: this.selectedAddress.addlshippingCharges };
     };
     ;
     ApproveOrder.prototype.ngOnInit = function () {
-        this.appService.httpGet('get:approve:artifacts');
+        this.getArtifact();
+        //this.appService.httpGet('get:approve:artifacts')
     };
     ;
     ApproveOrder.prototype.ngOnDestroy = function () {
@@ -240,6 +307,42 @@ var ApproveOrder = (function () {
         this.allCardSubscription.unsubscribe();
     };
     ;
+    ApproveOrder.prototype.getArtifact = function () {
+        this.orders = this.appService.request('orders');
+        this.holidaygift = this.appService.request('holidaygift');
+        this.shippingBottles = this.orders.reduce(function (a, b, c) {
+            return ({
+                requestedShippingBottle: a.requestedShippingBottle + b.shippingBottles * b.orderQty,
+                additinalShippingBottle: a.additinalShippingBottle + b.shippingBottles * b.wishList
+            });
+        }, { requestedShippingBottle: 0, additinalShippingBottle: 0 });
+        var shippedState = this.selectedAddress.state == undefined ? "" : this.selectedAddress.state;
+        var shippedZip = this.selectedAddress.zip == undefined ? "" : this.selectedAddress.zip;
+        var body = {};
+        body.data = JSON.stringify({ sqlKey: 'GetApproveArtifacts', sqlParms: {
+                requestedShippingBottle: this.shippingBottles.requestedShippingBottle,
+                additinalShippingBottle: this.shippingBottles.additinalShippingBottle,
+                shippingState: shippedState,
+                shippingZip: shippedZip
+            } });
+        this.appService.httpGet('get:approve:artifacts', body);
+        //this.appService.httpGet('get:approve:artifacts', body)
+        // this.appService.httpGet('get:approve:artifacts')
+    };
+    ApproveOrder.prototype.getShippingandSalesTax = function () {
+        var shippedState = this.selectedAddress.state == undefined ? "" : this.selectedAddress.state;
+        var shippedZip = this.selectedAddress.zip == undefined ? "" : this.selectedAddress.zip;
+        var body = {};
+        body.data = JSON.stringify({ sqlKey: 'GetShippingSalesTaxPerc', sqlParms: {
+                requestedShippingBottle: this.shippingBottles.requestedShippingBottle,
+                additinalShippingBottle: this.shippingBottles.additinalShippingBottle,
+                shippingState: shippedState,
+                shippingZip: shippedZip
+            } });
+        this.appService.httpGet('get:approve:artifacts:ShippingandSalesTax', body);
+        //this.appService.httpGet('get:approve:artifacts', body)
+        // this.appService.httpGet('get:approve:artifacts')
+    };
     ApproveOrder.prototype.closeAlert = function (i) {
         this.alerts.splice(i, 1);
     };

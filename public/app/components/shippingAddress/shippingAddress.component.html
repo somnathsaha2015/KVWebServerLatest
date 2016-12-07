@@ -1,23 +1,11 @@
 <div class="container mainContainer">
     <h2>Shipping Addresses</h2>
-    <div class="panel panel-default kistlarShippingAddress">
-        <!--<div class="panel-heading">
-            <div class="row">
-                <div class="col-xs-1">Default</div>
-                <div class="col-xs-2">Co</div>
-                <div class="col-xs-3">Name</div>
-                <div class="col-xs-1">City</div>
-                <div class="col-xs-1">State</div>
-                <div class="col-xs-1">Zip</div>
-                <div class="col-xs-1">Country</div>
-            </div>
-        </div>-->
-        <div class="panel-body">
-            <div *ngFor="let address of addresses; let i=index">
-                <div class="row divierBar">
-                    <div class="form-group">
-                        <span><input type="radio" name = "selected"></span>
-                        <span>{{address.name}}</span>
+<div class="panel panel-default kistlarShippingAddress">
+
+  <ul class="list-group">
+
+    <li class="list-group-item" *ngFor="let address of addresses; let i=index"> <span><input type="radio" name = "selected"></span>
+                        <span class="name-shipping-address">{{address.name}}</span>
                         <span>, {{address.street1}}</span>
                         <span>, {{address.street2}}</span>
                         <span>, {{address.city}}</span>
@@ -26,17 +14,17 @@
                         <span>, {{address.country}}</span>
                         <span>, {{address.phone}}</span>
                         <span>, Default:<input type="checkbox" [checked]="address.isDefault" [disabled]="true" name="isDefault"></span>
-                        <button *ngIf="isDataReady" type="button" class="btn btn-link" (click)="edit(address)">Edit</button>
-                    </div>                    
-                </div>
-            </div>
-            <div class="row panelAddSubmit">
-                <div class="pull-left">
+                        <button *ngIf="isDataReady" type="button" class="btn btn-link" (click)="edit(address)">Edit</button></li>
+
+
+  </ul>
+   <div class="row panelAddSubmit">
+                <div class="col-xs-12 pull-left">
                     <button *ngIf='isDataReady' (click)="addAddress()" class="btn btn-md btn-kistler"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Add Address</button>
                 </div>
             </div>
-        </div>
-    </div>
+</div>
+
 
     <div class="row">
         <modal #shippingModal>
@@ -113,15 +101,15 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-9">
+                        <div class="col-sm-offset-3 col-sm-9">
                             <div class="checkbox">
                                 <label><input type="checkbox" formControlName="isDefault"> Use as my default address</label>
                             </div>
                         </div>
                     </div>
-                    <div class="form-inline signInPanel">
+                    <div class="row">
                         <alert *ngIf="alert.show" [type]="alert.type" dismissable="true">{{alert.message}}</alert>
-                        <div class="form-group">
+                        <div class=" col-sm-offset-3 col-xs-9">
                             <button *ngIf="isDataReady" type="submit" class="btn btn-md btn-kistler" [disabled]="!shippingForm.valid">Submit</button>
                             <button type="button" class="btn btn-md btn-kistler" (click)="cancel()">Cancel</button>
                         </div>

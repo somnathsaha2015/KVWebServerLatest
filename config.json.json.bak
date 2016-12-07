@@ -1,19 +1,17 @@
 {
     "jwtKey": "12345",
-    "port": 6120,
+    "port": 1616,
     "env": "development",
-    "connString": "Server=tcp:kistlerdb.database.windows.net,1433;Initial Catalog=@dbName;Persist Security Info=False;User ID=somnath;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
-    "dbName": "SQL2005_481910_kvweb",
-    "connString2": "Server=tcp:kistlerdb.database.windows.net,1433;Initial Catalog=@dbName2;Persist Security Info=False;User ID=somnath;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
-    "dbName2": "NW_Deprecated_Dev",
-    "host": "http://localhost:1616",
+    "connString": "Data Source=SRV-SQL2012-SP\\SQL2012SP;Database=@dbName;Integrated Security=True",
+    "dbName": "KistlerDB",
+    "host": "http://localhost:6120",
     "homePageUrl": "http://www.kistlervineyards.com/",
     "sendMail": {
         "host": "smtp.gmail.com",
         "port": 587,
         "secure": false,
-        "fromUser": "capitalch2@gmail.com",
-        "fromUserPassword": "su$hant123",
+        "fromUser": "*****",
+        "fromUserPassword": "*****",
         "fromUserName": "System"
     },
     "forgotPassword": {

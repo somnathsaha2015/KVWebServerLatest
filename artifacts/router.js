@@ -10,7 +10,7 @@ router.init = function (app) {
     config = app.get('config');
     def = app.get('def');
     messages = app.get('messages');
-    data = { action: 'init', conn: config.connString.replace('@dbName', config.dbName) }
+    data = { action: 'init', conn: config.connString.replace('@dbName', config.dbName), conn2: config.connString2.replace('@dbName2', config.dbName2) }
     handler.init(app, data);
 }
 
@@ -218,7 +218,8 @@ router.post('/api/change/password', function (req, res, next) {
 });
 router.get('/api/current/offer', function (req, res, next) {
     try {
-        let data = { action: 'sql:query', sqlKey: 'GetCurrentOffer', sqlParms: {} };
+        //let data = { action: 'sql:query', sqlKey: 'GetCurrentOffer', sqlParms: {} };
+        let data = { action: 'get:offer', UserId: req.user.userId };
         handler.edgePush(res, next, 'common:result:data', data);
     } catch (error) {
         let err = new def.NError(500, messages.errInternalServerError, error.message);
@@ -227,8 +228,15 @@ router.get('/api/current/offer', function (req, res, next) {
 });
 
 router.get('/api/order/headers', function (req, res, next) {
-    try {
+    /*try {
         let data = { action: 'sql:query', sqlKey: 'GetOrderHeaders', sqlParms: { userId: req.user.userId } };
+        handler.edgePush(res, next, 'common:result:data', data);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
+        next(err);
+    }*/
+    try {
+        let data = { action: 'get:user:order', UserId: req.user.userId, Release: req.user.role };
         handler.edgePush(res, next, 'common:result:data', data);
     } catch (error) {
         let err = new def.NError(500, messages.errInternalServerError, error.message);
@@ -238,7 +246,7 @@ router.get('/api/order/headers', function (req, res, next) {
 
 router.get('/api/order/details/:orderId', function (req, res, next) {
     try {
-        let data = { action: 'sql:query', sqlKey: 'GetOrderDetails', sqlParms: { userId: req.user.userId, orderId: req.params.orderId } };
+        let data = { action: 'sql:queryforDeprecated', sqlKey: 'GetOrderDetails', sqlParms: { userId: req.user.userId, orderId: req.params.orderId } };
         handler.edgePush(res, next, 'common:result:data', data);
     } catch (error) {
         let err = new def.NError(500, messages.errInternalServerError, error.message);
@@ -298,7 +306,6 @@ router.post('/api/shipping/address', function (req, res, next) {
             action: 'sql:non:query',
             sqlKey: 'InsertShippingAddress',
             sqlParms: {
-                code: 'Test',
                 name: req.body.address.name,
                 street1: req.body.address.street1,
                 street2: req.body.address.street2,
@@ -326,7 +333,6 @@ router.put('/api/shipping/address', function (req, res, next) {
             sqlKey: 'UpdateShippingAddress',
             sqlParms: {
                 id: req.body.address.id,
-                code: 'Test',
                 name: req.body.address.name,
                 street1: req.body.address.street1,
                 street2: req.body.address.street2,
@@ -429,8 +435,8 @@ router.post('/api/credit/card/default', function (req, res, next) {
         next(err);
     }
 });
-
 router.get('/api/approve/artifact', function (req, res, next) {
+    /*
     try {
         let data = { action: 'sql:query', sqlKey: 'GetApproveArtifacts', sqlParms: { userId: req.user.userId } };
         handler.edgePush(res, next, 'common:result:data', data);
@@ -438,8 +444,40 @@ router.get('/api/approve/artifact', function (req, res, next) {
         let err = new def.NError(500, messages.errInternalServerError, error.message);
         next(err);
     }
+    */
+    try {
+        let body = JSON.parse(req.headers['data']);
+        let sqlKey = body.sqlKey;
+        let sqlParms = body.sqlParms;
+        sqlParms.userId=req.user.userId;
+        let data = { action: 'get:approve:artifact', sqlKey: sqlKey, sqlParms: sqlParms };
+        handler.edgePush(res, next, 'common:result:data', data);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
+        next(err);
+    }
 });
-
+/*
+router.get('/api/approve/artifact/:requestedShippingBottle/:additinalShippingBottle/:shippedState/:shippedZip', function (req, res, next) {
+    try {
+        let data = { 
+            action: 'get:approve:artifact', 
+            sqlKey: 'GetApproveArtifacts', 
+            sqlParms: { 
+                userId: req.user.userId,
+                requestedShippingBottle:req.params.requestedShippingBottle,
+                additinalShippingBottle:req.params.additinalShippingBottle,
+                shippedState:req.params.shippedState,
+                shippedZip:req.params.shippedZip
+            } 
+        };
+        handler.edgePush(res, next, 'common:result:data', data);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
+        next(err);
+    }
+});
+*/
 router.post('/api/approve/request', function (req, res, next) {
     try {
         let orderBundle = req.body;
@@ -462,6 +500,37 @@ router.post('/api/approve/request', function (req, res, next) {
         next(err);
     }
 });
-
-
+router.get('/api/current/settings', function (req, res, next) {
+    try {
+        let data = { action: 'sql:query', sqlKey: 'GetSettings', sqlParms: {  } };
+        handler.edgePush(res, next, 'common:result:data', data);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
+        next(err);
+    }
+});
+router.get('/api/generic/query', function (req, res, next) {
+    try {
+        let body = JSON.parse(req.headers['data']);
+        let sqlKey = body.sqlKey;
+        let sqlParms = body.sqlParms;
+        let data = { action: 'sql:query', sqlKey: sqlKey, sqlParms: sqlParms };
+        handler.edgePush(res, next, 'common:result:data', data);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
+        next(err);
+    }
+});
+router.get('/api/approve/artifact/shippingandsalestax', function (req, res, next) {
+    try {
+        let body = JSON.parse(req.headers['data']);
+        let sqlKey = body.sqlKey;
+        let sqlParms = body.sqlParms;
+        let data = { action: 'get:approve:artifact:shippingandsalestax', sqlKey: sqlKey, sqlParms: sqlParms };
+        handler.edgePush(res, next, 'common:result:data', data);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
+        next(err);
+    }
+});
 module.exports = router;

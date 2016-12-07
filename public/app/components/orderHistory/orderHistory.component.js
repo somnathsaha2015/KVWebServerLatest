@@ -27,7 +27,7 @@ var OrderHistory = (function () {
             else {
                 _this.orderDetails.details = JSON.parse(d.data).Table;
                 _this.orderDetails.address = JSON.parse(d.data).Table1[0];
-                _this.orderDetails.card = JSON.parse(d.data).Table2[0];
+                _this.orderDetails.card = JSON.parse(d.data).Table1[0];
                 //to escape from null values
                 _this.orderDetails.details = _this.orderDetails.details ? _this.orderDetails.details : [{}];
                 _this.orderDetails.address = _this.orderDetails.address ? _this.orderDetails.address : {};
