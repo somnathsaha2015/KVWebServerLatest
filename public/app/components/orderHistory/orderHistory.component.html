@@ -107,20 +107,44 @@
         <div class="panel-body">
             <table class="table">
             <tr>
-                <td width="20%" class="noBorder">Address1:</td>
-                <td class="noBorder">{{orderDetails.address.address1}}</td>
+                <td width="20%" class="noBorder">Name:</td>
+                <td class="noBorder">{{orderDetails.address.ShipName}}</td>
             </tr>
              <tr>
-                <td width="20%">Zip:</td>
-                <td>{{orderDetails.address.zip}}</td>
+                <td width="20%">Phone:</td>
+                <td>{{orderDetails.address.ShipPhone}}</td>
             </tr>
              <tr>
-                <td width="20%">Street:</td>
-                <td>{{orderDetails.address.street}}</td>
+                <td width="20%">Co:</td>
+                <td>{{orderDetails.address.ShipCo}}</td>
             </tr>
              <tr>
+                <td width="20%">Address1:</td>
+                <td>{{orderDetails.address.ShipStreet1}}</td>
+            </tr>
+            <tr>
+                <td width="20%">Address1:</td>
+                <td>{{orderDetails.address.ShipStreet1}}</td>
+            </tr>
+            <tr>
+                <td width="20%">Address2:</td>
+                <td>{{orderDetails.address.ShipStreet2}}</td>
+            </tr>
+            <tr>
                 <td width="20%">City:</td>
-                <td>{{orderDetails.address.city}}</td>
+                <td>{{orderDetails.address.ShipCity}}</td>
+            </tr>
+            <tr>
+                <td width="20%">State:</td>
+                <td>{{orderDetails.address.ShipState}}</td>
+            </tr>
+            <tr>
+                <td width="20%">Zip:</td>
+                <td>{{orderDetails.address.ShipZip}}</td>
+            </tr>
+            <tr>
+                <td width="20%">Country:</td>
+                <td>{{orderDetails.address.ShipCountry}}</td>
             </tr>
             </table>
         
@@ -132,8 +156,9 @@
             <div class="panel-heading">Payment Details</div>
         <div class="panel-body">
         <form class="form-horizontal">
-            <div class="panelPaymentGap">Card Name: <span class="cardname">{{orderDetails.card.cardName}}</span></div>
-            <div class="panelPaymentGap">Card Number: <span class="cardNumber">{{orderDetails.card.cardNumber}}</span></div>
+            <div class="panelPaymentGap">Card Name: <span class="cardname">{{orderDetails.card.CCFirstName + orderDetails.card.CCLastName}}</span></div>
+            <div class="panelPaymentGap">Card Type: <span class="cardNumber">{{orderDetails.card.CCType}}</span></div>
+            <div class="panelPaymentGap">Card Number: <span class="cardNumber">{{orderDetails.card.CCNumber}}</span></div>
         </form>
         </div>
         </div>

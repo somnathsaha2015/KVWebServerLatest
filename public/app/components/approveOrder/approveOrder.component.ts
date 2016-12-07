@@ -12,6 +12,7 @@ import { AlertModule } from 'ng2-bootstrap';
 export class ApproveOrder {
     approveArtifactsSub: Subscription;
     postApproveSubscription: Subscription;
+    shippingandSalesTaxSub:Subscription;
     selectedAddress: any = {};
     selectedCard: any = {};
     allTotals: {} = {};
@@ -34,6 +35,9 @@ export class ApproveOrder {
     allAddresses: [any] = [{}];
     allCards: [any] = [{}];
     orders: any[];
+    holidaygift:boolean = false;
+    isChangeAddress:boolean=false;
+    shippingBottles:any={};
     //orderBundle: any = {};
     isAlert: boolean;
     alert: any = { type: "success" };
@@ -63,7 +67,9 @@ export class ApproveOrder {
                     this.selectedCard = null;
                 }
                 if (artifacts.Table1.length > 0) {
-                    this.selectedAddress = artifacts.Table1[0];
+                    if(!this.isChangeAddress){
+                        this.selectedAddress = artifacts.Table1[0];
+                    }
                 } else {
                     this.selectedAddress = null;
                 }
@@ -90,17 +96,39 @@ export class ApproveOrder {
                 this.allCards = JSON.parse(d.data).Table;
             }
         });
+        this.shippingandSalesTaxSub=appService.filterOn('get:approve:artifacts:ShippingandSalesTax').subscribe(d => {
+            if (d.data.error) {
+                console.log(d.data.error);
+            } else {
+                var shippingandSaletax=JSON.parse(d.data).Table;
+                this.selectedAddress.salesTaxPerc=shippingandSaletax[0].SalesTaxRate;
+                this.selectedAddress.shippingCharges=shippingandSaletax[0].ShipPrice;
+                
+                if(shippingandSaletax.length == 2){
+                    this.selectedAddress.addlshippingCharges=shippingandSaletax[1].ShipPrice;
+                }  
+                else
+                {
+                    if(this.shippingBottles.requestedShippingBottle == this.shippingBottles.additinalShippingBottle){
+                        this.selectedAddress.addlshippingCharges=shippingandSaletax[0].ShipPrice;
+                    }  
+                }            
+            }
+        this.computeTotals();
+        });
 
     };
     @ViewChild('addrModal') addrModal: Modal;
     changeSelectedAddress() {
         this.isAlert = false;
+        this.isChangeAddress=true;
         this.appService.httpGet('get:shipping:address');
         this.addrModal.open();
     };
     selectAddress(address) {
         this.selectedAddress = address;
         this.addrModal.close();
+        this.getShippingandSalesTax();
     };
 
     @ViewChild('cardModal') cardModal: Modal;
@@ -120,13 +148,47 @@ export class ApproveOrder {
     approve() {
         let orderBundle: any = {};
         orderBundle.orderMaster = {
-            MDate: new Date(),
-            TotalPriceWine: this.footer.wineTotals.wine / 1,
-            TotalPriceAddl: this.footer.wineTotals.addl / 1,
-            SalesTaxWine: this.footer.salesTaxTotals.wine / 1,
-            SalesTaxAddl: this.footer.salesTaxTotals.addl / 1,
-            ShippingWine: this.footer.shippingTotals.wine / 1,
-            ShippingAddl: this.footer.shippingTotals.addl / 1
+            TaxRate:this.selectedAddress.salesTaxPerc,
+            PreviousBalance:this.footer.prevBalances.wine,
+            Status:"pending",
+            ShipName: this.selectedAddress.Name,
+            ShipCo:this.selectedAddress.Co,
+            ShipStreet1: this.selectedAddress.Street1,
+            ShipStreet2:this.selectedAddress.Street2,
+            ShipCity: this.selectedAddress.City,
+            ShipState: this.selectedAddress.State,
+            ShipZip:this.selectedAddress.Zip,
+            ShipCountry: this.selectedAddress.Country,
+            ShipISOCode:this.selectedAddress.ISOCode,
+            ShipPhone: this.selectedAddress.Phone,
+            PaymentType:"CC",
+            CCFirstName:this.selectedCard.CCFirstName,
+            CCLastName: this.selectedCard.CCLastName,
+            CCType:this.selectedCard.CCType,
+            CCNumber: this.selectedCard.CCNumber,
+            CCExpiryMonth:this.selectedCard.CCExpiryMonth,
+            CCExpiryYear: this.selectedCard.CCExpiryYear,
+            CCSecurityCode:this.selectedCard.CCSecurityCode,
+            BillingName: this.selectedCard.Name,
+            BillingCo:this.selectedCard.Co,
+            BillingStreet1: this.selectedCard.Street1,
+            BillingStreet2:this.selectedCard.Street2,
+            BillingCity: this.selectedCard.City,
+            BillingState: this.selectedCard.State,
+            BillingZip:this.selectedCard.Zip,
+            BillingCountry: this.selectedCard.Country,
+            BillingISOCode:this.selectedCard.ISOCode,
+            DayPhone: this.selectedCard.Phone,
+            MailName: this.selectedCard.Name,
+            MailCo:this.selectedCard.Co,
+            MailStreet1: this.selectedCard.Street1,
+            MailStreet2:this.selectedCard.Street2,
+            MailCity: this.selectedCard.City,
+            MailState: this.selectedCard.State,
+            MailZip:this.selectedCard.Zip,
+            MailCountry: this.selectedCard.Country,
+            MailISOCode:this.selectedCard.ISOCode,
+            HolidayGift:this.holidaygift
         };
         let master = orderBundle.orderMaster;
         orderBundle.orderMaster.Amount = master.TotalPriceWine + master.TotalPriceAddl + master.SalesTaxWine
@@ -138,13 +200,15 @@ export class ApproveOrder {
             (a) => {
                 return (
                     {
-                        OfferId: a.id
-                        , OrderQty: a.orderQty
-                        , WishList: a.wishList
+                        ProductId: a.id
+                        , NumOrdered: a.orderQty
+                        , AdditionalRequested: a.wishList
                         , Price: a.price
+                        ,Allocation: a.availableQty
+                        ,SortOrder:0
                     });
             });       
-        orderBundle.orderImpDetails = { AddressId: this.selectedAddress.id, CreditCardId: this.selectedCard.id };
+        //orderBundle.orderImpDetails = { AddressId: this.selectedAddress.id, CreditCardId: this.selectedCard.id };
         this.appService.httpPost('post:save:approve:request', orderBundle);
     };
 
@@ -182,7 +246,8 @@ export class ApproveOrder {
     };
 
     computeSalesTax() {
-        let effectiveSalesTaxPerc = this.selectedAddress.salesTaxPerc;
+        let effectiveSalesTaxPerc = this.selectedAddress.salesTaxPerc;   
+        /*
         if (effectiveSalesTaxPerc && (effectiveSalesTaxPerc > 0)) {
             this.footer.salesTaxPerc = effectiveSalesTaxPerc;
         } else {
@@ -197,10 +262,16 @@ export class ApproveOrder {
             wine: this.footer.wineTotals.wine * this.footer.salesTaxPerc / 100,
             addl: this.footer.wineTotals.addl * this.footer.salesTaxPerc / 100
         }
+        */
+        this.footer.salesTaxPerc=effectiveSalesTaxPerc;
+        this.footer.salesTaxTotals = {
+            wine: this.footer.wineTotals.wine * this.footer.salesTaxPerc / 100,
+            addl: this.footer.wineTotals.addl * this.footer.salesTaxPerc / 100
+        }
     };
 
     computeShipping() {
-        let effectiveShipping = this.selectedAddress.shippingCharges;
+        /*let effectiveShipping = this.selectedAddress.shippingCharges;
         if (effectiveShipping && (effectiveShipping > 0)) {
             this.footer.shippingTotals = effectiveShipping;
         } else {
@@ -210,17 +281,60 @@ export class ApproveOrder {
             } else {
                 this.footer.shippingTotals = { wine: 0.00, addl: 0.00 };
             }
-        }
+        }*/
+        this.footer.shippingTotals = { wine: this.selectedAddress.shippingCharges, addl: this.selectedAddress.addlshippingCharges };
     };
     ngOnInit() {
-        this.appService.httpGet('get:approve:artifacts')
+        this.getArtifact();
+        //this.appService.httpGet('get:approve:artifacts')
     };
     ngOnDestroy() {
         this.approveArtifactsSub.unsubscribe();
         this.allAddrSubscription.unsubscribe();
         this.allCardSubscription.unsubscribe();
+        
     };
+    getArtifact(){
+       this.orders = this.appService.request('orders');
+       this.holidaygift=this.appService.request('holidaygift');
+       this.shippingBottles = this.orders.reduce(function (a, b, c) {
+            return ({
+                requestedShippingBottle: a.requestedShippingBottle + b.shippingBottles * b.orderQty
+                , additinalShippingBottle: a.additinalShippingBottle + b.shippingBottles * b.wishList
+            })
+        }, { requestedShippingBottle: 0, additinalShippingBottle: 0 });
+        
+        var shippedState = this.selectedAddress.state == undefined ? "" : this.selectedAddress.state;
+        var shippedZip=this.selectedAddress.zip == undefined ? "" : this.selectedAddress.zip;
+        
 
+        let body:any={};
+        body.data = JSON.stringify({sqlKey:'GetApproveArtifacts', sqlParms:{ 
+            requestedShippingBottle: this.shippingBottles.requestedShippingBottle,
+            additinalShippingBottle: this.shippingBottles.additinalShippingBottle,
+            shippingState:shippedState,
+            shippingZip:shippedZip
+        }});
+        this.appService.httpGet('get:approve:artifacts',body);
+        //this.appService.httpGet('get:approve:artifacts', body)
+       // this.appService.httpGet('get:approve:artifacts')
+   }
+   getShippingandSalesTax(){
+        var shippedState = this.selectedAddress.state == undefined ? "" : this.selectedAddress.state;
+        var shippedZip=this.selectedAddress.zip == undefined ? "" : this.selectedAddress.zip;
+        
+
+        let body:any={};
+        body.data = JSON.stringify({sqlKey:'GetShippingSalesTaxPerc', sqlParms:{ 
+            requestedShippingBottle: this.shippingBottles.requestedShippingBottle,
+            additinalShippingBottle: this.shippingBottles.additinalShippingBottle,
+            shippingState:shippedState,
+            shippingZip:shippedZip
+        }});
+        this.appService.httpGet('get:approve:artifacts:ShippingandSalesTax',body);
+        //this.appService.httpGet('get:approve:artifacts', body)
+       // this.appService.httpGet('get:approve:artifacts')
+   }
     public alerts: Array<Object> = [
         {
             type: 'danger',

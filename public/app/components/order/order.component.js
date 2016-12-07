@@ -28,6 +28,8 @@ var Order = (function () {
             minimumRequest: this.appService.getMessage('mess:order:minimum:request'),
             bottomNotes: this.appService.getMessage('mess:order:bottom:notes')
         };
+        this.isholidayGift = false;
+        this.isShowHolidayGiftOption = false;
         this.currentOfferSubscription = appService.filterOn('get:current:offer')
             .subscribe(function (d) {
             if (d.data.error) {
@@ -49,6 +51,22 @@ var Order = (function () {
             }
             else {
                 console.log(d);
+            }
+        });
+        this.currentSettingsSubscription = appService.filterOn('get:current:settings')
+            .subscribe(function (d) {
+            if (d.data.error) {
+                console.log(d.data.error);
+            }
+            else {
+                var settings = JSON.parse(d.data).Table;
+                if (settings.length > 0) {
+                    _this.staticTexts.minimumRequest = "Minimum request " + settings[0].MinOrderBottles + " bottles";
+                    ;
+                    _this.staticTexts.bottomNotes = "Wines in " + settings[0].MinOrderBottles + " bottle packages are subject to change";
+                    ;
+                    _this.isShowHolidayGiftOption = !settings[0].HideHolidayGiftCheckBox; // == "true" ? true : false;
+                }
             }
         });
     }
@@ -101,6 +119,7 @@ var Order = (function () {
         }
         else {
             this.appService.httpGet('get:current:offer');
+            this.appService.httpGet('get:current:settings');
         }
     };
     ;
