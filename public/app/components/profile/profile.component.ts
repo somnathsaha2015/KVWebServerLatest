@@ -61,7 +61,7 @@ export class Profile {
         let mDate = Util.convertToUSDate(this.profile.birthDay);
         this.profileForm = this.fb.group({
             firstName: [this.profile.firstName, Validators.required]
-            , lastName: [this.profile.lastName, Validators.required]
+            //, lastName: [this.profile.lastName, Validators.required]
             , phone: [this.profile.phone, [Validators.required, CustomValidators.phoneValidator]]
             , birthDay: [mDate, Validators.required]
             , mailingAddress1: [this.profile.mailingAddress1, Validators.required]
@@ -76,7 +76,7 @@ export class Profile {
         let pr: any = {};
         pr.id = this.profile.id;
         pr.firstName = this.profileForm.controls['firstName'].value;
-        pr.lastName = this.profileForm.controls['lastName'].value;
+        //pr.lastName = this.profileForm.controls['lastName'].value;
         pr.phone = this.profileForm.controls['phone'].value;
         pr.birthDay = mDate;
         pr.mailingAddress1 = this.profileForm.controls['mailingAddress1'].value;
