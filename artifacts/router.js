@@ -281,6 +281,7 @@ router.post('/api/profile', function (req, res, next) {
             action: 'update:insert:profile',
             profile: req.body.profile,
             userId: req.user.userId,
+            email: req.user.email,
             isUpdate: req.body.profile.id ? true : false
         };
         handler.edgePush(res, next, 'common:result:no:data', data);

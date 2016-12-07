@@ -60,7 +60,6 @@ var Profile = (function () {
         var mDate = util_1.Util.convertToUSDate(this.profile.birthDay);
         this.profileForm = this.fb.group({
             firstName: [this.profile.firstName, forms_1.Validators.required],
-            lastName: [this.profile.lastName, forms_1.Validators.required],
             phone: [this.profile.phone, [forms_1.Validators.required, customValidators_1.CustomValidators.phoneValidator]],
             birthDay: [mDate, forms_1.Validators.required],
             mailingAddress1: [this.profile.mailingAddress1, forms_1.Validators.required],
@@ -76,7 +75,7 @@ var Profile = (function () {
         var pr = {};
         pr.id = this.profile.id;
         pr.firstName = this.profileForm.controls['firstName'].value;
-        pr.lastName = this.profileForm.controls['lastName'].value;
+        //pr.lastName = this.profileForm.controls['lastName'].value;
         pr.phone = this.profileForm.controls['phone'].value;
         pr.birthDay = mDate;
         pr.mailingAddress1 = this.profileForm.controls['mailingAddress1'].value;

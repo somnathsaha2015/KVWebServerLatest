@@ -7,7 +7,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Invoice</th>
-                    <th>Order Summary</th>
+                    <th>Order Status</th>
                     <th class="priceFldAlign">Amount</th>
                     <th>&nbsp;</th>
                 </tr>
@@ -15,8 +15,8 @@
             <tbody>
                 <tr *ngFor="let order of pageRows" (click)="showDetails(order)">
                     <td scope="row">{{order.mDate | date:'MM/dd/yyyy'}}</td>
-                    <td><a href="">{{order.invoice}}</a></td>
-                    <td>{{order.descr}}</td>
+                    <td>{{order.invoice}}</td>
+                    <td>{{order.status}}</td>
                     <td  class="productPrice priceFldAlign">{{order.amount | currency:'USD':true}}</td>
                     <td class="text-center"><input type="radio" name="showDetails" [checked]="order.checked"><span class="Chkshowdetails"> View Details</span></td>
                 </tr>
