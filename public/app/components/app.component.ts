@@ -16,11 +16,21 @@ export class AppComponent {
   home: string = '#';
   kistler: string = '#';
   viewBox: {} = viewBoxConfig['/login'];
-  showMenu:boolean=true;
-  myAccountshowMenu:boolean=true;
 
+ showMenu:boolean;
+ myAccountshowMenu:boolean;
+
+ 
   constructor(private appService: AppService, private router: Router) {
+    if(window.innerWidth>768){
+      this.showMenu=true;
+      this.myAccountshowMenu=true;
+    }else{
+      this.showMenu=false;
+      this. myAccountshowMenu=false;
+    }
     this.initDataSub = appService.filterOn('get:init:data').subscribe(d => {
+      
       if (d.data.error) {
         console.log(d.data.error);
       } else {
@@ -37,7 +47,18 @@ export class AppComponent {
   };
   logout() {
     this.appService.resetCredential();
-  }
+  };
+
+  hideMenu() {
+    if(window.innerWidth > 768){
+    this.showMenu=true;
+    this.myAccountshowMenu=true;
+    }else{
+       this.showMenu=false;
+    this.myAccountshowMenu=false;
+    }
+  };
+
   ngOnInit() {
     this.appService.httpGet('get:init:data');
   };

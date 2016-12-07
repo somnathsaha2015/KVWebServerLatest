@@ -20,8 +20,14 @@ var AppComponent = (function () {
         this.home = '#';
         this.kistler = '#';
         this.viewBox = config_1.viewBoxConfig['/login'];
-        this.showMenu = true;
-        this.myAccountshowMenu = true;
+        if (window.innerWidth > 768) {
+            this.showMenu = true;
+            this.myAccountshowMenu = true;
+        }
+        else {
+            this.showMenu = false;
+            this.myAccountshowMenu = false;
+        }
         this.initDataSub = appService.filterOn('get:init:data').subscribe(function (d) {
             if (d.data.error) {
                 console.log(d.data.error);
@@ -42,6 +48,18 @@ var AppComponent = (function () {
     AppComponent.prototype.logout = function () {
         this.appService.resetCredential();
     };
+    ;
+    AppComponent.prototype.hideMenu = function () {
+        if (window.innerWidth > 768) {
+            this.showMenu = true;
+            this.myAccountshowMenu = true;
+        }
+        else {
+            this.showMenu = false;
+            this.myAccountshowMenu = false;
+        }
+    };
+    ;
     AppComponent.prototype.ngOnInit = function () {
         this.appService.httpGet('get:init:data');
     };
