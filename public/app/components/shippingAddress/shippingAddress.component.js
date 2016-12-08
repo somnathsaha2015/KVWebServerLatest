@@ -78,7 +78,7 @@ var ShippingAddress = (function () {
     };
     ShippingAddress.prototype.edit = function (address) {
         this.shippingForm.patchValue({
-            id: address.id,
+            id: address.shippid,
             name: address.name,
             street1: address.street1,
             street2: address.street2,

@@ -21,12 +21,14 @@ export class Order {
     introText: string,
     holidayGift: string,
     minimumRequest: string,
-    bottomNotes: string
+    bottomNotes: string,
+    salutation: string
   } = {
     introText: this.appService.getMessage('mess:order:intro:text'),
     holidayGift: this.appService.getMessage('mess:order:holiday:gift'),
     minimumRequest: this.appService.getMessage('mess:order:minimum:request'),
-    bottomNotes: this.appService.getMessage('mess:order:bottom:notes')
+    bottomNotes: this.appService.getMessage('mess:order:bottom:notes'),
+    salutation:""
   };
   isholidayGift:boolean=false;
   isShowHolidayGiftOption:boolean = false;  
@@ -43,7 +45,7 @@ export class Order {
           this.orders = JSON.parse(d.data).Table.map(function (value, i) {
             value.orderQty = 0;
             value.wishList = 0;
-            value.imageUrl = 'app/assets/img/' + value.imageUrl;
+            value.imageUrl = value.imageUrl != null ? 'app/assets/img/' + value.imageUrl : null;
             return (value);
           });
         }
@@ -61,14 +63,18 @@ export class Order {
       if (d.data.error) {
         console.log(d.data.error);
       } else {
-          let settings = JSON.parse(d.data).Table;
-                  if (settings.length > 0) {
-                        this.staticTexts.minimumRequest = "Minimum request " + settings[0].MinOrderBottles+ " bottles";;
-                        this.staticTexts.bottomNotes = "Wines in " + settings[0].MinOrderBottles+ " bottle packages are subject to change";;
-                        this.isShowHolidayGiftOption = !settings[0].HideHolidayGiftCheckBox;// == "true" ? true : false;
+                  let settingsData = JSON.parse(d.data);
+                  if (settingsData.Table.length > 0) {
+                        let settings = settingsData.Table[0];
+                        this.staticTexts.minimumRequest = "Minimum request " + settings.MinOrderBottles+ " bottles";;
+                        this.staticTexts.bottomNotes = "Wines in " + settings.MinOrderBottles+ " bottle packages are subject to change";;
+                        this.isShowHolidayGiftOption = !settings.HideHolidayGiftCheckBox;// == "true" ? true : false;
                         //console.log("this.isShowHolidayGiftOption="+this.isShowHolidayGiftOption);
+                        this.staticTexts.introText = settings.WelcomeNote;
                   }
-        
+                  if (settingsData.Table1.length > 0) {
+                      this.staticTexts.salutation = settingsData.Table1[0].name;
+                  }
       }
     });
   };
@@ -101,7 +107,9 @@ export class Order {
       if (ords.length > 0) {
         this.alert.show = false;
         this.alert.message = '';
-        this.appService.reply('orders', this.orders);
+        this.orders.isholidayGift=this.isholidayGift;
+        this.appService.reply('orders', this.orders);        
+        //this.appService.reply('holidaygift', this.isholidayGift);
         this.router.navigate(['approve/order']);
       } else {
         this.alert.show = true;
@@ -113,13 +121,15 @@ export class Order {
     let ords = this.appService.request('orders');
     if (ords) {
       this.orders = ords;
+      this.isholidayGift = this.orders.isholidayGift;
     } else {
       this.appService.httpGet('get:current:offer');
-      this.appService.httpGet('get:current:settings');
     }
+    this.appService.httpGet('get:current:settings');
   };
   ngOnDestroy() {
     this.currentOfferSubscription.unsubscribe();
     this.saveOrderSubscription.unsubscribe();
+    this.currentSettingsSubscription.unsubscribe();
   }
 }
