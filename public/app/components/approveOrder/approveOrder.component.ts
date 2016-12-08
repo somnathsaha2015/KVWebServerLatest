@@ -296,7 +296,7 @@ export class ApproveOrder {
     };
     getArtifact(){
        this.orders = this.appService.request('orders');
-       this.holidaygift=this.appService.request('holidaygift');
+       this.holidaygift=this.orders.isholidayGift;
        this.shippingBottles = this.orders.reduce(function (a, b, c) {
             return ({
                 requestedShippingBottle: a.requestedShippingBottle + b.shippingBottles * b.orderQty

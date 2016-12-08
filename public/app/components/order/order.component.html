@@ -1,7 +1,7 @@
 <div class="container mainContainer">
     <h2>Order</h2>
     <div class="introText boxPanel">
-        <div class="welcomeTxt">Welcome <label class="username"> ipsum</label></div>
+        <div class="welcomeTxt">Welcome <label class="username"> {{staticTexts.salutation}}</label></div>
         <summary>{{staticTexts.introText}}</summary>
     </div>
     <div class="panel-group">
@@ -25,10 +25,10 @@
                 <div *ngIf="order.orderQty > order.availableQty" class="alertExcesOrder"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {{excessOrder}}</div>
                 <div class=" showproductDetails" *ngIf="order.isShowDetails || order.packing !='b'">
                     <div class="row orderDescPanel">
-                        <div class="col-sm-2"><img [src]="order.imageUrl" class="img-thumbnail"></div>
+                        <div *ngIf="order.imageUrl" class="col-sm-2"><img [src]="order.imageUrl" class="img-thumbnail"></div>
                         <div class="col-sm-10" [innerHTML]=order.descr></div>
                     </div>
-                    <div class="row">
+                    <div class="row" *ngIf="order.tastingNotes">
                         <div class="col-sm-12 tastingNotesPanel" [innerHTML]=order.tastingNotes></div>
                     </div>
                 </div>
@@ -36,8 +36,8 @@
         </div>
     </div>
     <div class="row requestPanel">
-        <div class="checkbox col-xs-10">
-            <label><input type="checkbox" value=""> {{staticTexts.holidayGift}}</label>
+        <div class="checkbox col-xs-10" >
+            <label *ngIf="isShowHolidayGiftOption"><input type="checkbox" [(ngModel)]="isholidayGift"> {{staticTexts.holidayGift}}</label>
         </div>
         <div class="col-xs-2">
             <button (click)="request()" class="btn btn-md btn-kistler pull-right">Request</button>

@@ -26,7 +26,8 @@ var Order = (function () {
             introText: this.appService.getMessage('mess:order:intro:text'),
             holidayGift: this.appService.getMessage('mess:order:holiday:gift'),
             minimumRequest: this.appService.getMessage('mess:order:minimum:request'),
-            bottomNotes: this.appService.getMessage('mess:order:bottom:notes')
+            bottomNotes: this.appService.getMessage('mess:order:bottom:notes'),
+            salutation: ""
         };
         this.isholidayGift = false;
         this.isShowHolidayGiftOption = false;
@@ -39,7 +40,7 @@ var Order = (function () {
                 _this.orders = JSON.parse(d.data).Table.map(function (value, i) {
                     value.orderQty = 0;
                     value.wishList = 0;
-                    value.imageUrl = 'app/assets/img/' + value.imageUrl;
+                    value.imageUrl = value.imageUrl != null ? 'app/assets/img/' + value.imageUrl : null;
                     return (value);
                 });
             }
@@ -59,13 +60,19 @@ var Order = (function () {
                 console.log(d.data.error);
             }
             else {
-                var settings = JSON.parse(d.data).Table;
-                if (settings.length > 0) {
-                    _this.staticTexts.minimumRequest = "Minimum request " + settings[0].MinOrderBottles + " bottles";
+                var settingsData = JSON.parse(d.data);
+                if (settingsData.Table.length > 0) {
+                    var settings = settingsData.Table[0];
+                    _this.staticTexts.minimumRequest = "Minimum request " + settings.MinOrderBottles + " bottles";
                     ;
-                    _this.staticTexts.bottomNotes = "Wines in " + settings[0].MinOrderBottles + " bottle packages are subject to change";
+                    _this.staticTexts.bottomNotes = "Wines in " + settings.MinOrderBottles + " bottle packages are subject to change";
                     ;
-                    _this.isShowHolidayGiftOption = !settings[0].HideHolidayGiftCheckBox; // == "true" ? true : false;
+                    _this.isShowHolidayGiftOption = !settings.HideHolidayGiftCheckBox; // == "true" ? true : false;
+                    //console.log("this.isShowHolidayGiftOption="+this.isShowHolidayGiftOption);
+                    _this.staticTexts.introText = settings.WelcomeNote;
+                }
+                if (settingsData.Table1.length > 0) {
+                    _this.staticTexts.salutation = settingsData.Table1[0].name;
                 }
             }
         });
@@ -103,7 +110,9 @@ var Order = (function () {
             if (ords.length > 0) {
                 this.alert.show = false;
                 this.alert.message = '';
+                this.orders.isholidayGift = this.isholidayGift;
                 this.appService.reply('orders', this.orders);
+                //this.appService.reply('holidaygift', this.isholidayGift);
                 this.router.navigate(['approve/order']);
             }
             else {
@@ -116,16 +125,18 @@ var Order = (function () {
         var ords = this.appService.request('orders');
         if (ords) {
             this.orders = ords;
+            this.isholidayGift = this.orders.isholidayGift;
         }
         else {
             this.appService.httpGet('get:current:offer');
-            this.appService.httpGet('get:current:settings');
         }
+        this.appService.httpGet('get:current:settings');
     };
     ;
     Order.prototype.ngOnDestroy = function () {
         this.currentOfferSubscription.unsubscribe();
         this.saveOrderSubscription.unsubscribe();
+        this.currentSettingsSubscription.unsubscribe();
     };
     Order = __decorate([
         core_1.Component({
