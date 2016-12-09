@@ -482,8 +482,8 @@ router.get('/api/approve/artifact/:requestedShippingBottle/:additinalShippingBot
 router.post('/api/approve/request', function (req, res, next) {
     try {
         let orderBundle = req.body;
-        orderBundle.orderMaster.userId = req.user.userId
-
+        orderBundle.orderMaster.Code = req.user.userId;
+        orderBundle.orderMaster.Release = req.user.role;
         let emailItem = config.sendMail;
         emailItem.htmlBody = config.receipt.mailBody;
         emailItem.subject = config.receipt.subject;
@@ -491,7 +491,8 @@ router.post('/api/approve/request', function (req, res, next) {
         let data = {
             action: 'save:approve:request',
             orderBundle: orderBundle,
-            userId: req.user.userId,
+            Code: req.user.userId,
+            Release:req.user.role,
             emailItem: emailItem,
             email: req.user.email
         };

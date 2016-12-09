@@ -41,6 +41,7 @@ var ApproveOrder = (function () {
         this.isChangeAddress = false;
         this.shippingBottles = {};
         this.alert = { type: "success" };
+        this.isApproveButtonDisabled = true;
         this.alerts = [
             {
                 type: 'danger',
@@ -73,17 +74,24 @@ var ApproveOrder = (function () {
                 var artifacts = JSON.parse(d.data);
                 if (artifacts.Table.length > 0) {
                     _this.selectedCard = artifacts.Table[0];
+                    _this.isApproveButtonDisabled = false;
                 }
                 else {
                     _this.selectedCard = null;
+                    _this.isApproveButtonDisabled = true;
                 }
                 if (artifacts.Table1.length > 0) {
                     if (!_this.isChangeAddress) {
                         _this.selectedAddress = artifacts.Table1[0];
+                        _this.selectedAddress.salesTaxPerc = _this.selectedAddress.isoCode != "US" ? 0 : _this.selectedAddress.salesTaxPerc;
+                        _this.selectedAddress.shippingCharges = _this.selectedAddress.isoCode != "US" ? 0 : _this.selectedAddress.shippingCharges;
+                        _this.selectedAddress.addlshippingCharges = _this.selectedAddress.isoCode != "US" ? 0 : _this.selectedAddress.addlshippingCharges;
+                        _this.isApproveButtonDisabled = false;
                     }
                 }
                 else {
                     _this.selectedAddress = null;
+                    _this.isApproveButtonDisabled = true;
                 }
                 if (artifacts.Table2.length > 0) {
                     _this.footer.prevBalance = artifacts.Table2[0] / 1;
@@ -117,14 +125,19 @@ var ApproveOrder = (function () {
             }
             else {
                 var shippingandSaletax = JSON.parse(d.data).Table;
-                _this.selectedAddress.salesTaxPerc = shippingandSaletax[0].SalesTaxRate;
-                _this.selectedAddress.shippingCharges = shippingandSaletax[0].ShipPrice;
                 if (shippingandSaletax.length == 2) {
+                    _this.selectedAddress.shippingCharges = shippingandSaletax[0].ShipPrice;
                     _this.selectedAddress.addlshippingCharges = shippingandSaletax[1].ShipPrice;
+                    _this.selectedAddress.salesTaxPerc = shippingandSaletax[0].SalesTaxRate;
                 }
                 else {
+                    _this.selectedAddress.shippingCharges = shippingandSaletax[0].ShipPrice;
+                    _this.selectedAddress.salesTaxPerc = shippingandSaletax[0].SalesTaxRate;
                     if (_this.shippingBottles.requestedShippingBottle == _this.shippingBottles.additinalShippingBottle) {
                         _this.selectedAddress.addlshippingCharges = shippingandSaletax[0].ShipPrice;
+                    }
+                    else {
+                        _this.selectedAddress.addlshippingCharges = 0;
                     }
                 }
             }
@@ -142,7 +155,15 @@ var ApproveOrder = (function () {
     ApproveOrder.prototype.selectAddress = function (address) {
         this.selectedAddress = address;
         this.addrModal.close();
-        this.getShippingandSalesTax();
+        if (this.selectedAddress.isoCode == "US") {
+            this.getShippingandSalesTax();
+        }
+        else {
+            this.selectedAddress.shippingCharges = 0;
+            this.selectedAddress.addlshippingCharges = 0;
+            this.selectedAddress.salesTaxPerc = 0;
+            this.computeTotals();
+        }
     };
     ;
     ApproveOrder.prototype.changeSelectedCard = function () {
@@ -166,16 +187,16 @@ var ApproveOrder = (function () {
             TaxRate: this.selectedAddress.salesTaxPerc,
             PreviousBalance: this.footer.prevBalances.wine,
             Status: "pending",
-            ShipName: this.selectedAddress.Name,
-            ShipCo: this.selectedAddress.Co,
-            ShipStreet1: this.selectedAddress.Street1,
-            ShipStreet2: this.selectedAddress.Street2,
-            ShipCity: this.selectedAddress.City,
-            ShipState: this.selectedAddress.State,
-            ShipZip: this.selectedAddress.Zip,
-            ShipCountry: this.selectedAddress.Country,
-            ShipISOCode: this.selectedAddress.ISOCode,
-            ShipPhone: this.selectedAddress.Phone,
+            ShipName: this.selectedAddress.name,
+            ShipCo: this.selectedAddress.co,
+            ShipStreet1: this.selectedAddress.street1,
+            ShipStreet2: this.selectedAddress.street2,
+            ShipCity: this.selectedAddress.city,
+            ShipState: this.selectedAddress.state,
+            ShipZip: this.selectedAddress.zip,
+            ShipCountry: this.selectedAddress.country,
+            ShipISOCode: this.selectedAddress.isoCode,
+            ShipPhone: this.selectedAddress.phone,
             PaymentType: "CC",
             CCFirstName: this.selectedCard.CCFirstName,
             CCLastName: this.selectedCard.CCLastName,
