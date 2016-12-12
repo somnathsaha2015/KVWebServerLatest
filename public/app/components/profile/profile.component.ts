@@ -7,7 +7,7 @@ import { AlertModule } from 'ng2-bootstrap';
 import { ControlMessages } from '../controlMessages/controlMessages.component';
 // import { DatepickerModule } from 'ng2-bootstrap';
 // import { MyDatePickerModule } from 'mydatepicker/dist/my-date-picker.module';
-import { CalendarModule } from 'primeng/primeng';
+import { CalendarModule, InputMaskModule, GrowlModule, Message } from 'primeng/primeng';
 import { Util } from '../../services/util'
 @Component({
     templateUrl: 'app/components/profile/profile.component.html'
@@ -23,7 +23,7 @@ export class Profile {
     //     , inline: false
     // };
     primeDate: any;
-    // dt: any;
+    messages: Message[] = [];
     constructor(private appService: AppService, private fb: FormBuilder) {
         //this.myDatePickerOptions={};
         this.initProfileForm();
@@ -45,7 +45,13 @@ export class Profile {
                 if (d.data.error) {
                     this.appService.showAlert(this.alert, true, 'dataNotSaved');
                 } else {
-                    this.appService.showAlert(this.alert, true,'dataSaved','success');
+                    //this.appService.showAlert(this.alert, true, 'dataSaved', 'success');
+                    this.messages = [];
+                    this.messages.push({
+                        severity: 'success'
+                        , summary: 'Saved'
+                        , detail: 'Data saved successfully'
+                    });
                     this.appService.httpGet('get:user:profile');
                 }
             });

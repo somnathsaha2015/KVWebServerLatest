@@ -83,6 +83,7 @@ router.post('/api/send/password', function (req, res, next) {
                     emailItem.htmlBody = htmlBody;
                     emailItem.subject = config.forgotPassword.subject;
                     emailItem.to = decoded.data;
+                    emailItem.userId = req.user.userId;
                     var data = { action: 'new:password', data: emailItem, };
                     handler.edgePush(res, next, 'common:result', data);
 
@@ -111,7 +112,7 @@ router.post('/api/forgot/password', function (req, res, next) {
         let auth = req.body.auth;
         if (auth) {
             let email = Buffer.from(auth, 'base64').toString();
-            var data = { action: 'isEmailExist', email: email };
+            var data = { action: 'isEmailExist', email: email};
             //verify email if it exists and then send url to the verified mail
             handler.edgePush(res, next, 'forgot:passowrd', data);
         } else {
@@ -205,6 +206,7 @@ router.post('/api/change/password', function (req, res, next) {
             var data = {
                 action: 'change:password', auth: auth
                 , emailItem: emailItem
+                , userId:req.user.userId
             };
             handler.edgePush(res, next, 'common:result:no:data', data);
         } else {
@@ -516,7 +518,35 @@ router.get('/api/generic/query', function (req, res, next) {
         let body = JSON.parse(req.headers['data']);
         let sqlKey = body.sqlKey;
         let sqlParms = body.sqlParms;
+        if(!sqlParms){
+            sqlParms={};
+        }
+        sqlParms.userId = req.user.userId;
         let data = { action: 'sql:query', sqlKey: sqlKey, sqlParms: sqlParms };
+        handler.edgePush(res, next, 'common:result:data', data);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
+        next(err);
+    }
+});
+router.post('/api/generic/non/query', function (req, res, next) {
+    try {
+        let sqlKey = req.body.sqlKey;
+        let sqlParms = req.body.sqlParms;
+        sqlParms.userId = req.user.userId;
+        let data = { action: 'sql:non:query', sqlKey: req.body.sqlKey, sqlParms: req.body.sqlParms };
+        handler.edgePush(res, next, 'common:result:no:data', data);
+    } catch (error) {
+        let err = new def.NError(500, messages.errInternalServerError, error.message);
+        next(err);
+    }
+});
+router.post('/api/generic/scalar', function (req, res, next) {
+    try {
+        let sqlParms = req.body.sqlParms;
+        sqlParms.userId = req.user.userId;
+        //let sql = handler.insertSqlFromObject(req.body.tableName, req.body.sqlObject);
+        let data = { action: 'sql:scalar', sqlKey: req.body.sqlKey, sqlParms : sqlParms };        
         handler.edgePush(res, next, 'common:result:data', data);
     } catch (error) {
         let err = new def.NError(500, messages.errInternalServerError, error.message);

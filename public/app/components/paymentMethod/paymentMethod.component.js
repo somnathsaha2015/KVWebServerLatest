@@ -10,86 +10,174 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var app_service_1 = require('../../services/app.service');
+var forms_1 = require('@angular/forms');
+var customValidators_1 = require('../../services/customValidators');
+var ng2_modal_1 = require("ng2-modal");
+var primeng_1 = require('primeng/primeng');
+// import {SpinnerModule} from 'primeng/primeng';
 var PaymentMethod = (function () {
-    function PaymentMethod(appService) {
+    function PaymentMethod(appService, fb, confirmationService) {
         var _this = this;
         this.appService = appService;
-        this.getSubscription = appService.filterOn("get:credit:card")
+        this.fb = fb;
+        this.confirmationService = confirmationService;
+        this.alert = {};
+        this.selectedISOCode = '';
+        this.isDataReady = false;
+        this.display = false;
+        this.initPayMethodForm();
+        this.getAllPaymentMethodsSub = appService.filterOn("get:payment:method")
             .subscribe(function (d) {
             if (d.data.error) {
                 console.log(d);
             }
             else {
-                _this.cards = JSON.parse(d.data).Table;
+                _this.payMethods = JSON.parse(d.data).Table;
+                console.log(_this.payMethods);
             }
         });
-        this.postSubscription = appService.filterOn("insert:credit:card")
+        this.dataReadySubs = appService.behFilterOn('masters:download:success').subscribe(function (d) {
+            _this.countries = _this.appService.getCountries();
+            _this.isDataReady = true;
+        });
+        this.postPayMethodSub = appService.filterOn("post:payment:method")
             .subscribe(function (d) {
             if (d.data.error) {
-                console.log(d);
+                _this.appService.showAlert(_this.alert, true, 'payMethodInsertFailed');
             }
             else {
-                _this.cards[0].id = d.data.result.result;
-                d.body.card.isNew = false;
+                _this.initPayMethodForm();
+                _this.appService.showAlert(_this.alert, false);
+                _this.getPaymentMethod();
+                _this.payMethodModal.close();
             }
         });
-        this.deleteSubscription = appService.filterOn("delete:credit:card")
+        this.deletePayMethodSub = appService.filterOn("post:delete:payment:method")
             .subscribe(function (d) {
             if (d.data.error) {
                 console.log("Error occured");
             }
             else {
-                _this.cards.splice(d.index, 1);
+                //this.payMethods.splice(d.body.index, 1);
+                _this.getPaymentMethod();
             }
         });
-        this.setDefaultCardSubscription = appService.filterOn("set:default:card")
+        this.setDefaultPayMethodSub = appService.filterOn("post:set:default:payment:method")
             .subscribe(function (d) {
             if (d.data.error) {
-                console.log("Error occured");
+                console.log('Error occured');
             }
             else {
-                console.log(d);
+                console.log('Successfully set as default');
             }
         });
     }
     ;
-    PaymentMethod.prototype.addCard = function () {
-        var card = { cardName: '', cardNumber: '', isNew: false };
-        card.isNew = true;
-        this.cards.unshift(card);
+    PaymentMethod.prototype.confirm = function (card) {
+        var _this = this;
+        this.confirmationService.confirm({
+            message: 'Are you sure that you want to perform this action?',
+            accept: function () {
+                _this.appService.httpPost('post:delete:payment:method', { sqlKey: 'DeletePaymentMethod', sqlParms: { id: card.id } });
+            }
+        });
     };
     ;
-    PaymentMethod.prototype.removeNew = function (index) {
-        this.cards.splice(index, 1);
+    PaymentMethod.prototype.initPayMethodForm = function () {
+        this.year = (new Date()).getFullYear();
+        this.month = (new Date()).getMonth() + 1;
+        this.payMethodForm = this.fb.group({
+            id: [''],
+            cardName: ['', forms_1.Validators.required],
+            ccFirstName: ['', forms_1.Validators.required],
+            ccLastName: ['', forms_1.Validators.required],
+            ccType: ['', forms_1.Validators.required],
+            ccNumber: ['', forms_1.Validators.required],
+            ccExpiryMonth: [this.month, forms_1.Validators.required],
+            ccExpiryYear: [this.year, forms_1.Validators.required],
+            ccSecurityCode: ['', forms_1.Validators.required],
+            co: [''],
+            name: ['', forms_1.Validators.required],
+            street1: ['', forms_1.Validators.required],
+            street2: ['', forms_1.Validators.required],
+            city: ['', forms_1.Validators.required],
+            state: ['', forms_1.Validators.required],
+            zip: ['', forms_1.Validators.required],
+            countryName: ['', forms_1.Validators.required],
+            isoCode: [''],
+            phone: ['', [forms_1.Validators.required, customValidators_1.CustomValidators.phoneValidator]],
+            isDefault: [false]
+        });
+    };
+    PaymentMethod.prototype.addPayMethod = function () {
+        this.initPayMethodForm();
+        this.payMethodModal.open();
     };
     ;
-    PaymentMethod.prototype.remove = function (card, index) {
-        //let token = this.appService.getToken();
-        this.appService.httpDelete('delete:credit:card', { id: card.id, index: index });
+    PaymentMethod.prototype.cancel = function () {
+        this.appService.showAlert(this.alert, false);
+        this.payMethodModal.close(true);
     };
-    ;
-    PaymentMethod.prototype.save = function (card) {
-        this.appService.httpPost('insert:credit:card', { card: card });
+    // remove(card) {        
+    //     this.appService.httpPost('post:delete:payment:method', { sqlKey: 'DeletePaymentMethod', sqlParms: { id: card.id }});
+    // };
+    PaymentMethod.prototype.submit = function () {
+        var _this = this;
+        var payMethod = {
+            cardName: this.payMethodForm.controls['cardName'].value,
+            ccFirstName: this.payMethodForm.controls['ccFirstName'].value,
+            ccLastName: this.payMethodForm.controls['ccLastName'].value,
+            ccType: this.payMethodForm.controls['ccType'].value,
+            ccNumber: this.payMethodForm.controls['ccNumber'].value,
+            ccExpiryMonth: this.payMethodForm.controls['ccExpiryMonth'].value,
+            ccExpiryYear: this.payMethodForm.controls['ccExpiryYear'].value,
+            ccSecurityCode: this.payMethodForm.controls['ccSecurityCode'].value,
+            name: this.payMethodForm.controls['name'].value,
+            street1: this.payMethodForm.controls['street1'].value,
+            street2: this.payMethodForm.controls['street2'].value,
+            city: this.payMethodForm.controls['city'].value,
+            state: this.payMethodForm.controls['state'].value,
+            zip: this.payMethodForm.controls['zip'].value,
+            country: '',
+            isoCode: '',
+            phone: this.payMethodForm.controls['phone'].value,
+            isDefault: this.payMethodForm.controls['isDefault'].value
+        };
+        payMethod.isoCode = this.selectedISOCode;
+        payMethod.country = this.countries.filter(function (d) { return d.isoCode == _this.selectedISOCode; })[0].countryName;
+        this.appService.httpPost('post:payment:method', { sqlKey: 'InsertPaymentMethod', sqlParms: payMethod });
     };
     ;
     PaymentMethod.prototype.setDefault = function (card) {
-        this.appService.httpPost('set:default:card', { id: card.id });
+        this.appService.httpPost('post:set:default:payment:method', { sqlKey: 'SetDefaultPaymentMethod', sqlParms: { id: card.id } });
     };
     PaymentMethod.prototype.ngOnInit = function () {
-        var token = this.appService.getToken();
-        this.appService.httpGet('get:credit:card', { token: token });
-    };
-    PaymentMethod.prototype.ngOnDestroy = function () {
-        this.getSubscription.unsubscribe();
-        this.postSubscription.unsubscribe();
-        this.setDefaultCardSubscription.unsubscribe();
+        // this.appService.httpGet('get:credit:card', { token: token });
+        this.getPaymentMethod();
     };
     ;
+    PaymentMethod.prototype.getPaymentMethod = function () {
+        var body = {};
+        body.data = JSON.stringify({ sqlKey: 'GetAllPaymentMethods' });
+        this.appService.httpGet('get:payment:method', body);
+    };
+    PaymentMethod.prototype.ngOnDestroy = function () {
+        this.getAllPaymentMethodsSub.unsubscribe();
+        this.dataReadySubs.unsubscribe();
+        this.postPayMethodSub.unsubscribe();
+        this.deletePayMethodSub.unsubscribe();
+        // this.setDefaultCardSubscription.unsubscribe();
+    };
+    ;
+    __decorate([
+        core_1.ViewChild('payMethodModal'), 
+        __metadata('design:type', ng2_modal_1.Modal)
+    ], PaymentMethod.prototype, "payMethodModal", void 0);
     PaymentMethod = __decorate([
         core_1.Component({
             templateUrl: 'app/components/paymentMethod/paymentMethod.component.html'
         }), 
-        __metadata('design:paramtypes', [app_service_1.AppService])
+        __metadata('design:paramtypes', [app_service_1.AppService, forms_1.FormBuilder, primeng_1.ConfirmationService])
     ], PaymentMethod);
     return PaymentMethod;
 }());

@@ -21,6 +21,7 @@ var ShippingAddress = (function () {
         this.alert = {};
         this.selectedISOCode = '';
         this.isDataReady = false;
+        this.messages = [];
         this.initShippingForm();
         this.dataReadySubs = appService.behFilterOn('masters:download:success').subscribe(function (d) {
             _this.countries = _this.appService.getCountries();
@@ -51,7 +52,13 @@ var ShippingAddress = (function () {
             else {
                 _this.appService.httpGet('get:shipping:address');
                 _this.initShippingForm();
-                _this.appService.showAlert(_this.alert, false);
+                _this.messages = [];
+                _this.messages.push({
+                    severity: 'info',
+                    summary: 'Saved',
+                    detail: 'Data saved successfully'
+                });
+                //this.appService.showAlert(this.alert, false);
                 _this.shippingModal.close();
             }
         });

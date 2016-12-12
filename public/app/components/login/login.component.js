@@ -13,16 +13,18 @@ This software developed by Sushant Agrawal, India, 92/2A Bidhan Nagar Road, Kol 
 */
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
+require('rxjs/add/operator/take');
 var forms_1 = require('@angular/forms');
 var customValidators_1 = require('../../services/customValidators');
 var app_service_1 = require('../../services/app.service');
 var md5_1 = require('../../vendor/md5');
 var Login = (function () {
-    function Login(appService, router, fb) {
+    function Login(appService, router, fb, activatedRoute) {
         var _this = this;
         this.appService = appService;
         this.router = router;
         this.fb = fb;
+        this.activatedRoute = activatedRoute;
         this.alert = {
             show: false,
             type: 'danger',
@@ -63,19 +65,25 @@ var Login = (function () {
     ;
     Login.prototype.ngOnInit = function () {
         var _this = this;
-        this.loginFormChangesSubscription = this.loginForm.valueChanges.subscribe(function (x) {
+        this.activatedRoute.queryParams.take(1).subscribe(function (params) {
+            var email = params['email'];
+            if (email) {
+                _this.loginForm.controls["email"].setValue(email);
+            }
+        });
+        this.loginFormChangesSubscription = this.loginForm.valueChanges.take(1).subscribe(function (x) {
             _this.alert.show = false;
         });
     };
     Login.prototype.ngOnDestroy = function () {
         this.subscription.unsubscribe();
-        this.loginFormChangesSubscription.unsubscribe();
+        //this.loginFormChangesSubscription.unsubscribe();
     };
     Login = __decorate([
         core_1.Component({
             templateUrl: 'app/components/login/login.component.html'
         }), 
-        __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router, forms_1.FormBuilder])
+        __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router, forms_1.FormBuilder, router_1.ActivatedRoute])
     ], Login);
     return Login;
 }());

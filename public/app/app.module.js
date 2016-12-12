@@ -33,6 +33,7 @@ var ng2_bootstrap_1 = require('ng2-bootstrap');
 var ng2_bootstrap_2 = require('ng2-bootstrap');
 // import { MyDatePickerModule } from 'mydatepicker/dist/my-date-picker.module';
 var primeng_1 = require('primeng/primeng');
+// import { SpinnerModule } from 'primeng/primeng';
 //import { jquery } from 'jquery';
 var AppModule = (function () {
     function AppModule() {
@@ -45,13 +46,16 @@ var AppModule = (function () {
                 ng2_bootstrap_1.PaginationModule,
                 forms_1.ReactiveFormsModule,
                 forms_1.FormsModule,
-                primeng_1.CalendarModule
+                primeng_1.CalendarModule,
+                primeng_1.ConfirmDialogModule,
+                primeng_1.InputMaskModule,
+                primeng_1.GrowlModule
             ],
             declarations: [app_component_1.AppComponent, login_component_1.Login, order_component_1.Order, managePassword_component_1.ForgotPassword,
                 managePassword_component_1.SendPassword, managePassword_component_1.ChangePassword, createAccount_component_1.CreateAccount,
                 profile_component_1.Profile, approveOrder_component_1.ApproveOrder, receipt_component_1.Receipt, orderHistory_component_1.OrderHistory, shippingAddress_component_1.ShippingAddress,
                 paymentMethod_component_1.PaymentMethod, controlMessages_component_1.ControlMessages, createPassword_component_1.CreatePassword],
-            providers: [app_service_1.AppService, app_service_1.LoginGuard, customValidators_1.CustomValidators],
+            providers: [app_service_1.AppService, app_service_1.LoginGuard, customValidators_1.CustomValidators, primeng_1.ConfirmationService],
             bootstrap: [app_component_1.AppComponent]
         }), 
         __metadata('design:paramtypes', [])

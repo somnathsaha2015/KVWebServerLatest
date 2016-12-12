@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
+import { CustomValidators } from '../../services/customValidators';
 import { AppService } from '../../services/app.service';
 import { md5 } from '../../vendor/md5';
 @Component({
@@ -9,7 +11,13 @@ import { md5 } from '../../vendor/md5';
 export class CreateAccount {
     email: string;
     subscription: Subscription;
-    constructor(private appService: AppService, private router: Router) {
+    createAccountForm: FormGroup;
+    constructor(private appService: AppService, private router: Router, private fb: FormBuilder) {
+        this.createAccountForm = fb.group({
+            email: ['', [Validators.required, CustomValidators.emailValidator]]
+            , password: ['', Validators.required]
+            , confirmPassword: ['', Validators.required]
+        });
         this.subscription = appService.filterOn('post:create:account')
             .subscribe(d => {
                 console.log(d);
@@ -17,13 +25,18 @@ export class CreateAccount {
                     console.log(d.data.error.status)
                     appService.resetCredential();
                 } else {
-                    console.log('success');
+                     this.router.navigate(['/login']);
                 }
             });
     };
-    createAccount(pwd, confirmPwd) {
+    createAccount() {
+        let pwd = this.createAccountForm.controls["password"].value;
+        let confirmPwd = this.createAccountForm.controls["confirmPassword"].value;
         if (pwd === confirmPwd) {
-            let data = { email: this.email, hash: md5(pwd) };
+            let data = {
+                email: this.createAccountForm.controls["email"].value
+                , hash: md5(pwd)
+            };
             this.appService.httpPost('post:create:account', data);
         }
 
