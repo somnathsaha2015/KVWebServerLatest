@@ -112,39 +112,6 @@ var AppService = (function () {
         });
     };
     ;
-    /*
-    httpGet(id: string, body?: any) {
-        var url = urlHash[id];
-        if (body && body.id) {
-            url = url.replace(':id', body.id);
-        }
-        if(body && body.requestedShippingBottle){
-            url = url.replace(':requestedShippingBottle',body.requestedShippingBottle);
-        }
-        if(body && body.additinalShippingBottle){
-            url = url.replace(':additinalShippingBottle',body.additinalShippingBottle);
-        }
-        if(body && body.shippedState){
-            url = url.replace(':shippedState',body.shippedState);
-        }
-        if(body && body.shippedZip){
-            url = url.replace(':shippedZip',body.shippedZip);
-        }
-        let headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        headers.append('x-access-token', this.getToken());
-        this.http.get(url, { headers: headers })
-            .map(response => response.json())
-            .subscribe(d =>
-                this.subject.next({
-                    id: id, data: d
-                }), err =>
-                this.subject.next({
-                    id: id,
-                    data: { error: err }
-                }));
-    };
-    */
     AppService.prototype.httpGet = function (id, body) {
         var _this = this;
         var url = config_1.urlHash[id];

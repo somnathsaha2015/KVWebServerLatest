@@ -5,6 +5,7 @@ import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms'
 import { CustomValidators } from '../../services/customValidators';
 import { Modal, ModalModule } from "ng2-modal"
 import { AlertModule } from 'ng2-bootstrap/components/alert';
+import {InputMaskModule, GrowlModule, Message } from 'primeng/primeng';
 import { ControlMessages } from '../controlMessages/controlMessages.component';
 @Component({
     templateUrl: 'app/components/shippingAddress/shippingAddress.component.html'
@@ -19,6 +20,7 @@ export class ShippingAddress {
     countries: [any];
     selectedISOCode: string = '';
     isDataReady:boolean=false;
+    messages: Message[] = [];
     @ViewChild('shippingModal') shippingModal: Modal;
     addresses: [{}];
     constructor(private appService: AppService, private fb: FormBuilder) {
@@ -50,7 +52,13 @@ export class ShippingAddress {
                 } else {
                     this.appService.httpGet('get:shipping:address');
                     this.initShippingForm();
-                    this.appService.showAlert(this.alert, false);
+                    this.messages = [];
+                    this.messages.push({
+                        severity: 'info'
+                        , summary: 'Saved'
+                        , detail: 'Data saved successfully'
+                    });
+                    //this.appService.showAlert(this.alert, false);
                     this.shippingModal.close();
                 }
             });

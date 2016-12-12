@@ -29,6 +29,11 @@ exports.urlHash = {
     'get:init:data': '/api/init/data',
     'get:all:masters': '/api/all/master',
     'get:current:settings': '/api/current/settings',
+    'get:shipping:sales:tax:perc': '/api/generic/query',
+    'get:payment:method': '/api/generic/query',
+    'post:payment:method': '/api/generic/scalar',
+    'post:delete:payment:method': '/api/generic/non/query',
+    'post:set:default:payment:method': '/api/generic/non/query',
     'get:approve:artifacts:ShippingandSalesTax': '/api/approve/artifact/shippingandsalestax'
 };
 exports.messages = {
@@ -57,7 +62,8 @@ exports.validationErrorMessages = {
     'invalidDate': 'Date is invalid',
     'dataNotSaved': 'Data could not be saved',
     'createPasswordFailed': 'Creation of new password failed',
-    'changePasswordSuccess': 'Password successfully changed'
+    'changePasswordSuccess': 'Password successfully changed',
+    'payMethodInsertFailed': 'Payment method insert failed'
 };
 exports.viewBoxConfig = {
     '/login': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false, logout: false },

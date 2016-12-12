@@ -14,13 +14,13 @@ var customValidators_1 = require('../../services/customValidators');
 var app_service_1 = require('../../services/app.service');
 var util_1 = require('../../services/util');
 var Profile = (function () {
-    // dt: any;
     function Profile(appService, fb) {
         var _this = this;
         this.appService = appService;
         this.fb = fb;
         this.alert = {};
         this.profile = {};
+        this.messages = [];
         //this.myDatePickerOptions={};
         this.initProfileForm();
         this.getProfileSubscription = appService.filterOn('get:user:profile')
@@ -42,7 +42,13 @@ var Profile = (function () {
                 _this.appService.showAlert(_this.alert, true, 'dataNotSaved');
             }
             else {
-                _this.appService.showAlert(_this.alert, true, 'dataSaved', 'success');
+                //this.appService.showAlert(this.alert, true, 'dataSaved', 'success');
+                _this.messages = [];
+                _this.messages.push({
+                    severity: 'success',
+                    summary: 'Saved',
+                    detail: 'Data saved successfully'
+                });
                 _this.appService.httpGet('get:user:profile');
             }
         });
