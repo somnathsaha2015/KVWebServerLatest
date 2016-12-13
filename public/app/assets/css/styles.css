@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Josefin+Slab:400,600,700');
-
+html{font-size:110%;}
 body{
     font-family: 'Josefin Slab', serif;
     background-color: #f5f2eb;
@@ -70,10 +70,10 @@ border-radius: 5px 5px 5px 5px;
 .ProductPanel .productTitle{font-size:1.2em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-top: 5px; }
 .ProductPanel .productTitle a{ cursor: pointer; color: #a0090a;}
 .ProductPanel .notesOrderAvailPanel .testingNotes{ width: 40%; float: left; padding-top: 7px;}
-.ProductPanel .notesOrderAvailPanel .orderPack{ width: 30%; float: left; padding-top: 7px; }
+.ProductPanel .notesOrderAvailPanel .orderPack{ width: 50%; float: left; padding-top: 7px; }
 .productPrice{color: #a75b02; }
 
-.ProductPanel .notesOrderAvailPanel .availPack{ width: 30%; float: left; padding-top: 7px;}
+.ProductPanel .notesOrderAvailPanel .availPack{ width: 50%; float: left; padding-top: 7px;}
 .ProductPanel .notesOrderAvailPanel .availPack .availableQtyColor{ color: #858585;}
 
 
@@ -261,6 +261,7 @@ input.ng-valid{
     padding-bottom: 15px;
     font-size: 1em;
 }
+.orderDescPanel ul{ list-style: none;}
 
 .ProductPanel .productTitle{ text-align: center; margin-bottom: 10px;}
 .orderDescPanel .col-sm-2{ padding-bottom: 10px; text-align: center;}
@@ -445,3 +446,7 @@ input.ng-valid{
 	@media only screen and (max-width : 320px){
 		.col-xs-6 span{display: block;}
 	}
+	@media(min-width:60em){
+		html{font-size: 90%
+		}
+}
