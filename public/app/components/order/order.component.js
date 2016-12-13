@@ -40,6 +40,9 @@ var Order = (function () {
                 _this.orders = JSON.parse(d.data).Table.map(function (value, i) {
                     value.orderQty = 0;
                     value.wishList = 0;
+                    if (value.packing == 'b') {
+                        value.imageUrl = "2014_Cuvee_Cathleen_Chardonnay.jpg";
+                    }
                     value.imageUrl = value.imageUrl != null ? 'app/assets/img/' + value.imageUrl : null;
                     return (value);
                 });
