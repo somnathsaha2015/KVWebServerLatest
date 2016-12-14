@@ -27,13 +27,13 @@
                     <div class="row orderDescPanel">
                         <div *ngIf="order.imageUrl" class="col-sm-2"><img [src]="order.imageUrl" class="img-thumbnail"></div>
                         <div class="col-sm-10" *ngIf="order.packing !='b'" [innerHTML]=order.descr></div>
-                        <div class="col-sm-10" *ngIf="order.packing =='b'"><h3> {{order.review1}}</h3>
+                        <div class="col-sm-10" *ngIf="order.packing =='b'"><span class="review1"> {{order.review1}}</span>
                                 <div [innerHTML]=order.review2></div>
                         </div>
                     </div>
-                    <div class="row" *ngIf="order.tastingNotes">
+                    <!--<div class="row" *ngIf="order.tastingNotes">
                         <div class="col-sm-12 tastingNotesPanel" [innerHTML]=order.tastingNotes></div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </div>
