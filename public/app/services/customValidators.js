@@ -8,6 +8,12 @@ var CustomValidators = (function () {
         }
     };
     ;
+    CustomValidators.usZipCodeValidator = function (control) {
+        if (!control.value.match(/(^\d{5}$)|(^\d{5}-\d{4}$)/)) {
+            return ({ 'invalidZipCode': true });
+        }
+    };
+    ;
     CustomValidators.phoneValidator = function (control) {
         var ret;
         var international = /^\(?[+]?(\d{1})\)?[- ]?\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;

@@ -5,7 +5,9 @@ var router = express.Router();
 var config, def, messages, data;
 var jwt = require('jsonwebtoken');
 var crypto = require('crypto');
-
+// var requestIp = require('request-ip');
+var ipaddr = require('ipaddr.js');
+//var lodash = require('lodash');
 router.init = function (app) {
     config = app.get('config');
     def = app.get('def');
@@ -54,7 +56,9 @@ router.post('/api/authenticate', function (req, res, next) {
         let auth = req.body.auth;
         let err;
         if (auth) {
-            var data = { action: 'authenticate', auth: auth };
+            let clientIp = handler.getClientIp(req);
+            let remoteIp = ipaddr.process(clientIp).toString();     
+            var data = { action: 'authenticate', auth: auth, remoteIp:remoteIp };
             handler.edgePush(res, next, 'authenticate', data);
         }
         else {
@@ -85,7 +89,7 @@ router.post('/api/send/password', function (req, res, next) {
                     emailItem.to = decoded.data;
                     emailItem.userId = req.user.userId;
                     var data = { action: 'new:password', data: emailItem, };
-                    handler.edgePush(res, next, 'common:result', data);
+                    handler.edgePush(res, next, 'common:result:no:data', data);
 
                     // let random = crypto.randomBytes(4).toString('hex');
                     // let url = `<a href='${config.host}'>${config.host}</a>`;
@@ -157,7 +161,7 @@ router.post('/api/create/account', function (req, res, next) {
         let account = req.body;
         if (account) {
             let data = { action: 'create:account', account: account };
-            handler.edgePush(res, next, 'common:result', data);
+            handler.edgePush(res, next, 'common:result:no:data', data);
         } else {
             let err = new def.NError(404, messages.errAuthStringNotFound, messages.messAuthStringinPostRequest);
             next(err);

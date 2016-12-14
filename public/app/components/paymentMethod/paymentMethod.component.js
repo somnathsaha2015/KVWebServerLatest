@@ -24,6 +24,7 @@ var PaymentMethod = (function () {
         this.alert = {};
         this.selectedISOCode = '';
         this.isDataReady = false;
+        this.messages = [];
         this.display = false;
         this.initPayMethodForm();
         this.getAllPaymentMethodsSub = appService.filterOn("get:payment:method")
@@ -49,6 +50,12 @@ var PaymentMethod = (function () {
                 _this.initPayMethodForm();
                 _this.appService.showAlert(_this.alert, false);
                 _this.getPaymentMethod();
+                _this.messages = [];
+                _this.messages.push({
+                    severity: 'success',
+                    summary: 'Saved',
+                    detail: 'Data saved successfully'
+                });
                 _this.payMethodModal.close();
             }
         });
@@ -92,7 +99,7 @@ var PaymentMethod = (function () {
             ccFirstName: ['', forms_1.Validators.required],
             ccLastName: ['', forms_1.Validators.required],
             ccType: ['', forms_1.Validators.required],
-            ccNumber: ['', forms_1.Validators.required],
+            ccNumber: ['', [forms_1.Validators.required, customValidators_1.CustomValidators.creditCardValidator]],
             ccExpiryMonth: [this.month, forms_1.Validators.required],
             ccExpiryYear: [this.year, forms_1.Validators.required],
             ccSecurityCode: ['', forms_1.Validators.required],

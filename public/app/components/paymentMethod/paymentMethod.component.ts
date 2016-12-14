@@ -5,7 +5,7 @@ import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms'
 import { CustomValidators } from '../../services/customValidators';
 import { Modal, ModalModule } from "ng2-modal"
 import { AlertModule } from 'ng2-bootstrap/components/alert';
-import {ConfirmDialogModule,ConfirmationService,InputMaskModule} from 'primeng/primeng';
+import { ConfirmDialogModule, ConfirmationService, InputMaskModule, GrowlModule, Message } from 'primeng/primeng';
 import { ControlMessages } from '../controlMessages/controlMessages.component';
 // import {SpinnerModule} from 'primeng/primeng';
 @Component({
@@ -26,7 +26,7 @@ export class PaymentMethod {
     @ViewChild('payMethodModal') payMethodModal: Modal;    
     payMethods: [any];
     isDataReady: boolean = false;
-
+    messages: Message[] = [];
     display: boolean = false;
 
     constructor(private appService: AppService, private fb: FormBuilder, private confirmationService: ConfirmationService
@@ -54,6 +54,12 @@ export class PaymentMethod {
                     this.initPayMethodForm();
                     this.appService.showAlert(this.alert, false);
                     this.getPaymentMethod();
+                    this.messages = [];
+                    this.messages.push({
+                        severity: 'success'
+                        , summary: 'Saved'
+                        , detail: 'Data saved successfully'
+                    });
                     this.payMethodModal.close();
                 }
             });
@@ -92,7 +98,7 @@ export class PaymentMethod {
             , ccFirstName: ['', Validators.required]
             , ccLastName: ['', Validators.required]
             , ccType: ['', Validators.required]
-            , ccNumber: ['', Validators.required]
+            , ccNumber: ['', [Validators.required, CustomValidators.creditCardValidator]]
             , ccExpiryMonth: [this.month, Validators.required]
             , ccExpiryYear: [this.year, Validators.required]
             , ccSecurityCode: ['', Validators.required]

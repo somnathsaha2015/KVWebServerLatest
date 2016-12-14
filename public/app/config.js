@@ -34,7 +34,9 @@ exports.urlHash = {
     'post:payment:method': '/api/generic/scalar',
     'post:delete:payment:method': '/api/generic/non/query',
     'post:set:default:payment:method': '/api/generic/non/query',
-    'get:approve:artifacts:ShippingandSalesTax': '/api/approve/artifact/shippingandsalestax'
+    'get:approve:artifacts:ShippingandSalesTax': '/api/approve/artifact/shippingandsalestax',
+    'get:smartyStreet': 'https://us-street.api.smartystreets.com/street-address?auth-id=:authId&auth-token=:authToken&street=:street&street2=:street2&city=:city&state=:state&zipcode=:zipcode&',
+    'smartyStreetAutoCom': 'https://us-autocomplete.api.smartystreets.com/suggest?auth-id=63395b2b-4df2-c8c7-a487-21ecc25979c8&auth-token=ikDR4hndQSAScpWSPdj8&prefix=Wyomi'
 };
 exports.messages = {
     'mess:order:intro:text': '',
@@ -63,7 +65,10 @@ exports.validationErrorMessages = {
     'dataNotSaved': 'Data could not be saved',
     'createPasswordFailed': 'Creation of new password failed',
     'changePasswordSuccess': 'Password successfully changed',
-    'payMethodInsertFailed': 'Payment method insert failed'
+    'payMethodInsertFailed': 'Payment method insert failed',
+    'addressValidationUnauthorized': 'Authorization error while validating address.',
+    'invalidAddress': 'This address is invalid',
+    'invalidZipCode': 'This zip code is not a US legal zip code'
 };
 exports.viewBoxConfig = {
     '/login': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false, logout: false },

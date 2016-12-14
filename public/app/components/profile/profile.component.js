@@ -20,9 +20,15 @@ var Profile = (function () {
         this.fb = fb;
         this.alert = {};
         this.profile = {};
+        this.selectedCountryName = '';
         this.messages = [];
+        this.isDataReady = false;
         //this.myDatePickerOptions={};
         this.initProfileForm();
+        this.dataReadySubs = appService.behFilterOn('masters:download:success').subscribe(function (d) {
+            _this.countries = _this.appService.getCountries();
+            _this.isDataReady = true;
+        });
         this.getProfileSubscription = appService.filterOn('get:user:profile')
             .subscribe(function (d) {
             if (d.data.error) {
@@ -34,6 +40,28 @@ var Profile = (function () {
                     _this.profile = profileArray[0];
                 }
                 _this.initProfileForm();
+            }
+        });
+        this.smartyStreetSubscription = appService.filterOn('get:smartyStreet')
+            .subscribe(function (d) {
+            if (d.data.error) {
+                console.log(d.data.error);
+            }
+            else {
+                var data = d.data;
+                if (d.data.length > 0) {
+                    data = d.data[0].components;
+                    var street = (data.street_predirection || '').concat(' ', data.primary_number, ' ', data.street_name, ' ', data.street_suffix, ' ', data.street_postdirection);
+                    console.log({
+                        street: street.trim(),
+                        city: data.city_name,
+                        state: data.state_abbreviation,
+                        zipcode: data.zipcode
+                    });
+                }
+                else {
+                    console.log('Invalid Address');
+                }
             }
         });
         this.saveProfileSubscription = appService.filterOn('post:save:profile')
@@ -72,7 +100,8 @@ var Profile = (function () {
             mailingAddress2: [this.profile.mailingAddress2],
             mailingCity: [this.profile.mailingCity, forms_1.Validators.required],
             mailingState: [this.profile.mailingState, forms_1.Validators.required],
-            mailingZip: [this.profile.mailingZip, forms_1.Validators.required]
+            mailingZip: [this.profile.mailingZip, forms_1.Validators.required],
+            mailingCountry: [this.profile.mailingCountry, forms_1.Validators.required]
         });
     };
     ;
@@ -89,6 +118,8 @@ var Profile = (function () {
         pr.mailingCity = this.profileForm.controls['mailingCity'].value;
         pr.mailingState = this.profileForm.controls['mailingState'].value;
         pr.mailingZip = this.profileForm.controls['mailingZip'].value;
+        pr.mailingCountry = this.profileForm.controls['mailingCountry'].value; // this.profileForm.controls['mailingCountry'].value;
+        pr.mailingCountryisoCode = this.countries.filter(function (d) { return d.countryName == pr.mailingCountry; })[0].isoCode;
         return (pr);
     };
     ;
@@ -101,6 +132,8 @@ var Profile = (function () {
     Profile.prototype.ngOnDestroy = function () {
         this.getProfileSubscription.unsubscribe();
         this.saveProfileSubscription.unsubscribe();
+        this.smartyStreetSubscription.unsubscribe();
+        this.dataReadySubs.unsubscribe();
     };
     ;
     Profile = __decorate([

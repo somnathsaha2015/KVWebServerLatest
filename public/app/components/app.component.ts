@@ -17,17 +17,16 @@ export class AppComponent {
   kistler: string = '#';
   viewBox: {} = viewBoxConfig['/login'];
 
- showMenu:boolean;
- myAccountshowMenu:boolean;
+ showMenu: boolean = false;
+  myAccountshowMenu: boolean = false;
+  currentUser: string = "";
 
  
   constructor(private appService: AppService, private router: Router) {
-    if(window.innerWidth>768){
-      this.showMenu=true;
-      this.myAccountshowMenu=true;
-    }else{
-      this.showMenu=false;
-      this. myAccountshowMenu=false;
+    this.initMenu(window.innerWidth);
+    let credential = appService.getCredential();
+    if (credential) {
+      this.currentUser = credential.email;
     }
     this.initDataSub = appService.filterOn('get:init:data').subscribe(d => {
       
@@ -67,29 +66,22 @@ export class AppComponent {
     this.initDataSub.unsubscribe();
   };
   menuToggle(){
-  if(this.showMenu){
-   this.showMenu=false;
-  }else{
-    this.showMenu=true;
-   }
+  this.showMenu = !this.showMenu;
   };
   myAccountToggle(){
-  if(this.myAccountshowMenu){
-   this.myAccountshowMenu=false;
-  }else{
-    this.myAccountshowMenu=true;
-   }
+  this.myAccountshowMenu = !this.myAccountshowMenu;
   };
+  initMenu(windowSize) {
+    if (windowSize > 768) {
+      this.showMenu = true;
+      this.myAccountshowMenu = true;
+    } else {
+      this.showMenu = false;
+      this.myAccountshowMenu = false;
+    }
+  }
  onResize(event) {
-  if(event.target.innerWidth < 768){
-      if(this.showMenu || this.myAccountshowMenu){
-        this.showMenu=false;
-        this.myAccountshowMenu=false;
-      }
- }else{
-      this.showMenu=true;
-      this.myAccountshowMenu=true;
- }
+  this.initMenu(event.target.innerWidth);
 };
 
 }
