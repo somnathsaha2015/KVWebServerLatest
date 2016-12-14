@@ -20,13 +20,13 @@ var AppComponent = (function () {
         this.home = '#';
         this.kistler = '#';
         this.viewBox = config_1.viewBoxConfig['/login'];
-        if (window.innerWidth > 768) {
-            this.showMenu = true;
-            this.myAccountshowMenu = true;
-        }
-        else {
-            this.showMenu = false;
-            this.myAccountshowMenu = false;
+        this.showMenu = false;
+        this.myAccountshowMenu = false;
+        this.currentUser = "";
+        this.initMenu(window.innerWidth);
+        var credential = appService.getCredential();
+        if (credential) {
+            this.currentUser = credential.email;
         }
         this.initDataSub = appService.filterOn('get:init:data').subscribe(function (d) {
             if (d.data.error) {
@@ -70,34 +70,25 @@ var AppComponent = (function () {
     };
     ;
     AppComponent.prototype.menuToggle = function () {
-        if (this.showMenu) {
-            this.showMenu = false;
-        }
-        else {
-            this.showMenu = true;
-        }
+        this.showMenu = !this.showMenu;
     };
     ;
     AppComponent.prototype.myAccountToggle = function () {
-        if (this.myAccountshowMenu) {
-            this.myAccountshowMenu = false;
-        }
-        else {
-            this.myAccountshowMenu = true;
-        }
+        this.myAccountshowMenu = !this.myAccountshowMenu;
     };
     ;
-    AppComponent.prototype.onResize = function (event) {
-        if (event.target.innerWidth < 768) {
-            if (this.showMenu || this.myAccountshowMenu) {
-                this.showMenu = false;
-                this.myAccountshowMenu = false;
-            }
-        }
-        else {
+    AppComponent.prototype.initMenu = function (windowSize) {
+        if (windowSize > 768) {
             this.showMenu = true;
             this.myAccountshowMenu = true;
         }
+        else {
+            this.showMenu = false;
+            this.myAccountshowMenu = false;
+        }
+    };
+    AppComponent.prototype.onResize = function (event) {
+        this.initMenu(event.target.innerWidth);
     };
     ;
     AppComponent = __decorate([

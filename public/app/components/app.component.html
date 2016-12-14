@@ -13,6 +13,7 @@
             <li class="active"><a [href]="home">Home</a></li>
         </ul>-->
         <ul class="nav navbar-nav navbar-right">
+            <li *ngIf="viewBox.logout"><a>{{currentUser}}</a></li>
             <li *ngIf="viewBox.needHelp"><a routerLink="#" (click)="hideMenu()">Need Help?</a></li>
             <li *ngIf="viewBox.order"><a routerLink="/order" (click)="hideMenu()">Order</a></li>
             <li *ngIf="viewBox.myAccount"><a routerLink="/profile" (click)="hideMenu()">My Account</a></li>
