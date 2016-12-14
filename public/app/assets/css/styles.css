@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Josefin+Slab:400,600,700');
-html{font-size:110%;}
+
 body{
     font-family: 'Josefin Slab', serif;
     background-color: #f5f2eb;
@@ -80,8 +80,10 @@ border-radius: 5px 5px 5px 5px;
 .ProductPanel .showproductDetails{padding: 15px; background-color: #fff; margin: 10px 1px 1px 1px; -webkit-border-radius: 3px 3px 3px 3px;
 border-radius: 3px 3px 3px 3px; -webkit-box-shadow: 0 0 2px 2px #dddddd;
 box-shadow: 0 0 2px 2px #dddddd;}
-.ProductPanel .showproductDetails .orderDescPanel{ padding-bottom: 15px; font-size:1.2em; }
+.ProductPanel .showproductDetails .orderDescPanel{ padding-bottom: 15px; }
 .ProductPanel .showproductDetails .tastingNotesPanel{ border-top:solid 1px #dddddd; padding-top:15px;}
+.ProductPanel .showproductDetails .orderDescPanel .review1{ font-family: serif; font-weight: 700;}
+.orderDescPanel ul{list-style-type: none; margin-left: -29px;}
 
 
 .ProductPanel .requestPanel{padding:15px 0px;}
@@ -213,6 +215,20 @@ input.ng-valid{
 .formGap{ margin-bottom: 10px;}
 .paymentSubmit{ padding-top: 10px;}
 
+.ui-growl-message-info{
+	background: deepskyblue;
+}
+.ui-growl-message-success{
+	background: lawngreen;
+}
+
+.ui-growl-message-warn{
+	background: darkorange;
+}
+
+.ui-growl-message-error{
+	background: red;
+}
 
 	/*==========  Mobile First Method  ==========*/
 
@@ -258,14 +274,19 @@ input.ng-valid{
 	/* Small Devices, Tablets */
 	@media only screen and (max-width : 767px){
 		.ProductPanel .showproductDetails .orderDescPanel {
-    padding-bottom: 15px;
-    font-size: 1em;
+     padding-bottom: 0px; 
+    font-size: .9em;
 }
-.orderDescPanel ul{ list-style: none;}
+.ProductPanel .showproductDetails{padding: 10px; background-color: #fff; margin: 10px 1px 1px 1px; -webkit-border-radius: 3px 3px 3px 3px;
+border-radius: 3px 3px 3px 3px; -webkit-box-shadow: 0 0 2px 2px #dddddd;
+box-shadow: 0 0 2px 2px #dddddd; margin-left: -10px; margin-right: -10px;}
+
 
 .ProductPanel .productTitle{ text-align: center; margin-bottom: 10px;}
 .orderDescPanel .col-sm-2{ padding-bottom: 10px; text-align: center;}
- .notesOrderAvailPanel{margin-bottom: 10px; border-bottom: solid 1px #ddd;  padding-bottom: 10px; border-top: solid 1px #ddd;}
+ .notesOrderAvailPanel{margin-bottom: 10px; text-align: center; border-bottom: solid 1px #ddd;  padding-bottom: 10px; border-top: solid 1px #ddd;}
+.ProductPanel .col-xs-6{ text-align: center;}
+
 
  .KistlerSubMenu .navbar-toggle {
      background-color: transparent;
@@ -446,7 +467,3 @@ input.ng-valid{
 	@media only screen and (max-width : 320px){
 		.col-xs-6 span{display: block;}
 	}
-	@media(min-width:60em){
-		html{font-size: 90%
-		}
-}
