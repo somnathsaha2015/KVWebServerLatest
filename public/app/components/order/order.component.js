@@ -66,10 +66,8 @@ var Order = (function () {
                 var settingsData = JSON.parse(d.data);
                 if (settingsData.Table.length > 0) {
                     var settings = settingsData.Table[0];
-                    _this.staticTexts.minimumRequest = "Minimum request " + settings.MinOrderBottles + " bottles";
-                    ;
-                    _this.staticTexts.bottomNotes = "Wines in " + settings.MinOrderBottles + " bottle packages are subject to change";
-                    ;
+                    _this.staticTexts.minimumRequest = "Minimum request " + settings.MinOrderBottles + " bottles or " + settings.MinOrderpackages + " 6-bottle package";
+                    //this.staticTexts.bottomNotes = "Wines in " + settings.MinOrderBottles+ " bottle packages are subject to change";;
                     _this.isShowHolidayGiftOption = !settings.HideHolidayGiftCheckBox; // == "true" ? true : false;
                     //console.log("this.isShowHolidayGiftOption="+this.isShowHolidayGiftOption);
                     _this.staticTexts.introText = settings.WelcomeNote;

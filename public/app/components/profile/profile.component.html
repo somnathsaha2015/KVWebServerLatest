@@ -4,7 +4,7 @@
         <div class="panel-body">
             <form [formGroup]="profileForm" novalidate (ngSubmit)="submit()" class="form-horizontal">
                 <div class="form-group">
-                    <label class="control-label col-sm-4" for="firstName">First Name:</label>
+                    <label class="control-label col-sm-4" for="firstName">Name:</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name" formControlName="firstName">
                         <control-messages [control]="profileForm.controls.firstName"></control-messages>
@@ -19,14 +19,6 @@
                     </div>
                 </div>
                 -->
-                <div class="form-group">
-                    <label class="control-label col-sm-4" for="phone">Phone:</label>
-                    <div class="col-sm-4">
-                        <!--<input type="phone" formControlName="phone" class="form-control" id="phone" name="phone" placeholder="Enter phone number">-->
-						<p-inputMask mask="(999) 999-9999" placeholder="(999) 999-9999" formControlName="phone"></p-inputMask>
-                        <control-messages [control]="profileForm.controls.phone"></control-messages>
-                    </div>
-                </div>
                 <div class="form-group">
                     <label class="control-label col-sm-4" for="birthDay">Birthday:</label>
                     <div class="col-sm-4">
@@ -82,6 +74,14 @@
                             <control-messages [control]="profileForm.controls.mailingCountry"></control-messages>
                         </div>
                     </div>
+                    <div class="form-group">
+                    <label class="control-label col-sm-4" for="phone">Phone:</label>
+                    <div class="col-sm-4">
+                        <!--<input type="phone" formControlName="phone" class="form-control" id="phone" name="phone" placeholder="Enter phone number">-->
+						<p-inputMask mask="(999) 999-9999" placeholder="(999) 999-9999" formControlName="phone"></p-inputMask>
+                        <control-messages [control]="profileForm.controls.phone"></control-messages>
+                    </div>
+                </div>
                 <div class="form-group">
                     <div class="col-sm-offset-4 col-sm-4">
                         <alert *ngIf="alert.show" [type]="alert.type" [dismissible]="true">{{alert.message}}</alert>
