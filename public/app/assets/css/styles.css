@@ -80,7 +80,7 @@ border-radius: 5px 5px 5px 5px;
 .ProductPanel .showproductDetails{padding: 15px; background-color: #fff; margin: 10px 1px 1px 1px; -webkit-border-radius: 3px 3px 3px 3px;
 border-radius: 3px 3px 3px 3px; -webkit-box-shadow: 0 0 2px 2px #dddddd;
 box-shadow: 0 0 2px 2px #dddddd;}
-.ProductPanel .showproductDetails .orderDescPanel{ padding-bottom: 15px; }
+
 .ProductPanel .showproductDetails .tastingNotesPanel{ border-top:solid 1px #dddddd; padding-top:15px;}
 .ProductPanel .showproductDetails .orderDescPanel .review1{ font-family: serif; font-weight: 700;}
 .orderDescPanel ul{list-style-type: none; margin-left: -29px;}
@@ -354,7 +354,8 @@ box-shadow: 0 0 2px 2px #dddddd; margin-left: -10px; margin-right: -10px;}
 			width: 45%; 
 			padding-right: 10px; 
 			white-space: nowrap;
-            font-weight: 700;
+            font-family: serif;
+			font-weight: 600;
 		}
 		
 		/*
@@ -385,7 +386,7 @@ box-shadow: 0 0 2px 2px #dddddd; margin-left: -10px; margin-right: -10px;}
 		.orderDetailsPaneltbl td { 
 			/* Behave  like a "row" */
 			border: none;
-			border-bottom: 1px solid #fcfcfc; 
+		/*	border-bottom: 1px solid #fcfcfc; */
 			position: relative;
 			padding-left: 50%!important; 
             width: 100%;
@@ -400,6 +401,8 @@ box-shadow: 0 0 2px 2px #dddddd; margin-left: -10px; margin-right: -10px;}
 			width: 45%; 
 			padding-right: 10px; 
 			white-space: nowrap;
+			font-family: serif;
+			font-weight: 600;
 		}
 		
 		/*
@@ -446,6 +449,8 @@ box-shadow: 0 0 2px 2px #dddddd; margin-left: -10px; margin-right: -10px;}
 			width: 45%; 
 			padding-right: 10px; 
 			white-space: nowrap;
+			font-family: serif;
+			font-weight: 600;
 		}
 		
 		/*
