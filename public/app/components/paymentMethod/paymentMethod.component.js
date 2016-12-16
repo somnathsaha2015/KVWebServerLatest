@@ -26,6 +26,7 @@ var PaymentMethod = (function () {
         this.isDataReady = false;
         this.messages = [];
         this.display = false;
+        this.creditCardTypes = [];
         this.initPayMethodForm();
         this.getAllPaymentMethodsSub = appService.filterOn("get:payment:method")
             .subscribe(function (d) {
@@ -39,6 +40,7 @@ var PaymentMethod = (function () {
         });
         this.dataReadySubs = appService.behFilterOn('masters:download:success').subscribe(function (d) {
             _this.countries = _this.appService.getCountries();
+            _this.creditCardTypes = _this.appService.getCreditCardTypes();
             _this.isDataReady = true;
         });
         this.postPayMethodSub = appService.filterOn("post:payment:method")
@@ -93,6 +95,10 @@ var PaymentMethod = (function () {
     PaymentMethod.prototype.initPayMethodForm = function () {
         this.year = (new Date()).getFullYear();
         this.month = (new Date()).getMonth() + 1;
+        var addr = {
+            country: "United States",
+            isoCode: "US",
+        };
         this.payMethodForm = this.fb.group({
             id: [''],
             cardName: ['', forms_1.Validators.required],
@@ -110,8 +116,8 @@ var PaymentMethod = (function () {
             city: ['', forms_1.Validators.required],
             state: ['', forms_1.Validators.required],
             zip: ['', forms_1.Validators.required],
-            countryName: ['', forms_1.Validators.required],
-            isoCode: [''],
+            countryName: [addr.country || '', forms_1.Validators.required],
+            isoCode: [addr.isoCode || ''],
             phone: ['', [forms_1.Validators.required, customValidators_1.CustomValidators.phoneValidator]],
             isDefault: [false]
         });
@@ -139,9 +145,9 @@ var PaymentMethod = (function () {
             ccExpiryMonth: this.payMethodForm.controls['ccExpiryMonth'].value,
             ccExpiryYear: this.payMethodForm.controls['ccExpiryYear'].value,
             ccSecurityCode: this.payMethodForm.controls['ccSecurityCode'].value,
-            name: this.payMethodForm.controls['name'].value,
+            name: this.payMethodForm.controls['ccFirstName'].value + ' ' + this.payMethodForm.controls['ccLastName'].value,
             street1: this.payMethodForm.controls['street1'].value,
-            street2: this.payMethodForm.controls['street2'].value,
+            street2: this.payMethodForm.controls['street2'].value ? this.payMethodForm.controls['street2'].value : '',
             city: this.payMethodForm.controls['city'].value,
             state: this.payMethodForm.controls['state'].value,
             zip: this.payMethodForm.controls['zip'].value,
