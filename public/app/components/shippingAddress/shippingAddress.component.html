@@ -8,13 +8,13 @@
                         <!--<span><input type="radio" name = "selected"></span>-->
                         <span class="name-shipping-address">{{address.name}}</span>
                         <span>, {{address.street1}}</span>
-                        <span>, {{address.street2}}</span>
+                        <span *ngIf="address.street2">, {{address.street2}}</span>
                         <span>, {{address.city}}</span>
                         <span>, {{address.state}}</span>
                         <span>, {{address.zip}}</span>
                         <span>, {{address.country}}</span>
                         <span>, {{address.phone}}</span>
-                        <span>, Default:<input type="checkbox" [checked]="address.isDefault" [disabled]="true" name="isDefault"></span>
+                        <span *ngIf="address.isDefault">, Default</span>
                         <button *ngIf="isDataReady" type="button" class="btn btn-link" (click)="edit(address)">Edit</button></li>
 
 
@@ -105,7 +105,7 @@
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9">
                             <div class="checkbox">
-                                <label>Use as my default address </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" formControlName="isDefault">
+                                <label><input type="checkbox" formControlName="isDefault"> Use as my default address</label>
                             </div>
                         </div>
                     </div>
