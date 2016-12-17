@@ -96,7 +96,7 @@ router.post('/api/authenticate', function (req, res, next) {
             //let remoteIp1 = ipaddr.process(clientIp).toString();
             //let remoteIp="::1";    
             var remoteIp = requestIp.getClientIp(req);
-            remoteIp = remoteIp.con
+            
             var data = { action: 'authenticate', auth: auth, remoteIp:remoteIp };
             handler.edgePush(res, next, 'authenticate', data);
         }
