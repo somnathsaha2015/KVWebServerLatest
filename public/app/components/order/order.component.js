@@ -108,10 +108,11 @@ var Order = (function () {
         var ords = this.orders.filter(function (a) {
             if (a.packing == 'p') {
                 totalRequestedPackagess += a.orderQty;
+                totalRequestedBottles += a.orderQty * 6;
             }
             else {
                 if (a.packing == 's') {
-                    totalRequestedBottles += a.orderQty;
+                    totalRequestedBottles += a.orderQty * 3;
                 }
                 else {
                     totalRequestedBottles += a.orderQty;
