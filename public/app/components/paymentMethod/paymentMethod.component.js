@@ -103,9 +103,9 @@ var PaymentMethod = (function () {
             ccExpiryYear: [this.year, forms_1.Validators.required],
             ccSecurityCode: ['', forms_1.Validators.required],
             co: [''],
-            name: ['', forms_1.Validators.required],
+            name: [''],
             street1: ['', forms_1.Validators.required],
-            street2: ['', forms_1.Validators.required],
+            street2: [''],
             city: ['', forms_1.Validators.required],
             state: ['', forms_1.Validators.required],
             zip: ['', forms_1.Validators.required],
@@ -117,6 +117,7 @@ var PaymentMethod = (function () {
     };
     PaymentMethod.prototype.addPayMethod = function () {
         this.initPayMethodForm();
+        this.selectedISOCode = "US";
         this.payMethodForm.controls["countryName"].setValue("US");
         this.payMethodModal.open();
     };
