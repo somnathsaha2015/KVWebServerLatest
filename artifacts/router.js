@@ -120,7 +120,8 @@ router.post('/api/forgot/password', function (req, res, next) {
     try {
         let auth = req.body.auth;
         if (auth) {
-            let email = Buffer.from(auth, 'base64').toString();
+            //let email = Buffer.from(auth, 'base64').toString();
+            let email = new Buffer(auth, 'base64').toString();
             var data = { action: 'isEmailExist', email: email};
             //verify email if it exists and then send url to the verified mail
             handler.edgePush(res, next, 'forgot:passowrd', data);

@@ -8,14 +8,14 @@
     "dbName": "KVWeb",
     "connString2": "Server=tcp:kvonline.database.windows.net,1433;Initial Catalog=@dbName2;Persist Security Info=False;User ID=Somnath;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
     "dbName2": "KVWeb_orders",
-    "host": "http://kistleronline.azurewebsites.net",
+    "host": "http://kistleronline.azurewebsites.net/",
     "homePageUrl": "http://kistleronline.azurewebsites.net/",
     "sendMail": {
         "host": "smtp.gmail.com",
         "port": 587,
         "secure": false,
-        "fromUser": "capitalch2@gmail.com",
-        "fromUserPassword": "su$hant123",
+        "fromUser": "netwoventest1@gmail.com",
+        "fromUserPassword": "netwoven@123#",
         "fromUserName": "System"
     },
     "forgotPassword": {
