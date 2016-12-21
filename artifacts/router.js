@@ -317,7 +317,7 @@ router.get('/api/shipping/address', function (req, res, next) {
 router.post('/api/shipping/address', function (req, res, next) {
     try {
         let data = {
-            action: 'sql:non:query',
+            action: 'sql:shipping:non:query',
             sqlKey: 'InsertShippingAddress',
             sqlParms: {
                 name: req.body.address.name,
@@ -331,6 +331,7 @@ router.post('/api/shipping/address', function (req, res, next) {
                 isoCode: req.body.address.isoCode,
                 country: req.body.address.country,
                 userId: req.user.userId,
+                release: req.user.role,
                 isAddressVerified:req.body.address.isAddressVerified
             }
         };
@@ -344,7 +345,7 @@ router.post('/api/shipping/address', function (req, res, next) {
 router.put('/api/shipping/address', function (req, res, next) {
     try {
         let data = {
-            action: 'sql:non:query',
+            action: 'sql:shipping:non:query',
             sqlKey: 'UpdateShippingAddress',
             sqlParms: {
                 id: req.body.address.id,
@@ -359,6 +360,7 @@ router.put('/api/shipping/address', function (req, res, next) {
                 isoCode: req.body.address.isoCode,
                 country: req.body.address.country,
                 userId: req.user.userId,
+                release: req.user.role,
                 isAddressVerified:req.body.address.isAddressVerified
             }
         };

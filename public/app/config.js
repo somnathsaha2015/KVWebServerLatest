@@ -33,6 +33,7 @@ exports.urlHash = {
     'get:payment:method': '/api/generic/query',
     'post:payment:method': '/api/generic/scalar',
     'post:delete:payment:method': '/api/generic/non/query',
+    'post:delete:shipping:address': '/api/generic/non/query',
     'post:set:default:payment:method': '/api/generic/non/query',
     'get:approve:artifacts:ShippingandSalesTax': '/api/approve/artifact/shippingandsalestax',
     'get:smartyStreet': 'https://us-street.api.smartystreets.com/street-address?auth-id=:authId&auth-token=:authToken&street=:street&street2=:street2&city=:city&state=:state&zipcode=:zipcode&',
@@ -72,7 +73,8 @@ exports.validationErrorMessages = {
     'invalidAddress': 'This address is invalid',
     'invalidZipCode': 'This zip code is not a US legal zip code',
     'emailNotFound': 'Email address is not registered. Please try again.',
-    'emailFound': 'Reset password link has been sent to your email address. Please check.'
+    'emailFound': 'Reset password link has been sent to your email address. Please check.',
+    'addressDeleteFailed': 'Address could not be removed due to server side error'
 };
 exports.viewBoxConfig = {
     '/login': { home: true, needHelp: false, order: false, myAccount: false, menuBar: false, logout: false },
