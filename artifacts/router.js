@@ -2,7 +2,7 @@
 var handler = require('./handler');
 var express = require('express');
 var router = express.Router();
-var config, def, messages, data;
+var config, def, messages, data, orderacknowledgementmailBody;
 var jwt = require('jsonwebtoken');
 var crypto = require('crypto');
 var requestIp = require('request-ip');
@@ -14,6 +14,7 @@ router.init = function (app) {
     messages = app.get('messages');
     data = { action: 'init', conn: config.connString.replace('@dbName', config.dbName), conn2: config.connString2.replace('@dbName2', config.dbName2) }
     handler.init(app, data);
+    orderacknowledgementmailBody = app.get('orderacknowledgementmailBody');
 }
 
 router.post('/api/validate/token', function (req, res, next) {
@@ -499,7 +500,8 @@ router.post('/api/approve/request', function (req, res, next) {
         orderBundle.orderMaster.Code = req.user.userId;
         orderBundle.orderMaster.Release = req.user.role;
         let emailItem = config.sendMail;
-        emailItem.htmlBody = config.receipt.mailBody;
+        //emailItem.htmlBody = config.receipt.mailBody;
+        emailItem.htmlBody = orderacknowledgementmailBody;
         emailItem.subject = config.receipt.subject;
 
         let data = {

@@ -14,7 +14,6 @@ var app_service_1 = require("../../services/app.service");
 var router_1 = require("@angular/router");
 var config_1 = require("../../config");
 var ng2_modal_1 = require("ng2-modal");
-//import { AlertModule } from 'ng2-bootstrap';
 var ApproveOrder = (function () {
     function ApproveOrder(appService, location, router) {
         var _this = this;
@@ -44,7 +43,15 @@ var ApproveOrder = (function () {
         this.shippingBottles = {};
         //orderBundle: any = {};
         this.profile = {};
-        this.isApproveButtonDisabled = true;
+        this.alert = { type: "success" };
+        this.payLater = function () {
+            if (!_this.selectedCard || _this.selectedCard == '') {
+                return ('Pay later');
+            }
+            else {
+                return ('');
+            }
+        };
         var ords = appService.request('orders');
         if (!ords) {
             router.navigate(['order']);
@@ -88,15 +95,13 @@ var ApproveOrder = (function () {
                         _this.selectedAddress.salesTaxPerc = _this.selectedAddress.isoCode != "US" ? 0 : _this.selectedAddress.salesTaxPerc;
                         _this.selectedAddress.shippingCharges = _this.selectedAddress.isoCode != "US" ? 0 : _this.selectedAddress.shippingCharges;
                         _this.selectedAddress.addlshippingCharges = _this.selectedAddress.isoCode != "US" ? 0 : _this.selectedAddress.addlshippingCharges;
-                        _this.isApproveButtonDisabled = false;
                     }
                 }
                 else {
-                    //this.selectedAddress = null;
+                    _this.selectedAddress = {};
                     _this.selectedAddress.salesTaxPerc = 0;
                     _this.selectedAddress.shippingCharges = 0;
                     _this.selectedAddress.addlshippingCharges = 0;
-                    _this.isApproveButtonDisabled = true;
                 }
                 if (artifacts.Table2.length > 0) {
                     _this.footer.prevBalance = artifacts.Table2[0] / 1;
@@ -151,6 +156,7 @@ var ApproveOrder = (function () {
     }
     ;
     ApproveOrder.prototype.changeSelectedAddress = function () {
+        this.isAlert = false;
         this.isChangeAddress = true;
         this.appService.httpGet('get:shipping:address');
         this.addrModal.open();
@@ -168,7 +174,6 @@ var ApproveOrder = (function () {
             this.selectedAddress.salesTaxPerc = 0;
             this.computeTotals();
         }
-        this.isApproveButtonDisabled = false;
     };
     ;
     ApproveOrder.prototype.changeSelectedCard = function () {
@@ -248,6 +253,21 @@ var ApproveOrder = (function () {
                 Price: a.price,
                 Allocation: a.availableQty,
                 SortOrder: 0
+            });
+        });
+        orderBundle.productDetails = this.orders.filter(function (a) {
+            return ((a.orderQty && a.orderQty > 0) || (a.wishList && a.wishList > 0));
+        }).map(function (a) {
+            return ({
+                ProductId: a.id,
+                NumOrdered: a.orderQty,
+                AdditionalRequested: a.wishList,
+                Price: a.price,
+                Allocation: a.availableQty,
+                SortOrder: 0,
+                item: a.item,
+                descr: a.descr,
+                productType: a.productType
             });
         });
         //orderBundle.orderImpDetails = { AddressId: this.selectedAddress.id, CreditCardId: this.selectedCard.id };
