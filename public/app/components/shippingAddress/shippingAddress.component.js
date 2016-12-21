@@ -106,7 +106,7 @@ var ShippingAddress = (function () {
         this.confirmationService.confirm({
             message: 'Are you sure to delete this address?',
             accept: function () {
-                _this.appService.httpPost('post:delete:shipping:address', { sqlKey: 'DeleteShippingAddress', sqlParms: { id: address.id } });
+                _this.appService.httpPost('post:delete:shipping:address', { sqlKey: 'DeleteShippingAddress', sqlParms: { id: address.shippid } });
             }
         });
     };
@@ -194,6 +194,7 @@ var ShippingAddress = (function () {
         var addr = {
             id: this.shippingForm.controls['id'].value,
             name: this.shippingForm.controls['name'].value,
+            co: this.shippingForm.controls['name'].value,
             street1: this.shippingForm.controls['street1'].value,
             street2: this.shippingForm.controls['street2'].value ? this.shippingForm.controls['street2'].value : '',
             city: this.shippingForm.controls['city'].value,
