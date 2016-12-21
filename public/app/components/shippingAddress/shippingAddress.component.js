@@ -26,7 +26,7 @@ var ShippingAddress = (function () {
             message: this.appService.getValidationErrorMessage('invalidAddress')
         };
         this.selectedISOCode = '';
-        this.selectedCountryName = '';
+        this.selectedCountryName = 'United States';
         this.selectedCountryObj = {};
         this.isDataReady = false;
         this.messages = [];
@@ -59,8 +59,12 @@ var ShippingAddress = (function () {
             .subscribe(function (d) {
             _this.isVerifying = false;
             _this.addresses = JSON.parse(d.data).Table;
-            _this.addresses[_this.radioIndex || 0].isSelected = true;
-            console.log(d);
+            if (_this.addresses.length > 0) {
+                if (_this.radioIndex > (_this.addresses.length - 1)) {
+                    _this.radioIndex = _this.addresses.length - 1;
+                }
+                _this.addresses[_this.radioIndex || 0].isSelected = true;
+            }
         });
         this.postSubscription = appService.filterOn("post:shipping:address")
             .subscribe(function (d) {
@@ -70,7 +74,42 @@ var ShippingAddress = (function () {
             .subscribe(function (d) {
             _this.showMessage(d);
         });
+        this.postDeleteSubscription = appService.filterOn("post:delete:shipping:address")
+            .subscribe(function (d) {
+            if (d.data.error) {
+                console.log(d.data.error);
+                // this.appService.doGrowl(this.messages, 'error', 'Error', 'Deletion of address failed at server')
+                _this.messages = [];
+                _this.messages.push({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Address could not be deleted'
+                });
+            }
+            else {
+                //this.addresses.splice(this.radioIndex);
+                // this.appService.showAlert(this.alert, false);
+                // this.appService.doGrowl(this.messages, 'success', 'Success', 'Data saved successfully');
+                _this.appService.httpGet('get:shipping:address');
+                _this.messages = [];
+                _this.messages.push({
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: 'Data saved successfully'
+                });
+            }
+        });
     }
+    ;
+    ShippingAddress.prototype.confirmRemove = function (address) {
+        var _this = this;
+        this.confirmationService.confirm({
+            message: 'Are you sure to delete this address?',
+            accept: function () {
+                _this.appService.httpPost('post:delete:shipping:address', { sqlKey: 'DeleteShippingAddress', sqlParms: { id: address.id } });
+            }
+        });
+    };
     ;
     ShippingAddress.prototype.showMessage = function (d) {
         this.isVerifying = false;
@@ -78,6 +117,7 @@ var ShippingAddress = (function () {
             this.appService.showAlert(this.alert, true, 'addressSaveFailed');
         }
         else {
+            this.appService.showAlert(this.alert, false);
             this.appService.httpGet('get:shipping:address');
             this.initShippingForm({});
             this.messages = [];
@@ -105,6 +145,10 @@ var ShippingAddress = (function () {
             isDefault: [address.isDefault || false]
         });
         this.selectedCountryName = address.country;
+        if (!address.phone) {
+            //separate reset is required to clear the input mask control
+            this.shippingForm.controls['phone'].reset();
+        }
     };
     ;
     ShippingAddress.prototype.ngOnInit = function () {
@@ -117,15 +161,13 @@ var ShippingAddress = (function () {
         this.shippingModal.open();
     };
     ;
-    ShippingAddress.prototype.delete = function (address) {
-        if (confirm('Are you sure to delete this address')) {
-            console.log('true');
-        }
-        else {
-            console.log(false);
-        }
-    };
-    ;
+    // delete(address) {
+    //     if (confirm('Are you sure to delete this address')) {
+    //         console.log('true');
+    //     } else {
+    //         console.log(false);
+    //     }
+    // };
     ShippingAddress.prototype.verifyOrSubmit = function () {
         if (this.selectedCountryName == 'United States') {
             this.verify();

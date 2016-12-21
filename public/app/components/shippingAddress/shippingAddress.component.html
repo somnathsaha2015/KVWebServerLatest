@@ -14,6 +14,7 @@
                 <span>, {{address.country}}</span>
                 <span>, {{address.phone}}</span>
                 <span *ngIf="address.isDefault" class="DefaultColor">Default</span>
+            	<button *ngIf="isDataReady" type="button" class="btn btn-link" (click)="confirmRemove(address)"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>Remove</button>				
                 <!--<span *ngIf="address.isDefault">, <i>Default</i>-->
                 <!--<input type="checkbox" [checked]="address.isDefault" [disabled]="true" name="isDefault">-->
                 <!--</span>-->
