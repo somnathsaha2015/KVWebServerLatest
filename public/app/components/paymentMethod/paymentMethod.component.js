@@ -38,7 +38,7 @@ var PaymentMethod = (function () {
         });
         this.dataReadySubs = appService.behFilterOn('masters:download:success').subscribe(function (d) {
             _this.countries = _this.appService.getCountries();
-            _this.creditCardTypes = _this.appService.getCreditCardTypes();
+            _this.creditCardTypes = _this.appService.getSetting('creditCardTypes');
             _this.isDataReady = true;
         });
         this.postPayMethodSub = appService.filterOn("post:payment:method")

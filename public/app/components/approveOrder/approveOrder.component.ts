@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { Location } from '@angular/common';
+//import { Location } from '@angular/common';
 import { AppService } from '../../services/app.service';
 import { Router } from '@angular/router';
 import { messages } from '../../config';
@@ -16,6 +16,7 @@ export class ApproveOrder {
     getProfileSubscription: Subscription;
     selectedAddress: any = {};
     selectedCard: any = {};
+    defaultCard: any = {};
     allTotals: {} = {};
     footer: any = {
         wineTotals: {
@@ -51,7 +52,7 @@ export class ApproveOrder {
             return('');
         }
     };
-    constructor(private appService: AppService, private location: Location, private router: Router) {
+    constructor(private appService: AppService, private router: Router) {
         let ords = appService.request('orders');
         if (!ords) {
             router.navigate(['order']);
@@ -82,7 +83,7 @@ export class ApproveOrder {
             } else {
                 let artifacts = JSON.parse(d.data);
                 if (artifacts.Table.length > 0) {
-                    this.selectedCard = artifacts.Table[0];
+                    this.selectedCard = this.defaultCard = artifacts.Table[0];
                 } else {
                     this.selectedCard = {};
                 }
