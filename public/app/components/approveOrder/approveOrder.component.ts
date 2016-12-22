@@ -223,7 +223,7 @@ export class ApproveOrder {
             BillingZip:this.selectedCard.zip,
             BillingCountry: this.selectedCard.country,
             BillingISOCode:this.selectedCard.isoCode,
-            DayPhone: this.selectedCard.phone,
+            DayPhone: this.profile.phone,
             MailName: this.profile.firstName,
             MailCo:this.profile.Co,
             MailStreet1: this.profile.mailingAddress1,
