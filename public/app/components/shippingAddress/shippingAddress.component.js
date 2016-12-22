@@ -16,7 +16,6 @@ var ng2_modal_1 = require("ng2-modal");
 var api_1 = require("primeng/components/common/api");
 var ShippingAddress = (function () {
     function ShippingAddress(appService, fb, confirmationService) {
-        var _this = this;
         this.appService = appService;
         this.fb = fb;
         this.confirmationService = confirmationService;
@@ -32,10 +31,14 @@ var ShippingAddress = (function () {
         this.messages = [];
         this.isVerifying = false;
         this.initShippingForm({});
+    }
+    ;
+    ShippingAddress.prototype.initSubscriptions = function () {
+        var _this = this;
         this.verifyAddressSub = this.appService.filterOn('get:smartyStreet').subscribe(function (d) {
             if (d.data.error) {
                 //Authorization of vendor at smartyStreet failed. Maybe purchase of new slot required
-                appService.showAlert(_this.alert, true, 'addressValidationUnauthorized');
+                _this.appService.showAlert(_this.alert, true, 'addressValidationUnauthorized');
                 _this.isVerifying = false;
             }
             else {
@@ -51,11 +54,11 @@ var ShippingAddress = (function () {
                 }
             }
         });
-        this.dataReadySubs = appService.behFilterOn('masters:download:success').subscribe(function (d) {
+        this.dataReadySubs = this.appService.behFilterOn('masters:download:success').subscribe(function (d) {
             _this.countries = _this.appService.getCountries();
             _this.isDataReady = true;
         });
-        this.getSubscription = appService.filterOn("get:shipping:address")
+        this.getSubscription = this.appService.filterOn("get:shipping:address")
             .subscribe(function (d) {
             _this.isVerifying = false;
             _this.addresses = JSON.parse(d.data).Table;
@@ -66,15 +69,15 @@ var ShippingAddress = (function () {
                 _this.addresses[_this.radioIndex || 0].isSelected = true;
             }
         });
-        this.postSubscription = appService.filterOn("post:shipping:address")
+        this.postSubscription = this.appService.filterOn("post:shipping:address")
             .subscribe(function (d) {
             _this.showMessage(d);
         });
-        this.putSubscription = appService.filterOn("put:shipping:address")
+        this.putSubscription = this.appService.filterOn("put:shipping:address")
             .subscribe(function (d) {
             _this.showMessage(d);
         });
-        this.postDeleteSubscription = appService.filterOn("post:delete:shipping:address")
+        this.postDeleteSubscription = this.appService.filterOn("post:delete:shipping:address")
             .subscribe(function (d) {
             if (d.data.error) {
                 console.log(d.data.error);
@@ -99,7 +102,7 @@ var ShippingAddress = (function () {
                 });
             }
         });
-    }
+    };
     ;
     ShippingAddress.prototype.confirmRemove = function (address) {
         var _this = this;
@@ -152,6 +155,7 @@ var ShippingAddress = (function () {
     };
     ;
     ShippingAddress.prototype.ngOnInit = function () {
+        this.initSubscriptions();
         this.appService.httpGet('get:shipping:address');
     };
     ;
@@ -194,7 +198,7 @@ var ShippingAddress = (function () {
         var addr = {
             id: this.shippingForm.controls['id'].value,
             name: this.shippingForm.controls['name'].value,
-            co: this.shippingForm.controls['name'].value,
+            // co: this.shippingForm.controls['name'].value,
             street1: this.shippingForm.controls['street1'].value,
             street2: this.shippingForm.controls['street2'].value ? this.shippingForm.controls['street2'].value : '',
             city: this.shippingForm.controls['city'].value,

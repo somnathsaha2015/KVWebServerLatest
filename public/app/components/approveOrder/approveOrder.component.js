@@ -9,19 +9,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
-var common_1 = require("@angular/common");
+//import { Location } from '@angular/common';
 var app_service_1 = require("../../services/app.service");
 var router_1 = require("@angular/router");
 var config_1 = require("../../config");
 var ng2_modal_1 = require("ng2-modal");
 var ApproveOrder = (function () {
-    function ApproveOrder(appService, location, router) {
+    function ApproveOrder(appService, router) {
         var _this = this;
         this.appService = appService;
-        this.location = location;
         this.router = router;
         this.selectedAddress = {};
         this.selectedCard = {};
+        this.defaultCard = {};
         this.allTotals = {};
         this.footer = {
             wineTotals: {
@@ -84,7 +84,7 @@ var ApproveOrder = (function () {
             else {
                 var artifacts = JSON.parse(d.data);
                 if (artifacts.Table.length > 0) {
-                    _this.selectedCard = artifacts.Table[0];
+                    _this.selectedCard = _this.defaultCard = artifacts.Table[0];
                 }
                 else {
                     _this.selectedCard = {};
@@ -414,7 +414,7 @@ ApproveOrder = __decorate([
     core_1.Component({
         templateUrl: 'app/components/approveOrder/approveOrder.component.html'
     }),
-    __metadata("design:paramtypes", [app_service_1.AppService, common_1.Location, router_1.Router])
+    __metadata("design:paramtypes", [app_service_1.AppService, router_1.Router])
 ], ApproveOrder);
 exports.ApproveOrder = ApproveOrder;
 //# sourceMappingURL=approveOrder.component.js.map

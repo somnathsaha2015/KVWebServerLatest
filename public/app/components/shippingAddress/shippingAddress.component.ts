@@ -42,10 +42,12 @@ export class ShippingAddress {
     addresses: [any];
     constructor(private appService: AppService, private fb: FormBuilder, private confirmationService: ConfirmationService) {
         this.initShippingForm({});
+    };
+    initSubscriptions() {
         this.verifyAddressSub = this.appService.filterOn('get:smartyStreet').subscribe(d => {            
             if (d.data.error) {
                 //Authorization of vendor at smartyStreet failed. Maybe purchase of new slot required
-                appService.showAlert(this.alert, true, 'addressValidationUnauthorized');
+                this.appService.showAlert(this.alert, true, 'addressValidationUnauthorized');
                 this.isVerifying = false;
             } else {
                 if (d.data.length == 0) {
@@ -59,11 +61,11 @@ export class ShippingAddress {
                 }
             }
         });
-        this.dataReadySubs=appService.behFilterOn('masters:download:success').subscribe(d=>{
+        this.dataReadySubs=this.appService.behFilterOn('masters:download:success').subscribe(d=>{
             this.countries = this.appService.getCountries();
             this.isDataReady=true;
         });
-        this.getSubscription = appService.filterOn("get:shipping:address")
+        this.getSubscription = this.appService.filterOn("get:shipping:address")
             .subscribe(d => {
                 this.isVerifying = false;
                 this.addresses = JSON.parse(d.data).Table;
@@ -74,15 +76,15 @@ export class ShippingAddress {
                     this.addresses[this.radioIndex || 0].isSelected = true;
                 }
             });
-        this.postSubscription = appService.filterOn("post:shipping:address")
+        this.postSubscription = this.appService.filterOn("post:shipping:address")
             .subscribe(d => {
                 this.showMessage(d);
             });
-        this.putSubscription = appService.filterOn("put:shipping:address")
+        this.putSubscription = this.appService.filterOn("put:shipping:address")
             .subscribe(d => {
                 this.showMessage(d);
             });
-        this.postDeleteSubscription = appService.filterOn("post:delete:shipping:address")
+        this.postDeleteSubscription = this.appService.filterOn("post:delete:shipping:address")
             .subscribe(d => {
                 if (d.data.error) {
                     console.log(d.data.error);
@@ -159,6 +161,7 @@ export class ShippingAddress {
         }
     };
     ngOnInit() {        
+	this.initSubscriptions();
         this.appService.httpGet('get:shipping:address');
     };
     edit(address) {
@@ -201,7 +204,7 @@ export class ShippingAddress {
         let addr = {
             id: this.shippingForm.controls['id'].value,
             name: this.shippingForm.controls['name'].value,
-            co: this.shippingForm.controls['name'].value,
+           // co: this.shippingForm.controls['name'].value,
             street1: this.shippingForm.controls['street1'].value,
             street2: this.shippingForm.controls['street2'].value ? this.shippingForm.controls['street2'].value : '',
             city: this.shippingForm.controls['city'].value,

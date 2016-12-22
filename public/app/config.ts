@@ -22,7 +22,7 @@ export var urlHash = {
     'get:default:shipping:address': '/api/shipping/address/default',
     // 'get:all:shipping:addresses': '/api/shipping/address',
     'get:default:credit:card': '/api/credit/card/default',
-    'get:all:credit:cards': '/api/credit/card',
+    //'get:all:credit:cards': '/api/credit/card',
 
     'get:approve:artifacts': '/api/approve/artifact',
     'post:save:approve:request': '/api/approve/request',
@@ -39,12 +39,14 @@ export var urlHash = {
     'get:approve:artifacts:ShippingandSalesTax':'/api/approve/artifact/shippingandsalestax',
     'get:smartyStreet':'https://us-street.api.smartystreets.com/street-address?auth-id=:authId&auth-token=:authToken&street=:street&street2=:street2&city=:city&state=:state&zipcode=:zipcode&'
     , 'smartyStreetAutoCom':'https://us-autocomplete.api.smartystreets.com/suggest?auth-id=63395b2b-4df2-c8c7-a487-21ecc25979c8&auth-token=ikDR4hndQSAScpWSPdj8&prefix=Wyomi'
+    , 'get:all:settings': '/api/generic/query'
+    ,'get:offer:settings': '/api/generic/query'
 };
 export var messages = {
     'mess:order:intro:text': '',
     'mess:order:holiday:gift': 'Holiday Gift - Yes I\'m interested, please contact me',
     'mess:order:minimum:request': 'Minimum request 6 bottles',
-    'mess:order:bottom:notes': '*Wines in 6 bottle packages are subject to change',
+    'mess:order:bottom:notes': 'Wines in 6 bottle packages are subject to change',
     'mess:approve:heading': 'Please review your shipping address & payment method information for your order.',
     'mess:receipt:heading': 'Thank you for your Kistler Fall 2016 Request.',
     'mess:receipt:info': 'An acknowledgement email has been sent to @email. If you do not receive the email within 10 minutes, please check your Spam / Junk mail folder. Otherwise, contact us for assistance. ',
@@ -63,7 +65,7 @@ export var validationErrorMessages = {
     'oldAndNewPasswordsSame':'Old and new passwords cannot be same',
     'confirmPasswordMismatch':'New Password and Confirm New Password mismatch',
     'invalidCreditCard':'Credit card is invalid',
-    'addressSaveFailed':'Saving of shipping address at server failed',
+    'addressSaveFailed':'Saving of address at server failed',
     'dataSaved':'Data successfully saved',
     'invalidDate':'Date is invalid',
     'dataNotSaved':'Data could not be saved',
@@ -74,7 +76,7 @@ export var validationErrorMessages = {
     'invalidAddress':'This address is invalid',
     'invalidZipCode':'This zip code is not a US legal zip code',
     'emailNotFound':'Email address is not registered. Please try again.',
-    'emailFound':'Reset password link has been sent to your email address. Please check.'
+    'emailFound':'Reset password link has been sent to your email address. Please check.',
      'addressDeleteFailed':'Address could not be removed due to server side error'
 
     // , 'testSyncValidation':'test sync validation'
