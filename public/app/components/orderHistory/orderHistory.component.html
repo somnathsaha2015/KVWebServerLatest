@@ -14,7 +14,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let order of pageRows" (click)="showDetails(order)">
-                    <td scope="row">{{order.mDate | date:'MM/dd/yyyy'}}</td>
+                    <td scope="row">{{order.mDate}}<!--  | date:'MM/dd/yyyy'}}--></td>
                     <td>{{order.invoice}}</td>
                     <td>{{order.status}}</td>
                     <td  class="productPrice priceFldAlign">{{order.amount | currency:'USD':true}}</td>
